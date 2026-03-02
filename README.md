@@ -1,2 +1,2 @@
-# AudioAudi
-CS371 Project
+# AudioAudit
+CS 371L Project
