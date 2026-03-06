@@ -22,8 +22,8 @@ class LoadingViewController: UIViewController {
         // rotate logo for a spotify look
         loadLogo.transform = CGAffineTransform(rotationAngle: rotAngle)
         
-        // timer makes splash screen last for 4 sec
-        Timer.scheduledTimer(withTimeInterval: 4.0, repeats: false) { _ in
+        // timer makes splash screen last for 3 sec
+        Timer.scheduledTimer(withTimeInterval: 3, repeats: false) { _ in
             self.performSegue(withIdentifier: "LoginSegue", sender: nil)
         }
     }
