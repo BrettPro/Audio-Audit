@@ -3,6 +3,7 @@
     <device id="retina6_9" orientation="portrait" appearance="light"/>
     <dependencies>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="24504"/>
+        <capability name="Named colors" minToolsVersion="9.0"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="System colors in document resources" minToolsVersion="11.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
@@ -87,6 +88,7 @@
                                 <buttonConfiguration key="configuration" style="filled" title="Login"/>
                                 <connections>
                                     <action selector="loginPressed:" destination="QlB-87-FYW" eventType="touchUpInside" id="gNp-hO-TBh"/>
+                                    <segue destination="h7V-o0-xGz" kind="presentation" identifier="LoginToHome" modalPresentationStyle="fullScreen" id="zWZ-fX-QCN"/>
                                 </connections>
                             </button>
                         </subviews>
@@ -209,7 +211,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="QmY-fg-8jU" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="2455.909090909091" y="130.54393305439331"/>
+            <point key="canvasLocation" x="2476" y="594"/>
         </scene>
         <!--Loading View Controller-->
         <scene sceneID="KyI-Og-bJQ">
@@ -241,35 +243,59 @@
             </objects>
             <point key="canvasLocation" x="836" y="877"/>
         </scene>
-        <!--Home View Controller-->
+        <!--Home-->
         <scene sceneID="A19-Yz-zmA">
             <objects>
                 <viewController id="iUC-ni-bNN" customClass="HomeViewController" customModule="AudioAudit" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="EHr-NI-fm6">
                         <rect key="frame" x="0.0" y="0.0" width="440" height="956"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="HOME PAGE" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Vgd-kW-v3F">
+                                <rect key="frame" x="199" y="468" width="96" height="21"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <nil key="textColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                        </subviews>
                         <viewLayoutGuide key="safeArea" id="dGb-Am-jKa"/>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                     </view>
+                    <tabBarItem key="tabBarItem" title="Home" image="house.fill" catalog="system" selectedImage="house.fill" id="cKC-hu-Xxc">
+                        <color key="badgeColor" name="AudioRed"/>
+                    </tabBarItem>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="LND-2U-Vpv" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="3227.727272727273" y="195.81589958158997"/>
+            <point key="canvasLocation" x="4145.454545454546" y="130.54393305439331"/>
         </scene>
-        <!--Profile View Controller-->
+        <!--Profile-->
         <scene sceneID="wtx-MP-o6M">
             <objects>
                 <viewController id="gPI-NV-cFm" customClass="ProfileViewController" customModule="AudioAudit" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="xDh-ey-9xb">
                         <rect key="frame" x="0.0" y="0.0" width="440" height="956"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="PROFILE PAGE" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Z0N-IX-hc5">
+                                <rect key="frame" x="199" y="492" width="113" height="21"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <nil key="textColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                        </subviews>
                         <viewLayoutGuide key="safeArea" id="Za3-K8-xNq"/>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                     </view>
+                    <tabBarItem key="tabBarItem" title="Profile" image="person.circle.fill" catalog="system" selectedImage="person.circle.fill" id="qKZ-NA-TRO">
+                        <color key="badgeColor" name="AudioRed"/>
+                    </tabBarItem>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="AvP-Vo-br8" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="4011.818181818182" y="195.81589958158997"/>
+            <point key="canvasLocation" x="4903.636363636364" y="195.81589958158997"/>
         </scene>
         <!--Settings View Controller-->
         <scene sceneID="xfe-AH-48K">
@@ -284,7 +310,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="EvR-ou-Ti0" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="4761.818181818182" y="195.81589958158997"/>
+            <point key="canvasLocation" x="5653.636363636364" y="195.81589958158997"/>
         </scene>
         <!--Navigation Controller-->
         <scene sceneID="Vwo-7T-d4m">
@@ -304,14 +330,46 @@
             </objects>
             <point key="canvasLocation" x="835.90909090909099" y="130.54393305439331"/>
         </scene>
+        <!--Tab Controller-->
+        <scene sceneID="THS-B0-2ll">
+            <objects>
+                <tabBarController automaticallyAdjustsScrollViewInsets="NO" id="h7V-o0-xGz" customClass="TabController" customModule="AudioAudit" customModuleProvider="target" sceneMemberID="viewController">
+                    <toolbarItems/>
+                    <tabBar key="tabBar" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" id="Caj-hd-GKF">
+                        <autoresizingMask key="autoresizingMask"/>
+                        <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        <color key="tintColor" name="AudioRed"/>
+                        <color key="barTintColor" name="AudioRed"/>
+                        <color key="selectedImageTintColor" name="AudioRed"/>
+                        <userDefinedRuntimeAttributes>
+                            <userDefinedRuntimeAttribute type="color" keyPath="unselectedItemTintColor">
+                                <color key="value" white="0.66666666666666663" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                            </userDefinedRuntimeAttribute>
+                        </userDefinedRuntimeAttributes>
+                    </tabBar>
+                    <connections>
+                        <outlet property="tabBarView" destination="Caj-hd-GKF" id="ENn-hO-qFk"/>
+                        <segue destination="iUC-ni-bNN" kind="relationship" relationship="viewControllers" id="EvN-kX-xY3"/>
+                        <segue destination="gPI-NV-cFm" kind="relationship" relationship="viewControllers" id="2B2-T0-cL6"/>
+                    </connections>
+                </tabBarController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="IAc-4n-gHl" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="3253.636363636364" y="130.54393305439331"/>
+        </scene>
     </scenes>
     <resources>
+        <image name="house.fill" catalog="system" width="128" height="104"/>
         <image name="load_logo_final" width="1024" height="1024"/>
+        <image name="person.circle.fill" catalog="system" width="128" height="123"/>
+        <namedColor name="AudioRed">
+            <color red="0.74699997901916504" green="0.2370000034570694" blue="0.36599999666213989" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
+        </namedColor>
         <systemColor name="systemBackgroundColor">
             <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
         </systemColor>
         <systemColor name="systemGray2Color">
-            <color red="0.68235294117647061" green="0.68235294117647061" blue="0.69803921568627447" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+            <color red="0.68235294120000001" green="0.68235294120000001" blue="0.69803921570000005" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </systemColor>
     </resources>
 </document>

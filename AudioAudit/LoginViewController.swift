@@ -38,13 +38,15 @@ class LoginViewController: UIViewController, UITextFieldDelegate {
     }
     
     @IBAction func loginPressed(_ sender: Any) {
-        var userAuth: Bool = false
+        var userAuth: Bool = true
         // TODO authenticate in firebase
         if !userAuth {
             let alertControl = UIAlertController(title: "Invalid login", message: "Username or password not recognized.", preferredStyle: .alert)
             let okAction = UIAlertAction(title: "OK", style: .default)
             alertControl.addAction(okAction)
             self.present(alertControl, animated: true)
+        } else {
+            self.performSegue(withIdentifier: "LoginToHome", sender: nil)
         }
         // TODO else segue to activity feed
     }
