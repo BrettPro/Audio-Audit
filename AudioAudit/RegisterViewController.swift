@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import FirebaseAuth
 
 class RegisterViewController: UIViewController, UITextFieldDelegate {
 
@@ -35,21 +36,24 @@ class RegisterViewController: UIViewController, UITextFieldDelegate {
         self.view.endEditing(true)
     }
     
-    func isValidCred(_ cred: String) -> Bool {
-       let credRegEx =
-           "[A-Z0-9a-z._]{2,64}"
-       let credPred = NSPredicate(format:"SELF MATCHES %@",
-           credRegEx)
-       return credPred.evaluate(with: cred)
+    func isValidEmail(_ email: String) -> Bool {
+       let emailRegEx =
+           "[A-Z0-9a-z._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,64}"
+       let emailPred = NSPredicate(format:"SELF MATCHES %@",
+           emailRegEx)
+       return emailPred.evaluate(with: email)
+    }
+    
+    func isValidPassword(_ password: String) -> Bool {
+       let minPasswordLength = 2
+       return password.count >= minPasswordLength
     }
       
     @IBAction func registerPressed(_ sender: Any) {
-        var validCreds: Bool = isValidCred(usernameField.text!) && isValidCred(passwordField.text!)
-        var passMatch: Bool = passwordField.text == retypeField.text
-        var uniqueCreds: Bool = false
-        // TODO ensure username is unique in firebase
+        let validCreds: Bool = isValidEmail(usernameField.text!) && isValidPassword(passwordField.text!)
+        let passMatch: Bool = passwordField.text == retypeField.text
         if !validCreds {
-            let alertControl = UIAlertController(title: "Invalid registration", message: "Username or password must contain at least two English characters, numbers, or symbols.", preferredStyle: .alert)
+            let alertControl = UIAlertController(title: "Invalid registration", message: "Email or password must contain at least two English characters, numbers, or symbols.", preferredStyle: .alert)
             let okAction = UIAlertAction(title: "OK", style: .default)
             alertControl.addAction(okAction)
             self.present(alertControl, animated: true)
@@ -58,13 +62,24 @@ class RegisterViewController: UIViewController, UITextFieldDelegate {
             let okAction = UIAlertAction(title: "OK", style: .default)
             alertControl.addAction(okAction)
             self.present(alertControl, animated: true)
-        } else if !uniqueCreds {
-            let alertControl = UIAlertController(title: "Invalid registration", message: "Username already taken.", preferredStyle: .alert)
-            let okAction = UIAlertAction(title: "OK", style: .default)
-            alertControl.addAction(okAction)
-            self.present(alertControl, animated: true)
+            // TODO check if firebase already accounts for unique usernames
+//        } else if !uniqueCreds {
+//            let alertControl = UIAlertController(title: "Invalid registration", message: "Username already taken.", preferredStyle: .alert)
+//            let okAction = UIAlertAction(title: "OK", style: .default)
+//            alertControl.addAction(okAction)
+//            self.present(alertControl, animated: true)
+        } else {
+            Auth.auth().createUser(withEmail: usernameField.text!, password: passwordField.text!) {
+                authResult, error in
+                if let error = error as NSError? {
+                    let alertControl = UIAlertController(title: "Error", message: "\(error.localizedDescription)", preferredStyle: .alert)
+                    let okAction = UIAlertAction(title: "OK", style: .default)
+                    alertControl.addAction(okAction)
+                    self.present(alertControl, animated: true)
+                }
+            }
+            self.performSegue(withIdentifier: "RegisterToHome", sender: nil)
         }
-        // TODO else store username and password in firebase, then segue to activity feed
     }
     
 }

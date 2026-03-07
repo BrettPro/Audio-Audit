@@ -61,7 +61,7 @@
                                 <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                 <textInputTraits key="textInputTraits"/>
                             </textField>
-                            <textField opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="248" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Username" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="rYB-wd-DCH">
+                            <textField opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="248" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Email" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="rYB-wd-DCH">
                                 <rect key="frame" x="101" y="348" width="238" height="34"/>
                                 <constraints>
                                     <constraint firstAttribute="width" constant="238" id="FgR-8V-sPY"/>
@@ -124,7 +124,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="NT1-xW-bi2" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1727.7272727272727" y="130.54393305439331"/>
+            <point key="canvasLocation" x="1589" y="-266"/>
         </scene>
         <!--Register View Controller-->
         <scene sceneID="lFg-QZ-3ae">
@@ -207,11 +207,12 @@
                         <outlet property="registerButton" destination="BGU-g2-kJs" id="vvj-rt-HD4"/>
                         <outlet property="retypeField" destination="vCl-hC-8p2" id="Pj6-0I-X1S"/>
                         <outlet property="usernameField" destination="8dC-oZ-aM6" id="aQQ-Wt-2oQ"/>
+                        <segue destination="h7V-o0-xGz" kind="presentation" identifier="RegisterToHome" modalPresentationStyle="fullScreen" id="kli-O5-QFY"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="QmY-fg-8jU" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="2476" y="594"/>
+            <point key="canvasLocation" x="1589" y="678"/>
         </scene>
         <!--Loading View Controller-->
         <scene sceneID="KyI-Og-bJQ">
@@ -237,11 +238,12 @@
                     <connections>
                         <outlet property="loadLogo" destination="p8k-CP-UJn" id="Hjs-2O-7re"/>
                         <segue destination="e3R-gi-SCa" kind="presentation" identifier="LoginSegue" modalPresentationStyle="fullScreen" modalTransitionStyle="crossDissolve" id="uu0-hU-h6w"/>
+                        <segue destination="h7V-o0-xGz" kind="presentation" identifier="HomeSegue" modalPresentationStyle="fullScreen" id="2YT-Lf-els"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="YbX-eq-fNI" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="836" y="877"/>
+            <point key="canvasLocation" x="140" y="825"/>
         </scene>
         <!--Home-->
         <scene sceneID="A19-Yz-zmA">
@@ -336,6 +338,7 @@
                 <tabBarController automaticallyAdjustsScrollViewInsets="NO" id="h7V-o0-xGz" customClass="TabController" customModule="AudioAudit" customModuleProvider="target" sceneMemberID="viewController">
                     <toolbarItems/>
                     <tabBar key="tabBar" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" id="Caj-hd-GKF">
+                        <rect key="frame" x="0.0" y="0.0" width="1000" height="1000"/>
                         <autoresizingMask key="autoresizingMask"/>
                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <color key="tintColor" name="AudioRed"/>
@@ -355,9 +358,12 @@
                 </tabBarController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="IAc-4n-gHl" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="3253.636363636364" y="130.54393305439331"/>
+            <point key="canvasLocation" x="3031" y="-266"/>
         </scene>
     </scenes>
+    <inferredMetricsTieBreakers>
+        <segue reference="zWZ-fX-QCN"/>
+    </inferredMetricsTieBreakers>
     <resources>
         <image name="house.fill" catalog="system" width="128" height="104"/>
         <image name="load_logo_final" width="1024" height="1024"/>
