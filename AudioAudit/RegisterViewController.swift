@@ -76,9 +76,26 @@ class RegisterViewController: UIViewController, UITextFieldDelegate {
                     let okAction = UIAlertAction(title: "OK", style: .default)
                     alertControl.addAction(okAction)
                     self.present(alertControl, animated: true)
+                    return
                 }
+
+                // Create user doc in Firestore -- Bersam Testing
+                if let uid = authResult?.user.uid {
+                    Task {
+                        do {
+                            try await UserService.shared.createUser(
+                                uid: uid,
+                                name: self.usernameField.text!,
+                                email: self.usernameField.text!
+                            )
+                        } catch {
+                            print("Failed to create user doc: \(error)")
+                        }
+                    }
+                }
+
+                self.performSegue(withIdentifier: "RegisterToHome", sender: nil)
             }
-            self.performSegue(withIdentifier: "RegisterToHome", sender: nil)
         }
     }
     

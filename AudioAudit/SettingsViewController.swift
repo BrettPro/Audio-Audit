@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import FirebaseAuth
 
 class SettingsViewController: UIViewController {
 
@@ -47,7 +48,10 @@ class SettingsViewController: UIViewController {
                 preferredStyle: .alert
             )
         let cancelAction = UIAlertAction(title: "Cancel", style: .cancel)
-        let logoutAction = UIAlertAction(title: "Log Out", style: .destructive)
+        let logoutAction = UIAlertAction(title: "Log Out", style: .destructive, handler: { _ in
+            try? Auth.auth().signOut()
+            self.view.window?.rootViewController = UIStoryboard(name: "Main", bundle: nil).instantiateInitialViewController()
+        })
         alert.addAction(cancelAction)
         alert.addAction(logoutAction)
         present(alert, animated: true)
