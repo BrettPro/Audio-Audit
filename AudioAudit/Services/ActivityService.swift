@@ -8,6 +8,23 @@
 import Foundation
 import FirebaseFirestore
 
+// Used for friend activity
+extension Array {
+    // Splits an array into smaller arrays of the given size.
+    func chunked(into size: Int) -> [[Element]] {
+        var result: [[Element]] = []
+        var start = 0
+
+        while start < count {
+            let end = Swift.min(start + size, count)
+            result.append(Array(self[start..<end]))
+            start += size
+        }
+
+        return result
+    }
+}
+
 class ActivityService {
 
     static let shared = ActivityService()
@@ -70,6 +87,28 @@ class ActivityService {
         })
     }
 
+
+    // Fetch recent activities from a user's friends.
+    func fetchFriendsFeed(friendIds: [String]) async throws -> [Activity] {
+        if friendIds.isEmpty { return [] }
+
+        var allActivities: [Activity] = []
+
+        // 30 due to firestore limits
+        for chunk in friendIds.chunked(into: 30) {
+            let activities = try await store.fetchAll(
+                type: Activity.self,
+                collection: collection,
+                filter: { ref in
+                    ref.whereField("user_id", in: chunk)
+                       .order(by: "timestamp", descending: true)
+                }
+            )
+            allActivities.append(contentsOf: activities)
+        }
+
+        return allActivities.sorted { $0.timestamp > $1.timestamp }
+    }
 
     // Delete an activity by its document ID.
     func deleteActivity(activityId: String) async throws {

@@ -7,20 +7,11 @@
 
 import UIKit
 
-struct Activity {
-    let username: String
-    let albumTitle: String
-    let songName: String
-    let artistName: String
-    let reviewText: String?
-    let profileImageName: String
-    let albumCoverImageName: String
-}
-
 class HomeViewController: UIViewController, UITableViewDataSource, UITableViewDelegate {
 
     @IBOutlet weak var activityTableView: UITableView!
     var activities: [Activity] = []
+    var currentUser: AAUser?
     override func viewDidLoad() {
         super.viewDidLoad()
         activityTableView.separatorStyle = .none
@@ -34,35 +25,43 @@ class HomeViewController: UIViewController, UITableViewDataSource, UITableViewDe
         activityTableView.backgroundColor = .white
         //view.backgroundColor = .systemBackground
 
-        loadSampleActivities()
+        //loadFriendsFeed()
         // Do any additional setup after loading the view.
     }
     
-    func loadSampleActivities() {
-        
-        let activity1 = Activity(
-            username: "Emma",
-            albumTitle: "Blonde",
-            songName: "Ivy",
-            artistName: "Frank Ocean",
-            reviewText: "Beautiful production and vocals. This is one of those songs that gets better every time.",
-            profileImageName: "load_logo_final",
-            albumCoverImageName: "load_logo_final"
-        )
-        
-        let activity2 = Activity(
-            username: "Leo",
-            albumTitle: "Currents",
-            songName: "The Less I Know the Better",
-            artistName: "Tame Impala",
-            reviewText: "Still one of my favorite songs ever.",
-            profileImageName: "load_logo_final",
-            albumCoverImageName: "load_logo_final"
-        )
-        
-        
-        activities = [activity1, activity2]
+    override func viewWillAppear(_ animated: Bool) {
+            super.viewWillAppear(animated)
+            loadFriendsFeed()
     }
+    
+    func loadFriendsFeed() {
+           guard let currentUser = currentUser else {
+               print("No current user found")
+               activities = []
+               activityTableView.reloadData()
+               return
+           }
+
+           let friendIds = currentUser.friends
+
+           Task {
+               do {
+                   let fetchedActivities = try await ActivityService.shared.fetchFriendsFeed(friendIds: friendIds)
+
+                   await MainActor.run {
+                       self.activities = fetchedActivities
+                       self.activityTableView.reloadData()
+                   }
+               } catch {
+                   print("Error loading friends feed: \(error.localizedDescription)")
+
+                   await MainActor.run {
+                       self.activities = []
+                       self.activityTableView.reloadData()
+                   }
+               }
+           }
+       }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return activities.count
