@@ -30,6 +30,7 @@ struct Activity: Codable, Identifiable {
         case song
         case artist
         case rating
+        case review
         case timestamp
     }
 }

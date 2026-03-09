@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import FirebaseAuth
 
 class LoginViewController: UIViewController, UITextFieldDelegate {
     
@@ -38,15 +39,32 @@ class LoginViewController: UIViewController, UITextFieldDelegate {
     }
     
     @IBAction func loginPressed(_ sender: Any) {
-        var userAuth: Bool = false
-        // TODO authenticate in firebase
-        if !userAuth {
-            let alertControl = UIAlertController(title: "Invalid login", message: "Username or password not recognized.", preferredStyle: .alert)
-            let okAction = UIAlertAction(title: "OK", style: .default)
-            alertControl.addAction(okAction)
+        guard let email = usernameField.text, !email.isEmpty,
+              let password = passwordField.text, !password.isEmpty else {
+            let alertControl = UIAlertController(title: "Invalid login", message: "Please enter your email and password.", preferredStyle: .alert)
+            alertControl.addAction(UIAlertAction(title: "OK", style: .default))
             self.present(alertControl, animated: true)
-        } else {
-            self.performSegue(withIdentifier: "LoginToHome", sender: nil)
+            return
+        }
+
+        Auth.auth().signIn(withEmail: email, password: password) { authResult, error in
+            if let error = error {
+                let alertControl = UIAlertController(title: "Invalid login", message: error.localizedDescription, preferredStyle: .alert)
+                alertControl.addAction(UIAlertAction(title: "OK", style: .default))
+                self.present(alertControl, animated: true)
+                return
+            }
+
+            Task {
+                do {
+                    try await UserService.shared.loadCurrentUser()
+                } catch {
+                    print("Failed to load current user: \(error)")
+                }
+                DispatchQueue.main.async {
+                    self.performSegue(withIdentifier: "LoginToHome", sender: nil)
+                }
+            }
         }
     }
 }

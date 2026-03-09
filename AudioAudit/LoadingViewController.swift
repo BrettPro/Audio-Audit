@@ -26,11 +26,19 @@ class LoadingViewController: UIViewController {
         // timer makes splash screen last for 3 sec
         Timer.scheduledTimer(withTimeInterval: 3, repeats: false) { _ in
             if self.isUserLoggedIn() {
-                self.performSegue(withIdentifier: "HomeSegue", sender: nil)
+                Task {
+                    do {
+                        try await UserService.shared.loadCurrentUser()
+                    } catch {
+                        print("Failed to load current user: \(error)")
+                    }
+                    DispatchQueue.main.async {
+                        self.performSegue(withIdentifier: "HomeSegue", sender: nil)
+                    }
+                }
             } else {
                 self.performSegue(withIdentifier: "LoginSegue", sender: nil)
             }
-            
         }
     }
     

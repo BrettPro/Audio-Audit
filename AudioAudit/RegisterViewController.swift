@@ -79,7 +79,7 @@ class RegisterViewController: UIViewController, UITextFieldDelegate {
                     return
                 }
 
-                // Create user doc in Firestore -- Bersam Testing
+                // Create user doc in Firestore and cache current user
                 if let uid = authResult?.user.uid {
                     Task {
                         do {
@@ -88,13 +88,15 @@ class RegisterViewController: UIViewController, UITextFieldDelegate {
                                 name: self.usernameField.text!,
                                 email: self.usernameField.text!
                             )
+                            try await UserService.shared.loadCurrentUser()
                         } catch {
                             print("Failed to create user doc: \(error)")
                         }
+                        DispatchQueue.main.async {
+                            self.performSegue(withIdentifier: "RegisterToHome", sender: nil)
+                        }
                     }
                 }
-
-                self.performSegue(withIdentifier: "RegisterToHome", sender: nil)
             }
         }
     }

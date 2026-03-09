@@ -164,12 +164,14 @@ class ActivityCellTableViewCell: UITableViewCell {
         ])
     }
 
-    func configure(with activity: Activity) {
-        let fullText = "\(activity.username) rated \(activity.albumTitle)"
+    func configure(with activity: Activity, username: String? = nil) {
+        let displayName = username ?? "User"
+        let action = activity.type == .review ? "reviewed" : "listened to"
+        let fullText = "\(displayName) \(action) \(activity.song)"
         let attributedText = NSMutableAttributedString(string: fullText)
 
-        let usernameRange = (fullText as NSString).range(of: activity.username)
-        let albumRange = (fullText as NSString).range(of: activity.albumTitle)
+        let usernameRange = (fullText as NSString).range(of: displayName)
+        let songRange = (fullText as NSString).range(of: activity.song)
 
         attributedText.addAttribute(
             .font,
@@ -180,16 +182,14 @@ class ActivityCellTableViewCell: UITableViewCell {
         attributedText.addAttribute(
             .font,
             value: UIFont.systemFont(ofSize: 16, weight: .semibold),
-            range: albumRange
+            range: songRange
         )
 
         titleLabel.attributedText = attributedText
-        songNameLabel.text = activity.songName
-        artistNameLabel.text = activity.artistName
-        profileImageView.image = UIImage(named: activity.profileImageName)
-        albumCoverImageView.image = UIImage(named: activity.albumCoverImageName)
+        songNameLabel.text = activity.song
+        artistNameLabel.text = activity.artist
 
-        if let review = activity.reviewText,
+        if let review = activity.review,
            !review.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty {
             descriptionLabel.text = review
             descriptionLabel.isHidden = false

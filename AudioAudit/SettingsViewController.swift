@@ -49,6 +49,7 @@ class SettingsViewController: UIViewController {
             )
         let cancelAction = UIAlertAction(title: "Cancel", style: .cancel)
         let logoutAction = UIAlertAction(title: "Log Out", style: .destructive, handler: { _ in
+            UserService.shared.clearCurrentUser()
             try? Auth.auth().signOut()
             self.view.window?.rootViewController = UIStoryboard(name: "Main", bundle: nil).instantiateInitialViewController()
         })

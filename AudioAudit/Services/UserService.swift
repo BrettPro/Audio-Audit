@@ -17,10 +17,22 @@ class UserService {
 
     private init() {}
 
+    // The cached current user. Set after login, register, or app launch.
+    var currentUser: AAUser?
 
     // Returns the current Firebase Auth user ID, or nil if not signed in.
     var currentUserId: String? {
         Auth.auth().currentUser?.uid
+    }
+
+    // Fetches the current user from Firestore and caches it.
+    func loadCurrentUser() async throws {
+        currentUser = try await fetchCurrentUser()
+    }
+
+    // Clears the cached current user (logout)
+    func clearCurrentUser() {
+        currentUser = nil
     }
 
 
