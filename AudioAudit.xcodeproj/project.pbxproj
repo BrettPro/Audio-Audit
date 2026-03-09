@@ -6,6 +6,13 @@
 	objectVersion = 77;
 	objects = {
 
+/* Begin PBXBuildFile section */
+		FF74BDAB2F5BA22700126AC5 /* FirebaseAuth in Frameworks */ = {isa = PBXBuildFile; productRef = FF74BDAA2F5BA22700126AC5 /* FirebaseAuth */; };
+		FF74BDAD2F5BA22700126AC5 /* FirebaseCore in Frameworks */ = {isa = PBXBuildFile; productRef = FF74BDAC2F5BA22700126AC5 /* FirebaseCore */; };
+		FF74BDAF2F5BA22700126AC5 /* FirebaseFirestore in Frameworks */ = {isa = PBXBuildFile; productRef = FF74BDAE2F5BA22700126AC5 /* FirebaseFirestore */; };
+		FF74BDB22F5BA27500126AC5 /* FirebaseAnalytics in Frameworks */ = {isa = PBXBuildFile; productRef = FF74BDB12F5BA27500126AC5 /* FirebaseAnalytics */; };
+/* End PBXBuildFile section */
+
 /* Begin PBXFileReference section */
 		8BA3AD252F563A8D008573AE /* AudioAudit.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = AudioAudit.app; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
@@ -36,6 +43,10 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				FF74BDAD2F5BA22700126AC5 /* FirebaseCore in Frameworks */,
+				FF74BDAB2F5BA22700126AC5 /* FirebaseAuth in Frameworks */,
+				FF74BDB22F5BA27500126AC5 /* FirebaseAnalytics in Frameworks */,
+				FF74BDAF2F5BA22700126AC5 /* FirebaseFirestore in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -46,6 +57,7 @@
 			isa = PBXGroup;
 			children = (
 				8BA3AD272F563A8D008573AE /* AudioAudit */,
+				FF74BDB02F5BA27500126AC5 /* Frameworks */,
 				8BA3AD262F563A8D008573AE /* Products */,
 			);
 			sourceTree = "<group>";
@@ -56,6 +68,13 @@
 				8BA3AD252F563A8D008573AE /* AudioAudit.app */,
 			);
 			name = Products;
+			sourceTree = "<group>";
+		};
+		FF74BDB02F5BA27500126AC5 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			name = Frameworks;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -78,6 +97,10 @@
 			);
 			name = AudioAudit;
 			packageProductDependencies = (
+				FF74BDAA2F5BA22700126AC5 /* FirebaseAuth */,
+				FF74BDAC2F5BA22700126AC5 /* FirebaseCore */,
+				FF74BDAE2F5BA22700126AC5 /* FirebaseFirestore */,
+				FF74BDB12F5BA27500126AC5 /* FirebaseAnalytics */,
 			);
 			productName = AudioAudit;
 			productReference = 8BA3AD252F563A8D008573AE /* AudioAudit.app */;
@@ -107,6 +130,9 @@
 			);
 			mainGroup = 8BA3AD1C2F563A8D008573AE;
 			minimizedProjectReferenceProxies = 1;
+			packageReferences = (
+				FF74BDA92F5BA22700126AC5 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */,
+			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = 8BA3AD262F563A8D008573AE /* Products */;
 			projectDirPath = "";
@@ -345,6 +371,40 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		FF74BDA92F5BA22700126AC5 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/firebase/firebase-ios-sdk";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 12.10.0;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		FF74BDAA2F5BA22700126AC5 /* FirebaseAuth */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = FF74BDA92F5BA22700126AC5 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
+			productName = FirebaseAuth;
+		};
+		FF74BDAC2F5BA22700126AC5 /* FirebaseCore */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = FF74BDA92F5BA22700126AC5 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
+			productName = FirebaseCore;
+		};
+		FF74BDAE2F5BA22700126AC5 /* FirebaseFirestore */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = FF74BDA92F5BA22700126AC5 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
+			productName = FirebaseFirestore;
+		};
+		FF74BDB12F5BA27500126AC5 /* FirebaseAnalytics */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = FF74BDA92F5BA22700126AC5 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
+			productName = FirebaseAnalytics;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = 8BA3AD1D2F563A8D008573AE /* Project object */;
 }

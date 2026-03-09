@@ -45,7 +45,8 @@ class LoginViewController: UIViewController, UITextFieldDelegate {
             let okAction = UIAlertAction(title: "OK", style: .default)
             alertControl.addAction(okAction)
             self.present(alertControl, animated: true)
+        } else {
+            self.performSegue(withIdentifier: "LoginToHome", sender: nil)
         }
-        // TODO else segue to activity feed
     }
 }
