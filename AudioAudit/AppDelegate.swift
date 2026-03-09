@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import FirebaseCore
 
 @main
 class AppDelegate: UIResponder, UIApplicationDelegate {
@@ -18,7 +19,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         // TODO figure out why these dont set color of nav back button and unselected tab bar items
         UINavigationBar.appearance().tintColor = UIColor.audioRed
         UITabBar.appearance().unselectedItemTintColor = UIColor.lightGray
-        
+        FirebaseApp.configure()
         return true
     }
 
