@@ -20,6 +20,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         UINavigationBar.appearance().tintColor = UIColor.audioRed
         UITabBar.appearance().unselectedItemTintColor = UIColor.lightGray
         FirebaseApp.configure()
+
         return true
     }
 

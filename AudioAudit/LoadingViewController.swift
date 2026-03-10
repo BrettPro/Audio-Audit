@@ -18,6 +18,7 @@ class LoadingViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        
         self.navigationController?.isNavigationBarHidden = true
         
         // rotate logo for a spotify look

@@ -93,7 +93,7 @@ class RegisterViewController: UIViewController, UITextFieldDelegate {
                             print("Failed to create user doc: \(error)")
                         }
                         DispatchQueue.main.async {
-                            self.performSegue(withIdentifier: "RegisterToHome", sender: nil)
+                            self.performSegue(withIdentifier: "RegistertoOnboard", sender: nil)
                         }
                     }
                 }
