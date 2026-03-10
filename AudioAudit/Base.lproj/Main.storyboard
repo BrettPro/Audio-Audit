@@ -947,11 +947,8 @@
         </scene>
     </scenes>
     <inferredMetricsTieBreakers>
-<<<<<<< HEAD
         <segue reference="7xy-gP-Kao"/>
-=======
         <segue reference="2YT-Lf-els"/>
->>>>>>> fda3a77375cc2008294d99a5fd957039d6556ba7
     </inferredMetricsTieBreakers>
     <resources>
         <image name="Spotify_Primary_Logo_RGB_Green" width="939" height="940"/>
