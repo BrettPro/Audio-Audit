@@ -256,20 +256,36 @@
                         <rect key="frame" x="0.0" y="0.0" width="440" height="884"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="HOME PAGE" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Vgd-kW-v3F">
-                                <rect key="frame" x="199" y="468" width="96" height="21"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                <nil key="textColor"/>
-                                <nil key="highlightedColor"/>
-                            </label>
+                            <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="-1" estimatedSectionHeaderHeight="-1" sectionFooterHeight="-1" estimatedSectionFooterHeight="-1" translatesAutoresizingMaskIntoConstraints="NO" id="zTk-GW-C2A">
+                                <rect key="frame" x="0.0" y="62" width="440" height="811"/>
+                                <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                                <prototypes>
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="ActivityCell" id="s7r-Ha-fbW" customClass="ActivityCellTableViewCell" customModule="AudioAudit" customModuleProvider="target">
+                                        <rect key="frame" x="0.0" y="50" width="440" height="51"/>
+                                        <autoresizingMask key="autoresizingMask"/>
+                                        <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="s7r-Ha-fbW" id="Dv5-D5-ZGF">
+                                            <rect key="frame" x="0.0" y="0.0" width="440" height="51"/>
+                                            <autoresizingMask key="autoresizingMask"/>
+                                        </tableViewCellContentView>
+                                    </tableViewCell>
+                                </prototypes>
+                            </tableView>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="dGb-Am-jKa"/>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                        <constraints>
+                            <constraint firstItem="dGb-Am-jKa" firstAttribute="trailing" secondItem="zTk-GW-C2A" secondAttribute="trailing" id="8RG-U8-hRe"/>
+                            <constraint firstItem="zTk-GW-C2A" firstAttribute="leading" secondItem="dGb-Am-jKa" secondAttribute="leading" id="e0Z-2X-be4"/>
+                            <constraint firstItem="zTk-GW-C2A" firstAttribute="top" secondItem="dGb-Am-jKa" secondAttribute="top" id="iPB-b5-lCc"/>
+                            <constraint firstItem="dGb-Am-jKa" firstAttribute="bottom" secondItem="zTk-GW-C2A" secondAttribute="bottom" id="o7H-7x-4hK"/>
+                        </constraints>
                     </view>
                     <tabBarItem key="tabBarItem" title="Home" image="house.fill" catalog="system" selectedImage="house.fill" id="cKC-hu-Xxc">
                         <color key="badgeColor" name="AudioRed"/>
                     </tabBarItem>
+                    <connections>
+                        <outlet property="activityTableView" destination="zTk-GW-C2A" id="xdg-OA-D72"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="LND-2U-Vpv" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
@@ -931,7 +947,11 @@
         </scene>
     </scenes>
     <inferredMetricsTieBreakers>
+<<<<<<< HEAD
         <segue reference="7xy-gP-Kao"/>
+=======
+        <segue reference="2YT-Lf-els"/>
+>>>>>>> fda3a77375cc2008294d99a5fd957039d6556ba7
     </inferredMetricsTieBreakers>
     <resources>
         <image name="Spotify_Primary_Logo_RGB_Green" width="939" height="940"/>

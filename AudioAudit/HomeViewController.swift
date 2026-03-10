@@ -7,14 +7,93 @@
 
 import UIKit
 
-class HomeViewController: UIViewController {
+class HomeViewController: UIViewController, UITableViewDataSource, UITableViewDelegate {
+
+    @IBOutlet weak var activityTableView: UITableView!
+    var activities: [Activity] = []
+    var usernames: [String: String] = [:]
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        activityTableView.separatorStyle = .none
+        
+        activityTableView.dataSource = self
+        activityTableView.delegate = self
 
+        activityTableView.rowHeight = UITableView.automaticDimension
+        activityTableView.estimatedRowHeight = 110
+        activityTableView.separatorStyle = .none
+        activityTableView.backgroundColor = .white
+        //view.backgroundColor = .systemBackground
+
+        //loadFriendsFeed()
         // Do any additional setup after loading the view.
     }
     
+    override func viewWillAppear(_ animated: Bool) {
+            super.viewWillAppear(animated)
+            loadFriendsFeed()
+    }
+    
+    func loadFriendsFeed() {
+        guard let currentUser = UserService.shared.currentUser else {
+            print("No current user found")
+            activities = []
+            activityTableView.reloadData()
+            return
+        }
+
+        var friendIds = currentUser.friends
+        if let myId = UserService.shared.currentUserId {
+            friendIds.append(myId)
+        }
+
+        Task {
+            do {
+                let fetchedActivities = try await ActivityService.shared.fetchFriendsFeed(friendIds: friendIds)
+
+                // Fetch usernames for each unique userId
+                let uniqueUserIds = Set(fetchedActivities.map { $0.userId })
+                var names: [String: String] = [:]
+                for uid in uniqueUserIds {
+                    if let user = try? await UserService.shared.fetchUser(uid: uid) {
+                        names[uid] = user.name
+                    }
+                }
+
+                await MainActor.run {
+                    self.activities = fetchedActivities
+                    self.usernames = names
+                    self.activityTableView.reloadData()
+                }
+            } catch {
+                print("Error loading friends feed: \(error.localizedDescription)")
+
+                await MainActor.run {
+                    self.activities = []
+                    self.activityTableView.reloadData()
+                }
+            }
+        }
+    }
+    
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        return activities.count
+    }
+    
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+
+        let activity = activities[indexPath.row]
+
+        let cell = tableView.dequeueReusableCell(
+            withIdentifier: "ActivityCell",
+            for: indexPath
+        ) as! ActivityCellTableViewCell
+
+        cell.configure(with: activity, username: usernames[activity.userId])
+
+        return cell
+    }
 
     /*
     // MARK: - Navigation

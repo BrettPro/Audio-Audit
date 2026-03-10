@@ -20,6 +20,7 @@ struct Activity: Codable, Identifiable {
     var song: String
     var artist: String
     var rating: Int?
+    var review: String?
     var timestamp: Date
 
     enum CodingKeys: String, CodingKey {
@@ -29,6 +30,7 @@ struct Activity: Codable, Identifiable {
         case song
         case artist
         case rating
+        case review
         case timestamp
     }
 }
