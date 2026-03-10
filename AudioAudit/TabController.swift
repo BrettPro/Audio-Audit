@@ -22,6 +22,7 @@ class TabController: UITabBarController {
         // tabBarAppearance.stackedLayoutAppearance.normal.iconColor = UIColor.lightGray
         tabBarView.standardAppearance = tabBarAppearance
         tabBarView.scrollEdgeAppearance = tabBarAppearance
+        isModalInPresentation = true
     }
     
 

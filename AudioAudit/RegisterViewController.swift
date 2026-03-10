@@ -94,7 +94,7 @@ class RegisterViewController: UIViewController, UITextFieldDelegate {
                     }
                 }
 
-                self.performSegue(withIdentifier: "RegisterToHome", sender: nil)
+                self.performSegue(withIdentifier: "RegistertoOnboard", sender: nil)
             }
         }
     }
