@@ -62,12 +62,6 @@ class RegisterViewController: UIViewController, UITextFieldDelegate {
             let okAction = UIAlertAction(title: "OK", style: .default)
             alertControl.addAction(okAction)
             self.present(alertControl, animated: true)
-            // TODO check if firebase already accounts for unique usernames
-//        } else if !uniqueCreds {
-//            let alertControl = UIAlertController(title: "Invalid registration", message: "Username already taken.", preferredStyle: .alert)
-//            let okAction = UIAlertAction(title: "OK", style: .default)
-//            alertControl.addAction(okAction)
-//            self.present(alertControl, animated: true)
         } else {
             Auth.auth().createUser(withEmail: usernameField.text!, password: passwordField.text!) {
                 authResult, error in
@@ -90,7 +84,7 @@ class RegisterViewController: UIViewController, UITextFieldDelegate {
                             )
                             try await UserService.shared.loadCurrentUser()
                         } catch {
-                            print("Failed to create user doc: \(error)")
+                            print("REGISTER ERROR: Failed to create user doc: \(error)")
                         }
                         DispatchQueue.main.async {
                             self.performSegue(withIdentifier: "RegistertoOnboard", sender: nil)

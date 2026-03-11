@@ -31,13 +31,13 @@ class HomeViewController: UIViewController, UITableViewDataSource, UITableViewDe
     }
     
     override func viewWillAppear(_ animated: Bool) {
-            super.viewWillAppear(animated)
-            loadFriendsFeed()
+        super.viewWillAppear(animated)
+        loadFriendsFeed()
     }
     
     func loadFriendsFeed() {
         guard let currentUser = UserService.shared.currentUser else {
-            print("No current user found")
+            print("HOME ERROR: No current user found")
             activities = []
             activityTableView.reloadData()
             return
