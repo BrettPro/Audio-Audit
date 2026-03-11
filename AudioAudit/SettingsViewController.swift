@@ -22,7 +22,7 @@ class SettingsViewController: UIViewController {
     @IBOutlet weak var largerLabel: UILabel!
     @IBOutlet weak var logoutButtonText: UIButton!
     @IBOutlet weak var fontSlider: UISlider!
-    
+    @IBOutlet weak var musicStatusLabel: UILabel!
     override func viewDidLoad() {
         super.viewDidLoad()
     }
@@ -39,6 +39,7 @@ class SettingsViewController: UIViewController {
             selectLabel,
             smallerLabel,
             largerLabel,
+            musicStatusLabel
         ], buttons: [logoutButtonText])
         let darkMode = UserDefaults.standard.bool(forKey: "darkMode")
         if darkMode {
@@ -50,6 +51,13 @@ class SettingsViewController: UIViewController {
         }
         let oldSize = (size - 15) / 2
         fontSlider.value = Float(oldSize)
+        let isConnected = UserDefaults.standard.bool(forKey: "appleMusicConnected")
+        if isConnected {
+            musicStatusLabel.text = "Apple Music is Connected!"
+        } else {
+            musicStatusLabel.text = "Apple Music is Not Connected. Please Connect in System Settings"
+        }
+        self.tabBarController?.tabBar.isHidden = true
     }
     
 
@@ -87,6 +95,7 @@ class SettingsViewController: UIViewController {
             selectLabel,
             smallerLabel,
             largerLabel,
+            musicStatusLabel
         ], buttons: [logoutButtonText])
         UserDefaults.standard.set(actualSize, forKey: "fontSize")
     }
