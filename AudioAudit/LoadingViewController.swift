@@ -45,7 +45,7 @@ class LoadingViewController: UIViewController {
     
     func isUserLoggedIn() -> Bool {
         let logged = Auth.auth().currentUser != nil
-        print("CURRENT USER: \(Auth.auth().currentUser)")
+        print("CURRENT USER: \(Auth.auth().currentUser, default: "ERROR GETTING USER")")
         return logged
     }
 
