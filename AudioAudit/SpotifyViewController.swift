@@ -12,31 +12,58 @@ class SpotifyViewController: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-
+        self.navigationItem.hidesBackButton = true
+        self.navigationController?.interactivePopGestureRecognizer?.isEnabled = false
         // Do any additional setup after loading the view.
     }
-    @IBAction func linkSpotifyPressed(_ sender: Any) {
-        Task {
+    
+    @IBAction func linkButtonPressed(_ sender: Any) {
+        Task { @MainActor in
             let status = await MusicAuthorization.request()
-
-            if status == .authorized {
+            
+            if status != .authorized {
+                UserDefaults.standard.set(false, forKey: "appleMusicConnected")
+                
                 let alert = UIAlertController(
-                        title: "Account Successfully Linked!",
-                        message: "",
-                        preferredStyle: .alert
-                    )
-                let action = UIAlertAction(title: "Ok", style: .default)
-                alert.addAction(action)
+                    title: "Access Denied",
+                    message: "Please allow Apple Music access in Settings.",
+                    preferredStyle: .alert
+                )
+                alert.addAction(UIAlertAction(title: "Ok", style: .default))
                 present(alert, animated: true)
+                return
+            }
+            
+            // Authorized — now check subscription
+            let hasSubscription: Bool
+            
+            do {
+                let subscription = try await MusicSubscription.current
+                hasSubscription = subscription.canPlayCatalogContent
+            } catch {
+                hasSubscription = false
+            }
+            
+            if hasSubscription {
                 UserDefaults.standard.set(true, forKey: "appleMusicConnected")
-            } else {
+                
                 let alert = UIAlertController(
-                        title: "Error in Linking Account",
-                        message: "Please allow Apple Music access in settings",
-                        preferredStyle: .alert
-                    )
-                let action = UIAlertAction(title: "Ok", style: .default)
-                alert.addAction(action)
+                    title: "Account Successfully Linked!",
+                    message: "Your Apple Music account is linked!",
+                    preferredStyle: .alert
+                )
+                alert.addAction(UIAlertAction(title: "Ok", style: .default))
+                present(alert, animated: true)
+                
+            } else {
+                UserDefaults.standard.set(false, forKey: "appleMusicConnected")
+                
+                let alert = UIAlertController(
+                    title: "Apple Music Not Active",
+                    message: "You need an active Apple Music subscription.",
+                    preferredStyle: .alert
+                )
+                alert.addAction(UIAlertAction(title: "Ok", style: .default))
                 present(alert, animated: true)
             }
         }

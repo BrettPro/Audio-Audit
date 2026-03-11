@@ -129,6 +129,7 @@
         <!--Register View Controller-->
         <scene sceneID="lFg-QZ-3ae">
             <objects>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="QmY-fg-8jU" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
                 <viewController id="Ea2-Vy-nBC" customClass="RegisterViewController" customModule="AudioAudit" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="jnC-Lw-TtQ">
                         <rect key="frame" x="0.0" y="0.0" width="440" height="956"/>
@@ -200,9 +201,7 @@
                             <constraint firstItem="3xt-ug-Pf6" firstAttribute="centerX" secondItem="jnC-Lw-TtQ" secondAttribute="centerX" id="wBa-y5-V7R"/>
                         </constraints>
                     </view>
-                    <navigationItem key="navigationItem" id="2B9-qz-EoF">
-                        <barButtonItem key="leftBarButtonItem" systemItem="undo" id="taz-a6-v4M"/>
-                    </navigationItem>
+                    <navigationItem key="navigationItem" id="2B9-qz-EoF"/>
                     <connections>
                         <outlet property="logoView" destination="3xt-ug-Pf6" id="k27-sv-cRa"/>
                         <outlet property="passwordField" destination="VdK-ZE-384" id="T46-Xg-d0a"/>
@@ -212,7 +211,6 @@
                         <segue destination="dFt-Ka-QtV" kind="show" identifier="RegistertoOnboard" id="RN1-ev-J8m"/>
                     </connections>
                 </viewController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="QmY-fg-8jU" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="1589" y="678"/>
         </scene>
@@ -832,12 +830,12 @@
                         <rect key="frame" x="0.0" y="0.0" width="440" height="956"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Lastly, connect your Spotify account!" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="6" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="uze-2h-fRM">
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Lastly, connect your Apple Music account!" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="6" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="uze-2h-fRM">
                                 <rect key="frame" x="20" y="155" width="400" height="200"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="200" id="VSS-Jm-MfG"/>
                                 </constraints>
-                                <fontDescription key="fontDescription" type="boldSystem" pointSize="55"/>
+                                <fontDescription key="fontDescription" type="boldSystem" pointSize="45"/>
                                 <nil key="textColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
@@ -878,8 +876,7 @@
                                     <color key="baseBackgroundColor" systemColor="systemPinkColor"/>
                                 </buttonConfiguration>
                                 <connections>
-                                    <action selector="loginPressed:" destination="QlB-87-FYW" eventType="touchUpInside" id="x7F-Hf-2A1"/>
-                                    <action selector="registerPressed:" destination="Ea2-Vy-nBC" eventType="touchUpInside" id="BFP-G7-h3D"/>
+                                    <action selector="linkButtonPressed:" destination="yQd-xd-zvi" eventType="touchUpInside" id="1eN-Md-eee"/>
                                 </connections>
                             </button>
                         </subviews>
@@ -928,10 +925,10 @@
                                 <connections>
                                     <action selector="loginPressed:" destination="QlB-87-FYW" eventType="touchUpInside" id="Lsh-fK-0Ir"/>
                                     <action selector="registerPressed:" destination="Ea2-Vy-nBC" eventType="touchUpInside" id="kLp-qM-hES"/>
-                                    <segue destination="h7V-o0-xGz" kind="presentation" id="7xy-gP-Kao"/>
+                                    <segue destination="h7V-o0-xGz" kind="presentation" modalPresentationStyle="fullScreen" id="7xy-gP-Kao"/>
                                 </connections>
                             </button>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Yay, you are all ready to get started!" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="6" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="s48-yy-gZc">
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Yay, you're all ready to get started!" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="6" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="s48-yy-gZc">
                                 <rect key="frame" x="20" y="155" width="400" height="197"/>
                                 <fontDescription key="fontDescription" type="boldSystem" pointSize="55"/>
                                 <nil key="textColor"/>
@@ -967,7 +964,7 @@
         </scene>
     </scenes>
     <inferredMetricsTieBreakers>
-        <segue reference="zWZ-fX-QCN"/>
+        <segue reference="7xy-gP-Kao"/>
     </inferredMetricsTieBreakers>
     <resources>
         <image name="Apple_Music_icon.svg" width="500" height="500"/>

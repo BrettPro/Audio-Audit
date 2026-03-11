@@ -14,13 +14,14 @@ class ThemeViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-
+        self.navigationItem.hidesBackButton = true
+        self.navigationController?.interactivePopGestureRecognizer?.isEnabled = false
         // Do any additional setup after loading the view.
     }
     
     override func viewWillAppear(_ animated: Bool) {
         let darkMode = UserDefaults.standard.bool(forKey: "darkMode")
-        let mode = darkMode ? "Dark" : "Light"
+        let mode = darkMode ? "Light" : "Dark"
         if darkMode {
             themeOutlet.setImage(UIImage(systemName: "moon.fill"), for: .normal)
             themeOutlet.backgroundColor = .black
