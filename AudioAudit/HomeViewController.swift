@@ -56,11 +56,23 @@ class HomeViewController: UIViewController, UITableViewDataSource, UITableViewDe
     }
     
     override func viewWillAppear(_ animated: Bool) {
-            super.viewWillAppear(animated)
-            loadFriendsFeed()
+        super.viewWillAppear(animated)
+        loadFriendsFeed()
     }
     
     func loadFriendsFeed() {
+        guard let currentUser = UserService.shared.currentUser else {
+            print("HOME ERROR: No current user found")
+            activities = []
+            activityTableView.reloadData()
+            return
+        }
+
+        var friendIds = currentUser.friends
+        if let myId = UserService.shared.currentUserId {
+            friendIds.append(myId)
+        }
+
         Task {
             do {
                 // Temporarily fetch all users' activities instead of just friends

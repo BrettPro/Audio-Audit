@@ -88,7 +88,6 @@
                                 <buttonConfiguration key="configuration" style="filled" title="Login"/>
                                 <connections>
                                     <action selector="loginPressed:" destination="QlB-87-FYW" eventType="touchUpInside" id="gNp-hO-TBh"/>
-                                    <segue destination="h7V-o0-xGz" kind="presentation" identifier="LoginToHome" modalPresentationStyle="fullScreen" id="zWZ-fX-QCN"/>
                                 </connections>
                             </button>
                         </subviews>
@@ -120,6 +119,7 @@
                         <outlet property="logoView" destination="tUP-t5-IVk" id="rHe-vs-SBZ"/>
                         <outlet property="passwordField" destination="YE6-La-z5L" id="4rg-Ak-ws0"/>
                         <outlet property="usernameField" destination="rYB-wd-DCH" id="NSQ-hR-dsP"/>
+                        <segue destination="h7V-o0-xGz" kind="presentation" id="BWZ-XX-2Ad"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="NT1-xW-bi2" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
@@ -129,7 +129,6 @@
         <!--Register View Controller-->
         <scene sceneID="lFg-QZ-3ae">
             <objects>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="QmY-fg-8jU" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
                 <viewController id="Ea2-Vy-nBC" customClass="RegisterViewController" customModule="AudioAudit" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="jnC-Lw-TtQ">
                         <rect key="frame" x="0.0" y="0.0" width="440" height="956"/>
@@ -174,7 +173,7 @@
                                     <action selector="registerPressed:" destination="Ea2-Vy-nBC" eventType="touchUpInside" id="ATS-fp-7uu"/>
                                 </connections>
                             </button>
-                            <textField opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="248" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Username" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="8dC-oZ-aM6">
+                            <textField opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="248" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Email" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="8dC-oZ-aM6">
                                 <rect key="frame" x="101" y="345" width="238" height="34"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="34" id="1FS-fK-jzz"/>
@@ -211,6 +210,7 @@
                         <segue destination="dFt-Ka-QtV" kind="show" identifier="RegistertoOnboard" id="RN1-ev-J8m"/>
                     </connections>
                 </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="QmY-fg-8jU" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="1589" y="678"/>
         </scene>
@@ -296,13 +296,21 @@
                         <rect key="frame" x="0.0" y="0.0" width="440" height="956"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="PROFILE PAGE" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Z0N-IX-hc5">
-                                <rect key="frame" x="199" y="492" width="113" height="21"/>
+                            <tableView clipsSubviews="YES" contentMode="scaleToFill" fixedFrame="YES" alwaysBounceVertical="YES" dataMode="prototypes" style="grouped" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="18" estimatedSectionHeaderHeight="-1" sectionFooterHeight="18" estimatedSectionFooterHeight="-1" translatesAutoresizingMaskIntoConstraints="NO" id="VoG-lV-044">
+                                <rect key="frame" x="0.0" y="0.0" width="440" height="956"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                <nil key="textColor"/>
-                                <nil key="highlightedColor"/>
-                            </label>
+                                <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                                <prototypes>
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" id="QmV-Oz-AaU">
+                                        <rect key="frame" x="0.0" y="55.333332061767578" width="440" height="51"/>
+                                        <autoresizingMask key="autoresizingMask"/>
+                                        <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="QmV-Oz-AaU" id="Af2-iW-TVj">
+                                            <rect key="frame" x="0.0" y="0.0" width="440" height="51"/>
+                                            <autoresizingMask key="autoresizingMask"/>
+                                        </tableViewCellContentView>
+                                    </tableViewCell>
+                                </prototypes>
+                            </tableView>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="Za3-K8-xNq"/>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
@@ -314,10 +322,13 @@
                             </connections>
                         </barButtonItem>
                     </navigationItem>
+                    <connections>
+                        <outlet property="profileTableView" destination="VoG-lV-044" id="QK3-Zu-ENu"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="AvP-Vo-br8" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="5745" y="-244"/>
+            <point key="canvasLocation" x="5745" y="-244.14225941422595"/>
         </scene>
         <!--Settings View Controller-->
         <scene sceneID="xfe-AH-48K">
@@ -1153,7 +1164,7 @@
         </scene>
     </scenes>
     <inferredMetricsTieBreakers>
-        <segue reference="7xy-gP-Kao"/>
+        <segue reference="2YT-Lf-els"/>
     </inferredMetricsTieBreakers>
     <resources>
         <image name="Apple_Music_icon.svg" width="500" height="500"/>
@@ -1170,10 +1181,10 @@
             <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
         </systemColor>
         <systemColor name="systemGray2Color">
-            <color red="0.68235294117647061" green="0.68235294117647061" blue="0.69803921568627447" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+            <color red="0.68235294120000001" green="0.68235294120000001" blue="0.69803921570000005" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </systemColor>
         <systemColor name="systemPinkColor">
-            <color red="1" green="0.17647058823529413" blue="0.33333333333333331" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+            <color red="1" green="0.1764705882" blue="0.33333333329999998" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </systemColor>
         <systemColor name="systemGray4Color">
             <color red="0.81960784313725488" green="0.81960784313725488" blue="0.83921568627450982" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
@@ -1182,7 +1193,7 @@
             <color red="0.89803921568627454" green="0.89803921568627454" blue="0.91764705882352937" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </systemColor>
         <systemColor name="systemRedColor">
-            <color red="1" green="0.2196078431372549" blue="0.23529411764705882" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+            <color red="1" green="0.23137254900000001" blue="0.18823529410000001" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </systemColor>
     </resources>
 </document>

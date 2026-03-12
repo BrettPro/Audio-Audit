@@ -25,7 +25,6 @@ class LoginViewController: UIViewController, UITextFieldDelegate {
         loginButton.tintColor = UIColor.audioRed
         accountButton.tintColor = UIColor.audioRed
     }
-    
 
     // Called when 'return' key pressed
     func textFieldShouldReturn(_ textField:UITextField) -> Bool {
@@ -41,6 +40,7 @@ class LoginViewController: UIViewController, UITextFieldDelegate {
     @IBAction func loginPressed(_ sender: Any) {
         guard let email = usernameField.text, !email.isEmpty,
               let password = passwordField.text, !password.isEmpty else {
+            print("ERROR: BAD LOGIN")
             let alertControl = UIAlertController(title: "Invalid login", message: "Please enter your email and password.", preferredStyle: .alert)
             alertControl.addAction(UIAlertAction(title: "OK", style: .default))
             self.present(alertControl, animated: true)
@@ -49,19 +49,18 @@ class LoginViewController: UIViewController, UITextFieldDelegate {
 
         Auth.auth().signIn(withEmail: email, password: password) { authResult, error in
             if let error = error {
+                print("SIGN IN ERROR")
                 let alertControl = UIAlertController(title: "Invalid login", message: error.localizedDescription, preferredStyle: .alert)
                 alertControl.addAction(UIAlertAction(title: "OK", style: .default))
                 self.present(alertControl, animated: true)
-                return
-            }
-
-            Task {
-                do {
-                    try await UserService.shared.loadCurrentUser()
-                } catch {
-                    print("Failed to load current user: \(error)")
-                }
-                DispatchQueue.main.async {
+            } else {
+                print("RESULT: \(authResult, default: "idek")")
+                Task {
+                    do {
+                        try await UserService.shared.loadCurrentUser()
+                    } catch {
+                        print("LOGIN ERROR: Failed to load current user: \(error)")
+                    }
                     self.performSegue(withIdentifier: "LoginToHome", sender: nil)
                 }
             }
