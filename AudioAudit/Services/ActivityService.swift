@@ -33,7 +33,6 @@ class ActivityService {
 
     private init() {}
 
-
     // Log a listen activity. Returns the new document ID.
     func logListen(userId: String, song: String, artist: String) async throws -> String {
         let activity = Activity(
@@ -61,7 +60,6 @@ class ActivityService {
         return try await store.create(object: activity, collection: collection)
     }
 
-
     // Fetch all activities for a user, ordered by most recent first.
     func fetchActivities(for userId: String) async throws -> [Activity] {
         try await store.fetchAll(type: Activity.self, collection: collection, filter: { ref in
@@ -87,7 +85,6 @@ class ActivityService {
                .order(by: "timestamp", descending: true)
         })
     }
-
 
     // Fetch recent activities from a user's friends.
     func fetchFriendsFeed(friendIds: [String]) async throws -> [Activity] {

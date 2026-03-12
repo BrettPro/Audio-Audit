@@ -37,6 +37,5 @@ class FontViewController: UIViewController {
         smallerLabel.font = smallerLabel.font.withSize(CGFloat(fontSize))
         largerLabel.font = largerLabel.font.withSize(CGFloat(fontSize))
     }
-    
 
 }

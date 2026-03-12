@@ -39,7 +39,3 @@ func getSongInfo(title: String) async throws -> (artist: String, album: String, 
     }
     return (song.artistName, song.albumTitle ?? "", image)
 }
-
-
-
-

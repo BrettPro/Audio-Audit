@@ -59,7 +59,6 @@ class SettingsViewController: UIViewController {
         }
         self.tabBarController?.tabBar.isHidden = true
     }
-    
 
     @IBAction func modeButton(_ sender: UIButton) {
         let isDark = view.window?.overrideUserInterfaceStyle == .dark

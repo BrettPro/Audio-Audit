@@ -119,7 +119,7 @@
                         <outlet property="logoView" destination="tUP-t5-IVk" id="rHe-vs-SBZ"/>
                         <outlet property="passwordField" destination="YE6-La-z5L" id="4rg-Ak-ws0"/>
                         <outlet property="usernameField" destination="rYB-wd-DCH" id="NSQ-hR-dsP"/>
-                        <segue destination="h7V-o0-xGz" kind="presentation" id="BWZ-XX-2Ad"/>
+                        <segue destination="h7V-o0-xGz" kind="presentation" identifier="LoginToHome" modalPresentationStyle="fullScreen" id="BWZ-XX-2Ad"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="NT1-xW-bi2" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>

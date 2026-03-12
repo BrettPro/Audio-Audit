@@ -16,7 +16,6 @@ class MapService {
 
     private init() {}
 
-
     // Drop a pin for a song at a location. Returns the new document ID.
     func dropPin(userId: String, song: String, artist: String, latitude: Double, longitude: Double) async throws -> String {
         let pin = MapPin(
@@ -30,7 +29,6 @@ class MapService {
         return try await store.create(object: pin, collection: collection)
     }
 
-
     // Fetch all pins for a user.
     func fetchPins(for userId: String) async throws -> [MapPin] {
         try await store.fetchAll(type: MapPin.self, collection: collection, filter: { ref in
@@ -43,7 +41,6 @@ class MapService {
     func fetchAllPins() async throws -> [MapPin] {
         try await store.fetchAll(type: MapPin.self, collection: collection)
     }
-
 
     func deletePin(pinId: String) async throws {
         try await store.delete(collection: collection, documentId: pinId)

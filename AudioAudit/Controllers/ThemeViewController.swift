@@ -51,6 +51,5 @@ class ThemeViewController: UIViewController {
             textLabel.text = "Tap to Change into Light Mode"
         }
     }
-    
-    
+
 }

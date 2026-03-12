@@ -26,7 +26,7 @@ class RegisterViewController: UIViewController, UITextFieldDelegate {
     }
 
     // Called when 'return' key pressed
-    func textFieldShouldReturn(_ textField:UITextField) -> Bool {
+    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
         textField.resignFirstResponder()
         return true
     }

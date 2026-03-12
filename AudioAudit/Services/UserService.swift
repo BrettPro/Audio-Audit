@@ -35,7 +35,6 @@ class UserService {
         currentUser = nil
     }
 
-
     // Create a new user document using the Firebase Auth UID as the document ID.
     func createUser(uid: String, name: String, email: String) async throws {
         let user = AAUser(
@@ -77,7 +76,6 @@ class UserService {
         ])
     }
 
-
     // Add a friend by appending their UID to the friends array.
     func addFriend(uid: String, friendId: String) async throws {
         try await store.update(collection: collection, documentId: uid, fields: [
@@ -91,7 +89,6 @@ class UserService {
             "friends": FieldValue.arrayRemove([friendId])
         ])
     }
-
 
     // Save or update Spotify credentials.
     func updateSpotifyCredential(uid: String, credential: SpotifyCredential) async throws {

@@ -16,7 +16,6 @@ class QuizService {
 
     private init() {}
 
-
     // Save a quiz attempt. Returns the new document ID.
     func saveAttempt(quizId: String, userId: String, correctAnswers: [String], score: Int) async throws -> String {
         let quiz = Quiz(
@@ -27,7 +26,6 @@ class QuizService {
         )
         return try await store.create(object: quiz, collection: collection)
     }
-
 
     // Fetch all quiz attempts for a user.
     func fetchAttempts(for userId: String) async throws -> [Quiz] {
@@ -53,7 +51,6 @@ class QuizService {
         })
         return results.first
     }
-
 
     func deleteAttempt(attemptId: String) async throws {
         try await store.delete(collection: collection, documentId: attemptId)
