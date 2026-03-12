@@ -16,7 +16,7 @@ class HomeViewController: UIViewController, UITableViewDataSource, UITableViewDe
     override func viewDidLoad() {
         super.viewDidLoad()
         activityTableView.separatorStyle = .none
-        
+
         activityTableView.dataSource = self
         activityTableView.delegate = self
 
@@ -24,10 +24,35 @@ class HomeViewController: UIViewController, UITableViewDataSource, UITableViewDe
         activityTableView.estimatedRowHeight = 110
         activityTableView.separatorStyle = .none
         activityTableView.backgroundColor = .white
-        //view.backgroundColor = .systemBackground
+        activityTableView.isScrollEnabled = true
+        activityTableView.alwaysBounceVertical = true
 
-        //loadFriendsFeed()
-        // Do any additional setup after loading the view.
+        setupAddButton()
+    }
+
+    func setupAddButton() {
+        let addButton = UIButton(type: .system)
+        addButton.translatesAutoresizingMaskIntoConstraints = false
+        addButton.setImage(UIImage(systemName: "plus", withConfiguration: UIImage.SymbolConfiguration(pointSize: 24, weight: .semibold)), for: .normal)
+        addButton.tintColor = .white
+        addButton.backgroundColor = .audioRed
+        addButton.layer.cornerRadius = 28
+        addButton.addTarget(self, action: #selector(addActivityTapped), for: .touchUpInside)
+        view.addSubview(addButton)
+
+        NSLayoutConstraint.activate([
+            addButton.widthAnchor.constraint(equalToConstant: 56),
+            addButton.heightAnchor.constraint(equalToConstant: 56),
+            addButton.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -20),
+            addButton.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -20),
+        ])
+    }
+
+    @objc func addActivityTapped() {
+        let storyboard = UIStoryboard(name: "Main", bundle: nil)
+        let addVC = storyboard.instantiateViewController(withIdentifier: "AddActivityVC")
+        let nav = UINavigationController(rootViewController: addVC)
+        present(nav, animated: true)
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -36,21 +61,10 @@ class HomeViewController: UIViewController, UITableViewDataSource, UITableViewDe
     }
     
     func loadFriendsFeed() {
-        guard let currentUser = UserService.shared.currentUser else {
-            print("No current user found")
-            activities = []
-            activityTableView.reloadData()
-            return
-        }
-
-        var friendIds = currentUser.friends
-        if let myId = UserService.shared.currentUserId {
-            friendIds.append(myId)
-        }
-
         Task {
             do {
-                let fetchedActivities = try await ActivityService.shared.fetchFriendsFeed(friendIds: friendIds)
+                // Temporarily fetch all users' activities instead of just friends
+                let fetchedActivities = try await ActivityService.shared.fetchAllActivities()
 
                 // Fetch usernames for each unique userId
                 let uniqueUserIds = Set(fetchedActivities.map { $0.userId })

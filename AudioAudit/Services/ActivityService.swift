@@ -48,13 +48,14 @@ class ActivityService {
     }
 
     // Log a review activity with a rating. Returns the new document ID.
-    func logReview(userId: String, song: String, artist: String, rating: Int) async throws -> String {
+    func logReview(userId: String, song: String, artist: String, rating: Int, review: String? = nil) async throws -> String {
         let activity = Activity(
             userId: userId,
             type: .review,
             song: song,
             artist: artist,
             rating: rating,
+            review: review,
             timestamp: Date()
         )
         return try await store.create(object: activity, collection: collection)
@@ -108,6 +109,13 @@ class ActivityService {
         }
 
         return allActivities.sorted { $0.timestamp > $1.timestamp }
+    }
+
+    // Fetch all activities from all users, ordered by most recent first.
+    func fetchAllActivities() async throws -> [Activity] {
+        try await store.fetchAll(type: Activity.self, collection: collection, filter: { ref in
+            ref.order(by: "timestamp", descending: true)
+        })
     }
 
     // Delete an activity by its document ID.
