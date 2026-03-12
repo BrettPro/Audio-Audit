@@ -15,6 +15,7 @@ class ProfileHeaderView: UIView {
     let songButton = UIButton()
     let avatarButton = UIButton()
     
+    var onBackTapped: (() -> Void)?
     var statsStack = UIStackView()
     
     init(user: AAUser) {
@@ -54,12 +55,14 @@ class ProfileHeaderView: UIView {
     }
     
     func setConstraints() {
+        
+        let imageWidth = CGFloat(100)
         NSLayoutConstraint.activate([
             // avatar on left
             avatarButton.topAnchor.constraint(equalTo: topAnchor, constant: 16),
             avatarButton.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 24),
-            avatarButton.widthAnchor.constraint(equalToConstant: 100),
-            avatarButton.heightAnchor.constraint(equalToConstant: 100),
+            avatarButton.widthAnchor.constraint(equalToConstant: imageWidth),
+            avatarButton.heightAnchor.constraint(equalToConstant: imageWidth),
             
             // stats to the right of avatar
             statsStack.centerYAnchor.constraint(equalTo: avatarButton.centerYAnchor),
@@ -71,6 +74,8 @@ class ProfileHeaderView: UIView {
             nameLabel.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 24),
             nameLabel.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -16),
         ])
+        
+        avatarButton.layer.cornerRadius = imageWidth / 2
     }
     
     func setLabel(_ l: UILabel) {
@@ -86,8 +91,7 @@ class ProfileHeaderView: UIView {
     }
     
     func openEditPage() {
-        // TODO segue into edit page that allows user to upload photo for profile pic?
-        // possibly leave that in settings instead
+        onBackTapped?()
     }
     
     func setButtons() {
@@ -103,7 +107,6 @@ class ProfileHeaderView: UIView {
         avatarButton.clipsToBounds = true
         avatarButton.translatesAutoresizingMaskIntoConstraints = false
         avatarButton.imageView?.contentMode = .scaleAspectFill
-        avatarButton.layer.cornerRadius = 40
         
         let avatarAction = UIAction { _ in
             print("avatar button pressed")

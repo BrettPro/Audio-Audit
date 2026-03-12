@@ -59,7 +59,7 @@
                                     <constraint firstAttribute="width" constant="238" id="v89-Qu-2Tw"/>
                                 </constraints>
                                 <fontDescription key="fontDescription" type="system" pointSize="14"/>
-                                <textInputTraits key="textInputTraits"/>
+                                <textInputTraits key="textInputTraits" secureTextEntry="YES"/>
                             </textField>
                             <textField opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="248" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Email" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="rYB-wd-DCH">
                                 <rect key="frame" x="101" y="348" width="238" height="34"/>
@@ -119,7 +119,7 @@
                         <outlet property="logoView" destination="tUP-t5-IVk" id="rHe-vs-SBZ"/>
                         <outlet property="passwordField" destination="YE6-La-z5L" id="4rg-Ak-ws0"/>
                         <outlet property="usernameField" destination="rYB-wd-DCH" id="NSQ-hR-dsP"/>
-                        <segue destination="h7V-o0-xGz" kind="presentation" id="BWZ-XX-2Ad"/>
+                        <segue destination="h7V-o0-xGz" kind="presentation" identifier="LoginToHome" id="BWZ-XX-2Ad"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="NT1-xW-bi2" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
@@ -250,11 +250,11 @@
             <objects>
                 <viewController id="iUC-ni-bNN" customClass="HomeViewController" customModule="AudioAudit" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="EHr-NI-fm6">
-                        <rect key="frame" x="0.0" y="0.0" width="440" height="956"/>
+                        <rect key="frame" x="0.0" y="0.0" width="440" height="884"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="-1" estimatedSectionHeaderHeight="-1" sectionFooterHeight="-1" estimatedSectionFooterHeight="-1" translatesAutoresizingMaskIntoConstraints="NO" id="zTk-GW-C2A">
-                                <rect key="frame" x="0.0" y="62" width="440" height="811"/>
+                                <rect key="frame" x="0.0" y="0.0" width="440" height="835"/>
                                 <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                                 <prototypes>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="ActivityCell" id="s7r-Ha-fbW" customClass="ActivityCellTableViewCell" customModule="AudioAudit" customModuleProvider="target">
@@ -293,7 +293,7 @@
             <objects>
                 <viewController id="gPI-NV-cFm" customClass="ProfileViewController" customModule="AudioAudit" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="xDh-ey-9xb">
-                        <rect key="frame" x="0.0" y="0.0" width="440" height="956"/>
+                        <rect key="frame" x="0.0" y="0.0" width="440" height="884"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <tableView clipsSubviews="YES" contentMode="scaleToFill" fixedFrame="YES" alwaysBounceVertical="YES" dataMode="prototypes" style="grouped" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="18" estimatedSectionHeaderHeight="-1" sectionFooterHeight="18" estimatedSectionFooterHeight="-1" translatesAutoresizingMaskIntoConstraints="NO" id="VoG-lV-044">
@@ -335,23 +335,23 @@
             <objects>
                 <viewController id="1Cu-fh-bUL" customClass="SettingsViewController" customModule="AudioAudit" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="yVq-r1-QtT">
-                        <rect key="frame" x="0.0" y="0.0" width="440" height="956"/>
+                        <rect key="frame" x="0.0" y="0.0" width="440" height="884"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="User Settings" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="40t-VF-aE5">
-                                <rect key="frame" x="168" y="116" width="104" height="21"/>
+                                <rect key="frame" x="168" y="74" width="104" height="21"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                 <nil key="textColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Toggle Light or Dark Mode" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="p0f-qB-9zm">
-                                <rect key="frame" x="20" y="237" width="202" height="21"/>
+                                <rect key="frame" x="20" y="195" width="202" height="21"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                 <nil key="textColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="4uM-gv-mVA">
-                                <rect key="frame" x="350" y="218" width="70" height="70"/>
+                                <rect key="frame" x="350" y="176" width="70" height="70"/>
                                 <accessibility key="accessibilityConfiguration">
                                     <accessibilityTraits key="traits" button="YES" image="YES"/>
                                 </accessibility>
@@ -369,25 +369,25 @@
                                 </connections>
                             </button>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Show Activity in Map?" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="X7Y-1j-3rF">
-                                <rect key="frame" x="20" y="358" width="167" height="21"/>
+                                <rect key="frame" x="20" y="316" width="167" height="21"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                 <nil key="textColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
                             <switch opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" contentHorizontalAlignment="center" contentVerticalAlignment="center" on="YES" translatesAutoresizingMaskIntoConstraints="NO" id="g8r-xZ-BBa">
-                                <rect key="frame" x="359" y="358" width="63" height="28"/>
+                                <rect key="frame" x="359" y="316" width="63" height="28"/>
                                 <connections>
                                     <action selector="mapButton:" destination="1Cu-fh-bUL" eventType="valueChanged" id="VzP-2z-39K"/>
                                 </connections>
                             </switch>
                             <slider opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" value="2" minValue="0.0" maxValue="4" translatesAutoresizingMaskIntoConstraints="NO" id="6t9-5O-zQV">
-                                <rect key="frame" x="20" y="504" width="400" height="34"/>
+                                <rect key="frame" x="20" y="462" width="400" height="34"/>
                                 <connections>
                                     <action selector="fontSelector:" destination="1Cu-fh-bUL" eventType="valueChanged" id="tJ0-yv-BqY"/>
                                 </connections>
                             </slider>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="fye-lW-MTt">
-                                <rect key="frame" x="145" y="724.33333333333337" width="150" height="35"/>
+                                <rect key="frame" x="145" y="682.33333333333337" width="150" height="35"/>
                                 <constraints>
                                     <constraint firstAttribute="width" constant="150" id="sXn-ma-pnB"/>
                                 </constraints>
@@ -399,31 +399,31 @@
                                 </connections>
                             </button>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Smaller" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Qqz-zS-kwx">
-                                <rect key="frame" x="20" y="543" width="57" height="21"/>
+                                <rect key="frame" x="20" y="501" width="57" height="21"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                 <nil key="textColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Larger" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="mR4-eE-Hwa">
-                                <rect key="frame" x="370" y="543" width="50" height="21"/>
+                                <rect key="frame" x="370" y="501" width="50" height="21"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                 <nil key="textColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Current Font Size: #" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="PVu-t4-SLE">
-                                <rect key="frame" x="144" y="470" width="152" height="21"/>
+                                <rect key="frame" x="144" y="428" width="152" height="21"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                 <nil key="textColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Select a Font Size" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="TvW-vo-LFb">
-                                <rect key="frame" x="152" y="429" width="136" height="21"/>
+                                <rect key="frame" x="152" y="387" width="136" height="21"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                 <nil key="textColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="DTT-Lc-PRQ">
-                                <rect key="frame" x="20" y="629" width="225" height="20.333333333333371"/>
+                                <rect key="frame" x="20" y="587" width="225" height="20.333333333333371"/>
                                 <constraints>
                                     <constraint firstAttribute="width" constant="225" id="4QU-6C-VLI"/>
                                 </constraints>
@@ -432,7 +432,7 @@
                                 <nil key="highlightedColor"/>
                             </label>
                             <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" image="Apple_Music_icon.svg" translatesAutoresizingMaskIntoConstraints="NO" id="xqV-wF-h7B">
-                                <rect key="frame" x="350" y="604" width="70" height="70"/>
+                                <rect key="frame" x="350" y="562" width="70" height="70"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="70" id="1uk-N6-ZgE"/>
                                     <constraint firstAttribute="width" constant="70" id="rJg-fW-Nns"/>
@@ -545,7 +545,7 @@
                     </tabBarItem>
                     <toolbarItems/>
                     <navigationBar key="navigationBar" contentMode="scaleToFill" id="SXR-7B-q4y">
-                        <rect key="frame" x="0.0" y="62" width="440" height="54"/>
+                        <rect key="frame" x="0.0" y="20" width="440" height="54"/>
                         <autoresizingMask key="autoresizingMask"/>
                     </navigationBar>
                     <nil name="viewControllers"/>
@@ -975,7 +975,7 @@
         </scene>
     </scenes>
     <inferredMetricsTieBreakers>
-        <segue reference="2YT-Lf-els"/>
+        <segue reference="BWZ-XX-2Ad"/>
     </inferredMetricsTieBreakers>
     <resources>
         <image name="Apple_Music_icon.svg" width="500" height="500"/>

@@ -87,7 +87,6 @@ class TabBarView: UIView {
             } else {
                 self.underlineLeadConstraint.constant = self.bounds.width / 2
             }
-            //print("UNDERLINE LEAD CONSTRAINT: \(self.underlineLeadConstraint.constant, default: "error lol")")
             self.layoutIfNeeded()
         }
         
