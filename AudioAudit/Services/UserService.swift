@@ -41,7 +41,7 @@ class UserService {
         let user = AAUser(
             name: name,
             email: email,
-            profilePicURL: nil,
+            profilePicURL: "https://www.cs.utexas.edu/~aguillon/audioaudit/assets/logo_transparent.png",
             friends: [],
             createdAt: Date(),
             lastLogin: Date(),

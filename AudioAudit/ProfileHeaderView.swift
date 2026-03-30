@@ -138,7 +138,63 @@ class ProfileHeaderView: UIView {
             print("ERROR READING POST COUNT")
         }
         friendsLabel.text = "\(user.friends.count)"
-        // TODO load from user url
-        avatarButton.setImage(UIImage.loadLogoFinal, for: .normal)
+        // loads user pic from utcs directory
+        await getUserPic()
+    }
+    
+    func getUserPic() async {
+        var imageURL = URL(string: "https://www.cs.utexas.edu/~aguillon/audioaudit/assets/logo_transparent.png")
+        do {
+            imageURL = URL(string: "\(try await UserService.shared.fetchCurrentUser().profilePicURL ?? "https://www.cs.utexas.edu/~aguillon/audioaudit/assets/logo_transparent.png")")
+        } catch {
+            print("ERROR READING IMAGE URL")
+        }
+        
+        // create a session that we can use for this request
+        let session = URLSession(configuration: .default)
+        
+        // create a task for downloading the image>  I could have just
+        // used URLSession.shared.datatask, but I used .default just to
+        // show you the long way.
+        
+        let task = session.dataTask(with: imageURL!) { (data, response, error) in
+            
+            // ensure we did not get an error
+            guard error == nil else {
+                print("Error fetching data")
+                return
+            }
+            
+            // Convert the response to an HTTPURLResponse so we can get
+            // a status code
+            
+            if let httpResponse = response as? HTTPURLResponse {
+                
+                // ensure we got back a status code of 200 - "Success"
+                guard httpResponse.statusCode == 200 else {
+                    return
+                }
+                
+                // Make sure we received the data
+                
+                if let receivedData = data {
+                    
+                    guard let image = UIImage(data: receivedData) else {
+                        return
+                    }
+                    guard let compressedData = image.jpegData(compressionQuality: 0.5) else {
+                        return
+                    }
+                    
+                    let compressedImage = UIImage(data: compressedData)
+                    
+                    DispatchQueue.main.async {
+                        self.avatarButton.setImage(compressedImage, for: .normal)
+                    }
+                }
+            }
+        }
+        
+        task.resume( )
     }
 }

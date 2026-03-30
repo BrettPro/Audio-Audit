@@ -8,7 +8,7 @@
 import UIKit
 import PhotosUI
 
-class EditPicViewController: UIViewController, PHPickerViewControllerDelegate {
+class EditPicViewController: UIViewController, PHPickerViewControllerDelegate, UIImagePickerControllerDelegate & UINavigationControllerDelegate {
     
     var currentImage: UIImage?
     var saveChanges: ((UIImage) -> Void)? // TODO add text field too
@@ -22,7 +22,7 @@ class EditPicViewController: UIViewController, PHPickerViewControllerDelegate {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        imageView.image = UIImage.loadLogoFinal
+        //imageView.image = UIImage.loadLogoFinal
         imageView.translatesAutoresizingMaskIntoConstraints = false
         imageView.contentMode = .scaleAspectFill
         imageView.clipsToBounds = true
@@ -33,7 +33,7 @@ class EditPicViewController: UIViewController, PHPickerViewControllerDelegate {
         
         let photoAction = UIAction { action in
             print("photo button pressed")
-            
+            self.openCamera()
         }
         photoButton.addAction(photoAction, for: .touchUpInside)
         
@@ -74,6 +74,36 @@ class EditPicViewController: UIViewController, PHPickerViewControllerDelegate {
         b.titleLabel?.font = .boldSystemFont(ofSize: 20)
     }
     
+    func openCamera() {
+        guard UIImagePickerController.isSourceTypeAvailable(.camera) else {
+            print("No camera available on this device")
+            return
+        }
+        let picker = UIImagePickerController()
+        picker.sourceType = .camera
+        picker.allowsEditing = true
+        picker.delegate = self
+        present(picker, animated: true)
+    }
+    
+    func imagePickerController(_ picker: UIImagePickerController,
+                               didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey: Any]) {
+        
+        dismiss(animated: true)
+
+        let image = info[.editedImage] as? UIImage ?? info[.originalImage] as? UIImage
+
+        DispatchQueue.main.async {
+            self.imageView.image = image
+            self.uploadPic()
+        }
+    }
+
+    // Called when the user cancels
+    func imagePickerControllerDidCancel(_ picker: UIImagePickerController) {
+        dismiss(animated: true)
+    }
+    
     func openPicker() {
         var config = PHPickerConfiguration()
         config.filter = .images
@@ -93,10 +123,16 @@ class EditPicViewController: UIViewController, PHPickerViewControllerDelegate {
             if let image = object as? UIImage {
                 DispatchQueue.main.async {
                     self.imageView.image = image
-                    // TODO send to firebase
+                    self.uploadPic()
                 }
             }
         }
+    }
+    
+    func uploadPic() {
+        // TODO upload user image to utcs machines, get url
+       
+       // UserService.shared.updateProfilePic(uid: UserService.shared.currentUserId, url: uploadURL)
     }
     
     func setConstraints() {
