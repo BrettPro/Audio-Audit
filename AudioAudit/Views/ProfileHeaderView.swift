@@ -15,6 +15,7 @@ class ProfileHeaderView: UIView {
     let songButton = UIButton()
     let avatarButton = UIButton()
     
+    var onBackTapped: (() -> Void)?
     var statsStack = UIStackView()
     
     init(user: AAUser) {
@@ -54,12 +55,14 @@ class ProfileHeaderView: UIView {
     }
     
     func setConstraints() {
+        
+        let imageWidth = CGFloat(100)
         NSLayoutConstraint.activate([
             // avatar on left
             avatarButton.topAnchor.constraint(equalTo: topAnchor, constant: 16),
             avatarButton.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 24),
-            avatarButton.widthAnchor.constraint(equalToConstant: 100),
-            avatarButton.heightAnchor.constraint(equalToConstant: 100),
+            avatarButton.widthAnchor.constraint(equalToConstant: imageWidth),
+            avatarButton.heightAnchor.constraint(equalToConstant: imageWidth),
             
             // stats to the right of avatar
             statsStack.centerYAnchor.constraint(equalTo: avatarButton.centerYAnchor),
@@ -71,6 +74,8 @@ class ProfileHeaderView: UIView {
             nameLabel.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 24),
             nameLabel.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -16),
         ])
+        
+        avatarButton.layer.cornerRadius = imageWidth / 2
     }
     
     func setLabel(_ l: UILabel) {
@@ -86,8 +91,7 @@ class ProfileHeaderView: UIView {
     }
     
     func openEditPage() {
-        // TODO segue into edit page that allows user to upload photo for profile pic?
-        // possibly leave that in settings instead
+        onBackTapped?()
     }
     
     func setButtons() {
@@ -103,7 +107,6 @@ class ProfileHeaderView: UIView {
         avatarButton.clipsToBounds = true
         avatarButton.translatesAutoresizingMaskIntoConstraints = false
         avatarButton.imageView?.contentMode = .scaleAspectFill
-        avatarButton.layer.cornerRadius = 40
         
         let avatarAction = UIAction { _ in
             print("avatar button pressed")
@@ -135,7 +138,63 @@ class ProfileHeaderView: UIView {
             print("ERROR READING POST COUNT")
         }
         friendsLabel.text = "\(user.friends.count)"
-        // TODO load from user url
-        avatarButton.setImage(UIImage.loadLogoFinal, for: .normal)
+        // loads user pic from utcs directory
+        await getUserPic()
+    }
+    
+    func getUserPic() async {
+        var imageURL = URL(string: "https://www.cs.utexas.edu/~aguillon/audioaudit/assets/logo_transparent.png")
+        do {
+            imageURL = URL(string: "\(try await UserService.shared.fetchCurrentUser().profilePicURL ?? "https://www.cs.utexas.edu/~aguillon/audioaudit/assets/logo_transparent.png")")
+        } catch {
+            print("ERROR READING IMAGE URL")
+        }
+        
+        // create a session that we can use for this request
+        let session = URLSession(configuration: .default)
+        
+        // create a task for downloading the image>  I could have just
+        // used URLSession.shared.datatask, but I used .default just to
+        // show you the long way.
+        
+        let task = session.dataTask(with: imageURL!) { (data, response, error) in
+            
+            // ensure we did not get an error
+            guard error == nil else {
+                print("Error fetching data")
+                return
+            }
+            
+            // Convert the response to an HTTPURLResponse so we can get
+            // a status code
+            
+            if let httpResponse = response as? HTTPURLResponse {
+                
+                // ensure we got back a status code of 200 - "Success"
+                guard httpResponse.statusCode == 200 else {
+                    return
+                }
+                
+                // Make sure we received the data
+                
+                if let receivedData = data {
+                    
+                    guard let image = UIImage(data: receivedData) else {
+                        return
+                    }
+                    guard let compressedData = image.jpegData(compressionQuality: 0.5) else {
+                        return
+                    }
+                    
+                    let compressedImage = UIImage(data: compressedData)
+                    
+                    DispatchQueue.main.async {
+                        self.avatarButton.setImage(compressedImage, for: .normal)
+                    }
+                }
+            }
+        }
+        
+        task.resume( )
     }
 }

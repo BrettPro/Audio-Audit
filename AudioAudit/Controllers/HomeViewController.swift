@@ -23,7 +23,7 @@ class HomeViewController: UIViewController, UITableViewDataSource, UITableViewDe
         activityTableView.rowHeight = UITableView.automaticDimension
         activityTableView.estimatedRowHeight = 110
         activityTableView.separatorStyle = .none
-        activityTableView.backgroundColor = .white
+        activityTableView.backgroundColor = .systemBackground
         activityTableView.isScrollEnabled = true
         activityTableView.alwaysBounceVertical = true
 

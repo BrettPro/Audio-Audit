@@ -10,6 +10,7 @@ import UIKit
 class ProfileViewController: UIViewController, UITableViewDataSource, UITableViewDelegate {
     
     @IBOutlet weak var profileTableView: UITableView!
+    var header: ProfileHeaderView?
     var selectedTab = 0
     var testImage: UIImageView!
     var activities: [Activity] = []
@@ -27,12 +28,25 @@ class ProfileViewController: UIViewController, UITableViewDataSource, UITableVie
             profileTableView.reloadData()
             return
         }
-        let header = ProfileHeaderView(user: currentUser)
-        header.frame = CGRect(x: 0, y: 0, width: profileTableView.bounds.width, height: 150)
+        header = ProfileHeaderView(user: currentUser)
+        header?.frame = CGRect(x: 0, y: 0, width: profileTableView.bounds.width, height: 150)
         profileTableView.tableHeaderView = header
         tabBar.onTabSelected = { tab in
             self.selectedTab = tab
             self.profileTableView.reloadData()
+        }
+        header?.onBackTapped = {
+            print("SHOULD GO TO EDIT PAGE")
+            let storyboard = UIStoryboard(name: "EditProfilePic", bundle: nil)
+            let destVC = storyboard.instantiateViewController(withIdentifier: "EditPic") as! EditPicViewController
+            destVC.imageView.image = self.header?.avatarButton.imageView?.image
+            destVC.saveChanges = { image in
+                self.header?.avatarButton.setImage(image, for: .normal)
+                print("PFP SHOULD BE SAVED: \(self.header?.avatarButton.imageView?.image)")
+            }
+            //destVC.imageView.image = self.header?.avatarButton.imageView?.image
+            //print(destVC.imageView.image)
+            self.navigationController?.pushViewController(destVC, animated: true)
         }
         Task {
             do {
