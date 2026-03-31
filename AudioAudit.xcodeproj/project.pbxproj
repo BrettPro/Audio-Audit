@@ -11,6 +11,7 @@
 		FF74BDAD2F5BA22700126AC5 /* FirebaseCore in Frameworks */ = {isa = PBXBuildFile; productRef = FF74BDAC2F5BA22700126AC5 /* FirebaseCore */; };
 		FF74BDAF2F5BA22700126AC5 /* FirebaseFirestore in Frameworks */ = {isa = PBXBuildFile; productRef = FF74BDAE2F5BA22700126AC5 /* FirebaseFirestore */; };
 		FF74BDB22F5BA27500126AC5 /* FirebaseAnalytics in Frameworks */ = {isa = PBXBuildFile; productRef = FF74BDB12F5BA27500126AC5 /* FirebaseAnalytics */; };
+		FFDFD9712F7B640100FF8661 /* FirebaseStorage in Frameworks */ = {isa = PBXBuildFile; productRef = FFDFD9702F7B640100FF8661 /* FirebaseStorage */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -46,6 +47,7 @@
 				FF74BDAD2F5BA22700126AC5 /* FirebaseCore in Frameworks */,
 				FF74BDAB2F5BA22700126AC5 /* FirebaseAuth in Frameworks */,
 				FF74BDB22F5BA27500126AC5 /* FirebaseAnalytics in Frameworks */,
+				FFDFD9712F7B640100FF8661 /* FirebaseStorage in Frameworks */,
 				FF74BDAF2F5BA22700126AC5 /* FirebaseFirestore in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -101,6 +103,7 @@
 				FF74BDAC2F5BA22700126AC5 /* FirebaseCore */,
 				FF74BDAE2F5BA22700126AC5 /* FirebaseFirestore */,
 				FF74BDB12F5BA27500126AC5 /* FirebaseAnalytics */,
+				FFDFD9702F7B640100FF8661 /* FirebaseStorage */,
 			);
 			productName = AudioAudit;
 			productReference = 8BA3AD252F563A8D008573AE /* AudioAudit.app */;
@@ -403,6 +406,11 @@
 			isa = XCSwiftPackageProductDependency;
 			package = FF74BDA92F5BA22700126AC5 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
 			productName = FirebaseAnalytics;
+		};
+		FFDFD9702F7B640100FF8661 /* FirebaseStorage */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = FF74BDA92F5BA22700126AC5 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
+			productName = FirebaseStorage;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};

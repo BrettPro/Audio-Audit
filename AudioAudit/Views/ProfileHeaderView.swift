@@ -7,7 +7,7 @@
 
 import UIKit
 
-let DEFAULT_PFP = "https://www.cs.utexas.edu/~aguillon/audioaudit/assets/logo_transparent.png"
+let DEFAULT_PFP = "https://firebasestorage.googleapis.com/v0/b/audioaudit-3a29c.firebasestorage.app/o/logo_transparent.jpg?alt=media&token=c5ec3413-6c78-4947-aa6e-57d8bb819224"
 
 class ProfileHeaderView: UIView {
     
@@ -146,22 +146,16 @@ class ProfileHeaderView: UIView {
     }
     
     func getUserPic() async {
-        var imageURL = URL(string: DEFAULT_PFP)
+        var imageURL:URL
         do {
-            imageURL = URL(string: "\(try await UserService.shared.fetchCurrentUser().profilePicURL ?? DEFAULT_PFP)")
+            imageURL = URL(string: "\(try await UserService.shared.fetchCurrentUser().profilePicURL ?? DEFAULT_PFP)")!
         } catch {
             print("ERROR READING IMAGE URL")
             return
         }
         
-        // create a session that we can use for this request
         let session = URLSession(configuration: .default)
-        
-        // create a task for downloading the image>  I could have just
-        // used URLSession.shared.datatask, but I used .default just to
-        // show you the long way.
-        
-        let task = session.dataTask(with: imageURL!) { (data, response, error) in
+        let task = session.dataTask(with: imageURL) { (data, response, error) in
             
             // ensure we did not get an error
             guard error == nil else {

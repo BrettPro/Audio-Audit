@@ -40,7 +40,7 @@ class UserService {
         let user = AAUser(
             name: name,
             email: email,
-            profilePicURL: nil,
+            profilePicURL: DEFAULT_PFP,
             friends: [],
             createdAt: Date(),
             lastLogin: Date(),
