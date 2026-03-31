@@ -7,6 +7,8 @@
 
 import UIKit
 
+let DEFAULT_PFP = "https://www.cs.utexas.edu/~aguillon/audioaudit/assets/logo_transparent.png"
+
 class ProfileHeaderView: UIView {
     
     let nameLabel = UILabel()
@@ -136,6 +138,7 @@ class ProfileHeaderView: UIView {
             postCountLabel.text = "\(postCount)"
         } catch {
             print("ERROR READING POST COUNT")
+            return
         }
         friendsLabel.text = "\(user.friends.count)"
         // loads user pic from utcs directory
@@ -143,11 +146,12 @@ class ProfileHeaderView: UIView {
     }
     
     func getUserPic() async {
-        var imageURL = URL(string: "https://www.cs.utexas.edu/~aguillon/audioaudit/assets/logo_transparent.png")
+        var imageURL = URL(string: DEFAULT_PFP)
         do {
-            imageURL = URL(string: "\(try await UserService.shared.fetchCurrentUser().profilePicURL ?? "https://www.cs.utexas.edu/~aguillon/audioaudit/assets/logo_transparent.png")")
+            imageURL = URL(string: "\(try await UserService.shared.fetchCurrentUser().profilePicURL ?? DEFAULT_PFP)")
         } catch {
             print("ERROR READING IMAGE URL")
+            return
         }
         
         // create a session that we can use for this request

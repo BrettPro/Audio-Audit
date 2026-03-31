@@ -95,7 +95,6 @@ class EditPicViewController: UIViewController, PHPickerViewControllerDelegate, U
 
         DispatchQueue.main.async {
             self.imageView.image = image
-            self.uploadPic()
         }
     }
 
@@ -123,16 +122,9 @@ class EditPicViewController: UIViewController, PHPickerViewControllerDelegate, U
             if let image = object as? UIImage {
                 DispatchQueue.main.async {
                     self.imageView.image = image
-                    self.uploadPic()
                 }
             }
         }
-    }
-    
-    func uploadPic() {
-        // TODO upload user image to utcs machines, get url
-       
-       // UserService.shared.updateProfilePic(uid: UserService.shared.currentUserId, url: uploadURL)
     }
     
     func setConstraints() {

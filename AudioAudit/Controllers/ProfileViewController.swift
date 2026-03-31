@@ -42,7 +42,62 @@ class ProfileViewController: UIViewController, UITableViewDataSource, UITableVie
             destVC.imageView.image = self.header?.avatarButton.imageView?.image
             destVC.saveChanges = { image in
                 self.header?.avatarButton.setImage(image, for: .normal)
-                print("PFP SHOULD BE SAVED: \(self.header?.avatarButton.imageView?.image)")
+                print("PFP SHOULD BE SAVED: \(self.header?.avatarButton.imageView?.image, default: "SOMETHING WENT WRONG")")
+                
+                // TODO upload user image to utcs machines, get url
+                guard let imageData = image.jpegData(compressionQuality: 0.5) else {
+                    print("COULD NOT COMPRESS NEW IMAGE")
+                    return
+                }
+                let userName = UserService.shared.currentUser?.name.dropLast(4).replacingOccurrences(of: "@", with: "")
+                let urlString = "https://www.cs.utexas.edu/~aguillon/audioaudit/assets/\(userName ?? "error").jpeg"
+                if urlString.contains("error") {
+                    print("ERROR RETRIEVING USER NAME. UPLOADING TO error.jpeg")
+                } else {
+                    print("URL GOOD: \(urlString)")
+                }
+                let url = URL(string: urlString)
+                var request = URLRequest(url: url!)
+                request.httpMethod = "PUT"
+                request.setValue("image/jpeg", forHTTPHeaderField: "Content-Type")
+                request.httpBody = imageData
+                
+                let session = URLSession(configuration: .default)
+                let task = session.dataTask(with: request) { (data, response, error) in
+                    
+                    guard error == nil else {
+                        print("Error putting data")
+                        return
+                    }
+                    
+                    if let httpResponse = response as? HTTPURLResponse {
+                        let finalURL: String
+                        if httpResponse.statusCode == 200 {
+                            if let receivedData = data {
+                                let responseString = String(data: receivedData, encoding: .utf8)
+                                print("Server response: \(responseString ?? "empty")")
+                            }
+                            finalURL = urlString
+                        } else {
+                            print("Bad status code: \(httpResponse.statusCode)")
+                            if let data = data, let errorBody = String(data: data, encoding: .utf8) {
+                                print("Server error: \(errorBody)")
+                            }
+                            finalURL = DEFAULT_PFP
+                        }
+                        Task {
+                            do {
+                                try await UserService.shared.updateProfilePic(uid: UserService.shared.currentUserId!, url: finalURL)
+                            } catch {
+                                print("UPDATED USER PFP URL FAILED")
+                                print(error.localizedDescription)
+                            }
+                        }
+                    }
+                }
+
+                task.resume()
+                
             }
             //destVC.imageView.image = self.header?.avatarButton.imageView?.image
             //print(destVC.imageView.image)
