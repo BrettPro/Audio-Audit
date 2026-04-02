@@ -32,6 +32,22 @@ class AddActivityViewController: UIViewController, UISearchBarDelegate, UITableV
         let title: String
         let artist: String
     }
+    
+    struct Song {
+        let title: String
+        let artistName: String
+        let artworkUrl: String?  // optional URL string for album art
+    }
+    
+    struct ITunesSong: Codable {
+        let trackName: String
+        let artistName: String
+        let artworkUrl100: String?
+    }
+
+    struct ITunesSearchResponse: Codable {
+        let results: [ITunesSong]
+    }
 
     let sampleSongs: [SampleSong] = [
         SampleSong(title: "Bohemian Rhapsody", artist: "Queen"),
@@ -90,27 +106,26 @@ class AddActivityViewController: UIViewController, UISearchBarDelegate, UITableV
 
         Task {
             do {
-                var request = MusicCatalogSearchRequest(term: query, types: [Song.self])
-                request.limit = 15
-                let response = try await request.response()
+                let results = try await searchITunes(query: query)
                 await MainActor.run {
-                    if response.songs.isEmpty {
+                    if results.isEmpty {
+                        // fallback to your sample songs
                         self.usingSamples = true
                         self.filteredSamples = self.sampleSongs.filter {
                             $0.title.localizedCaseInsensitiveContains(query) ||
                             $0.artist.localizedCaseInsensitiveContains(query)
                         }
-                        if self.filteredSamples.isEmpty {
-                            self.filteredSamples = self.sampleSongs
-                        }
                     } else {
                         self.usingSamples = false
-                        self.searchResults = Array(response.songs)
+                        // Convert ITunesSong to your Song-like struct
+                        self.searchResults = results.map { song in
+                            Song(title: song.trackName, artistName: song.artistName, artworkUrl: song.artworkUrl100)
+                        }
                     }
                     self.resultsTableView.reloadData()
                 }
             } catch {
-                print("Search error: \(error)")
+                print("iTunes search failed: \(error)")
                 await MainActor.run {
                     self.usingSamples = true
                     self.filteredSamples = self.sampleSongs
@@ -158,7 +173,7 @@ class AddActivityViewController: UIViewController, UISearchBarDelegate, UITableV
 
             Task {
                 var image: UIImage? = nil
-                if let url = song.artwork?.url(width: 500, height: 500) {
+                if let urlString = song.artworkUrl, let url = URL(string: urlString) {
                     let (data, _) = try await URLSession.shared.data(from: url)
                     image = UIImage(data: data)
                 }
@@ -213,5 +228,14 @@ class AddActivityViewController: UIViewController, UISearchBarDelegate, UITableV
                 }
             }
         }
+    }
+
+    func searchITunes(query: String) async throws -> [ITunesSong] {
+        let encodedQuery = query.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed) ?? query
+        let urlString = "https://itunes.apple.com/search?term=\(encodedQuery)&entity=song&limit=20"
+        guard let url = URL(string: urlString) else { return [] }
+        let (data, _) = try await URLSession.shared.data(from: url)
+        let response = try JSONDecoder().decode(ITunesSearchResponse.self, from: data)
+        return response.results
     }
 }

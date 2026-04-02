@@ -6,8 +6,10 @@
 //
 
 import UIKit
+import MusicKit
 
 class ActivityCellTableViewCell: UITableViewCell {
+    var currentSongTitle: String?
 
     let cardView = UIView()
     let profileImageView = UIImageView()
@@ -188,6 +190,9 @@ class ActivityCellTableViewCell: UITableViewCell {
         titleLabel.attributedText = attributedText
         songNameLabel.text = activity.song
         artistNameLabel.text = activity.artist
+        
+        currentSongTitle = activity.song
+        loadSongInfo(title: activity.song, artist: activity.artist)
 
         if let review = activity.review,
            !review.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty {
@@ -208,5 +213,27 @@ class ActivityCellTableViewCell: UITableViewCell {
         artistNameLabel.text = nil
         descriptionLabel.text = nil
         descriptionLabel.isHidden = false
+    }
+    
+    func loadSongInfo(title: String, artist: String) {
+        // Placeholder while loading
+        albumCoverImageView.image = UIImage(systemName: "music.note")
+
+        Task {
+            do {
+                guard let info = try await getSongInfoFromITunes(title: title) else { return }
+
+                await MainActor.run {
+                    // Prevent wrong data due to reuse
+                    if self.currentSongTitle == title {
+                        self.artistNameLabel.text = info.artist
+                        self.albumCoverImageView.image = info.artwork
+                    }
+                }
+
+            } catch {
+                print("Failed to load song info from iTunes: \(error)")
+            }
+        }
     }
 }

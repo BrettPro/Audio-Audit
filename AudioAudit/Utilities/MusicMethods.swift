@@ -30,12 +30,15 @@ func getAlbumArt(songTitle: String, width: Int = 500, height: Int = 500) async t
 }
 
 // This function returns a tuple that contains a song's artist, album, and cover art
-func getSongInfo(title: String) async throws -> (artist: String, album: String, artwork: UIImage?)? {
-    guard let song = try await searchSong(title: title) else { return nil }
+func getSongInfo(title: String, artist: String) async throws -> (artist: String, album: String, artwork: UIImage?)? {
+    let query = "\(title) \(artist)"
+    guard let song = try await searchSong(title: query) else { return nil }
+
     var image: UIImage? = nil
     if let url = song.artwork?.url(width: 500, height: 500) {
         let (data, _) = try await URLSession.shared.data(from: url)
         image = UIImage(data: data)
     }
+
     return (song.artistName, song.albumTitle ?? "", image)
 }
