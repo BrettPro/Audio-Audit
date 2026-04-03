@@ -46,7 +46,7 @@ final class ActivityMapViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        title = "Activity Map"
+        //title = "Activity Map"
         view.backgroundColor = .systemBackground
 
         setupMapView()

@@ -5,12 +5,6 @@
 //  Created by Leo Lei on 3/30/26.
 //
 
-
-//
-//  ReviewLocationPickerViewController.swift
-//  AudioAudit
-//
-
 import UIKit
 import MapKit
 import CoreLocation
@@ -124,6 +118,7 @@ final class ReviewLocationPickerViewController: UIViewController {
         let coordinate = pinAnnotation?.coordinate
         dismiss(animated: true) { [weak self] in
             guard let coordinate else { return }
+            print("ENTERING ONCONFIRM")
             self?.onConfirm?(coordinate)
         }
     }

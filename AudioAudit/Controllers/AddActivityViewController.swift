@@ -179,7 +179,7 @@ class AddActivityViewController: UIViewController, UISearchBarDelegate, UITableV
     @IBAction func changeSongTapped() {
         showSearch()
     }
-
+    
     @IBAction func submitTapped() {
         guard let song = selectedSong, let artist = selectedArtist,
               let uid = UserService.shared.currentUserId else { return }

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="24506" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="7bm-GV-ysc">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="24506" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="gKg-2p-28g">
     <device id="retina6_9" orientation="portrait" appearance="light"/>
     <dependencies>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="24504"/>
@@ -217,7 +217,7 @@
         <!--Loading View Controller-->
         <scene sceneID="KyI-Og-bJQ">
             <objects>
-                <viewController id="gKg-2p-28g" customClass="LoadingViewController" customModule="AudioAudit" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController automaticallyAdjustsScrollViewInsets="NO" id="gKg-2p-28g" customClass="LoadingViewController" customModule="AudioAudit" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="YwT-jv-EqT">
                         <rect key="frame" x="0.0" y="0.0" width="440" height="956"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -530,6 +530,7 @@
                         <outlet property="tabBarView" destination="Caj-hd-GKF" id="ENn-hO-qFk"/>
                         <segue destination="iUC-ni-bNN" kind="relationship" relationship="viewControllers" id="EvN-kX-xY3"/>
                         <segue destination="Ffa-rF-jSK" kind="relationship" relationship="viewControllers" id="2B2-T0-cL6"/>
+                        <segue destination="7bm-GV-ysc" kind="relationship" relationship="viewControllers" id="gF4-O4-CeS"/>
                     </connections>
                 </tabBarController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="IAc-4n-gHl" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
@@ -698,7 +699,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="KVM-Ji-vcr" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="3265.909090909091" y="677.82426778242677"/>
+            <point key="canvasLocation" x="3030" y="778"/>
         </scene>
         <!--Register View Controller-->
         <scene sceneID="3Yj-r9-Lbd">
@@ -743,17 +744,18 @@
             <objects>
                 <viewController id="N29-x8-6ek" customClass="ReviewLocationPickerViewController" customModule="AudioAudit" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="JVk-Cq-RIn">
-                        <rect key="frame" x="0.0" y="0.0" width="440" height="956"/>
+                        <rect key="frame" x="0.0" y="0.0" width="440" height="894"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <viewLayoutGuide key="safeArea" id="B0x-zK-PiD"/>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                     </view>
+                    <navigationItem key="navigationItem" id="DxX-pn-OgL"/>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Fn0-b0-66x" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="3209" y="1440"/>
+            <point key="canvasLocation" x="7437" y="778"/>
         </scene>
-        <!--Activity Map View Controller-->
+        <!--Map-->
         <scene sceneID="zDE-xg-5GZ">
             <objects>
                 <viewController id="7bm-GV-ysc" customClass="ActivityMapViewController" customModule="AudioAudit" customModuleProvider="target" sceneMemberID="viewController">
@@ -763,6 +765,9 @@
                         <viewLayoutGuide key="safeArea" id="Ze6-kh-V5p"/>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                     </view>
+                    <tabBarItem key="tabBarItem" title="Map" image="map.fill" catalog="system" selectedImage="map.fill" id="W30-Cu-tiI">
+                        <color key="badgeColor" name="AudioRed"/>
+                    </tabBarItem>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="EyC-89-usR" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
@@ -1033,7 +1038,7 @@
                                 <rect key="frame" x="0.0" y="124" width="440" height="832"/>
                                 <subviews>
                                     <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" alignment="center" spacing="16" translatesAutoresizingMaskIntoConstraints="NO" id="add-formStack">
-                                        <rect key="frame" x="20" y="20" width="400" height="618.33333333333337"/>
+                                        <rect key="frame" x="20" y="20" width="400" height="630.33333333333337"/>
                                         <subviews>
                                             <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFill" translatesAutoresizingMaskIntoConstraints="NO" id="add-albumArt">
                                                 <rect key="frame" x="100" y="0.0" width="200" height="200"/>
@@ -1083,19 +1088,22 @@
                                                     <segment title="5"/>
                                                 </segments>
                                             </segmentedControl>
-                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" text="Review (optional)" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="add-reviewLabel">
-                                                <rect key="frame" x="139" y="418.33333333333337" width="122" height="18"/>
-                                                <fontDescription key="fontDescription" type="system" weight="medium" pointSize="15"/>
-                                                <nil key="textColor"/>
-                                                <nil key="highlightedColor"/>
-                                            </label>
-                                            <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="add-reviewText">
-                                                <rect key="frame" x="0.0" y="452.33333333333337" width="400" height="100"/>
+                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="A1o-rF-hVs">
+                                                <rect key="frame" x="155" y="418.33333333333337" width="90" height="30"/>
+                                                <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
+                                                <state key="normal" title="Add Location"/>
+                                                <connections>
+                                                    <segue destination="N29-x8-6ek" kind="show" id="aaj-3b-9RI"/>
+                                                </connections>
+                                            </button>
+                                            <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" text="Write review here (optional)" translatesAutoresizingMaskIntoConstraints="NO" id="add-reviewText">
+                                                <rect key="frame" x="0.0" y="464.33333333333337" width="400" height="100"/>
                                                 <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                                                 <constraints>
                                                     <constraint firstAttribute="height" constant="100" id="add-reviewH"/>
                                                 </constraints>
-                                                <fontDescription key="fontDescription" type="system" pointSize="15"/>
+                                                <color key="textColor" systemColor="placeholderTextColor"/>
+                                                <fontDescription key="fontDescription" name=".AppleSystemUIFont" family=".AppleSystemUIFont" pointSize="15"/>
                                                 <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
                                                 <userDefinedRuntimeAttributes>
                                                     <userDefinedRuntimeAttribute type="number" keyPath="layer.cornerRadius">
@@ -1110,7 +1118,7 @@
                                                 </userDefinedRuntimeAttributes>
                                             </textView>
                                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="add-submitBtn">
-                                                <rect key="frame" x="0.0" y="568.33333333333337" width="400" height="50"/>
+                                                <rect key="frame" x="0.0" y="580.33333333333337" width="400" height="50"/>
                                                 <color key="backgroundColor" name="AudioRed"/>
                                                 <constraints>
                                                     <constraint firstAttribute="height" constant="50" id="add-submitH"/>
@@ -1181,7 +1189,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="add-firstResp" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="7000" y="130"/>
+            <point key="canvasLocation" x="7381" y="-48"/>
         </scene>
     </scenes>
     <inferredMetricsTieBreakers>
@@ -1193,11 +1201,15 @@
         <image name="happy_headphones" width="768" height="768"/>
         <image name="house.fill" catalog="system" width="128" height="104"/>
         <image name="load_logo_final" width="1024" height="1024"/>
+        <image name="map.fill" catalog="system" width="128" height="110"/>
         <image name="person.circle.fill" catalog="system" width="128" height="123"/>
         <image name="sun.max.fill" catalog="system" width="128" height="125"/>
         <namedColor name="AudioRed">
             <color red="0.74699997901916504" green="0.2370000034570694" blue="0.36599999666213989" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
         </namedColor>
+        <systemColor name="placeholderTextColor">
+            <color red="0.23529411759999999" green="0.23529411759999999" blue="0.26274509800000001" alpha="0.29803921570000003" colorSpace="custom" customColorSpace="sRGB"/>
+        </systemColor>
         <systemColor name="secondaryLabelColor">
             <color red="0.23529411759999999" green="0.23529411759999999" blue="0.26274509800000001" alpha="0.59999999999999998" colorSpace="custom" customColorSpace="sRGB"/>
         </systemColor>
