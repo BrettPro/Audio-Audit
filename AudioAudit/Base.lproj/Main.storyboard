@@ -217,7 +217,7 @@
         <!--Loading View Controller-->
         <scene sceneID="KyI-Og-bJQ">
             <objects>
-                <viewController id="gKg-2p-28g" customClass="LoadingViewController" customModule="AudioAudit" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController automaticallyAdjustsScrollViewInsets="NO" id="gKg-2p-28g" customClass="LoadingViewController" customModule="AudioAudit" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="YwT-jv-EqT">
                         <rect key="frame" x="0.0" y="0.0" width="440" height="956"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -530,6 +530,7 @@
                         <outlet property="tabBarView" destination="Caj-hd-GKF" id="ENn-hO-qFk"/>
                         <segue destination="iUC-ni-bNN" kind="relationship" relationship="viewControllers" id="EvN-kX-xY3"/>
                         <segue destination="Ffa-rF-jSK" kind="relationship" relationship="viewControllers" id="2B2-T0-cL6"/>
+                        <segue destination="7bm-GV-ysc" kind="relationship" relationship="viewControllers" id="gF4-O4-CeS"/>
                     </connections>
                 </tabBarController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="IAc-4n-gHl" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
@@ -698,7 +699,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="KVM-Ji-vcr" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="3265.909090909091" y="677.82426778242677"/>
+            <point key="canvasLocation" x="3030" y="778"/>
         </scene>
         <!--Register View Controller-->
         <scene sceneID="3Yj-r9-Lbd">
@@ -737,6 +738,40 @@
                 <placeholder placeholderIdentifier="IBFirstResponder" id="b05-g7-pAI" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="2328" y="1422"/>
+        </scene>
+        <!--Review Location Picker View Controller-->
+        <scene sceneID="mLk-BB-HsY">
+            <objects>
+                <viewController id="N29-x8-6ek" customClass="ReviewLocationPickerViewController" customModule="AudioAudit" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="JVk-Cq-RIn">
+                        <rect key="frame" x="0.0" y="0.0" width="440" height="956"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <viewLayoutGuide key="safeArea" id="B0x-zK-PiD"/>
+                        <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                    </view>
+                    <navigationItem key="navigationItem" id="DxX-pn-OgL"/>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="Fn0-b0-66x" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="7437" y="778"/>
+        </scene>
+        <!--Map-->
+        <scene sceneID="zDE-xg-5GZ">
+            <objects>
+                <viewController id="7bm-GV-ysc" customClass="ActivityMapViewController" customModule="AudioAudit" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="fUb-8x-LQe">
+                        <rect key="frame" x="0.0" y="0.0" width="440" height="956"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <viewLayoutGuide key="safeArea" id="Ze6-kh-V5p"/>
+                        <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                    </view>
+                    <tabBarItem key="tabBarItem" title="Map" image="map.fill" catalog="system" selectedImage="map.fill" id="W30-Cu-tiI">
+                        <color key="badgeColor" name="AudioRed"/>
+                    </tabBarItem>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="EyC-89-usR" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="4022" y="1447"/>
         </scene>
         <!--Font View Controller-->
         <scene sceneID="iSu-9d-seb">
@@ -973,7 +1008,7 @@
             </objects>
             <point key="canvasLocation" x="6000" y="677.82426778242677"/>
         </scene>
-        <!--Add Activity View Controller-->
+        <!--New Activity-->
         <scene sceneID="add-act-scene">
             <objects>
                 <viewController storyboardIdentifier="AddActivityVC" id="add-act-vc" customClass="AddActivityViewController" customModule="AudioAudit" customModuleProvider="target" sceneMemberID="viewController">
@@ -981,39 +1016,36 @@
                         <rect key="frame" x="0.0" y="0.0" width="440" height="956"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <!--Search Bar-->
                             <searchBar contentMode="redraw" placeholder="Search for a song..." translatesAutoresizingMaskIntoConstraints="NO" id="add-searchBar">
-                                <rect key="frame" x="0.0" y="103" width="440" height="56"/>
+                                <rect key="frame" x="0.0" y="124" width="440" height="64"/>
+                                <textInputTraits key="textInputTraits"/>
                             </searchBar>
-                            <!--Results Table-->
                             <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="-1" estimatedSectionHeaderHeight="-1" sectionFooterHeight="-1" estimatedSectionFooterHeight="-1" translatesAutoresizingMaskIntoConstraints="NO" id="add-resultsTable">
-                                <rect key="frame" x="0.0" y="159" width="440" height="797"/>
+                                <rect key="frame" x="0.0" y="188" width="440" height="768"/>
                                 <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                                 <prototypes>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="SongResult" id="add-songCell">
-                                        <rect key="frame" x="0.0" y="50" width="440" height="44"/>
+                                        <rect key="frame" x="0.0" y="50" width="440" height="51"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="add-songCell" id="add-songCellContent">
-                                            <rect key="frame" x="0.0" y="0.0" width="440" height="44"/>
+                                            <rect key="frame" x="0.0" y="0.0" width="440" height="51"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                         </tableViewCellContentView>
                                     </tableViewCell>
                                 </prototypes>
                             </tableView>
-                            <!--Form Scroll View-->
                             <scrollView hidden="YES" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="add-formScroll">
-                                <rect key="frame" x="0.0" y="103" width="440" height="853"/>
+                                <rect key="frame" x="0.0" y="124" width="440" height="832"/>
                                 <subviews>
                                     <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" alignment="center" spacing="16" translatesAutoresizingMaskIntoConstraints="NO" id="add-formStack">
-                                        <rect key="frame" x="20" y="20" width="400" height="700"/>
+                                        <rect key="frame" x="20" y="20" width="400" height="630.33333333333337"/>
                                         <subviews>
-                                            <!--Album Art-->
                                             <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFill" translatesAutoresizingMaskIntoConstraints="NO" id="add-albumArt">
                                                 <rect key="frame" x="100" y="0.0" width="200" height="200"/>
                                                 <color key="backgroundColor" systemColor="systemGray5Color"/>
                                                 <constraints>
-                                                    <constraint firstAttribute="width" constant="200" id="add-artW"/>
                                                     <constraint firstAttribute="height" constant="200" id="add-artH"/>
+                                                    <constraint firstAttribute="width" constant="200" id="add-artW"/>
                                                 </constraints>
                                                 <userDefinedRuntimeAttributes>
                                                     <userDefinedRuntimeAttribute type="number" keyPath="layer.cornerRadius">
@@ -1021,38 +1053,33 @@
                                                     </userDefinedRuntimeAttribute>
                                                 </userDefinedRuntimeAttributes>
                                             </imageView>
-                                            <!--Song Label-->
                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" text="Song Name" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="2" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="add-songLabel">
-                                                <rect key="frame" x="100" y="216" width="200" height="24"/>
+                                                <rect key="frame" x="146" y="216" width="108.33333333333331" height="24"/>
                                                 <fontDescription key="fontDescription" type="boldSystem" pointSize="20"/>
                                                 <nil key="textColor"/>
                                                 <nil key="highlightedColor"/>
                                             </label>
-                                            <!--Artist Label-->
                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" text="Artist Name" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="add-artistLabel">
-                                                <rect key="frame" x="100" y="256" width="200" height="20"/>
+                                                <rect key="frame" x="157" y="256" width="86" height="19.333333333333314"/>
                                                 <fontDescription key="fontDescription" type="system" pointSize="16"/>
                                                 <color key="textColor" systemColor="secondaryLabelColor"/>
                                                 <nil key="highlightedColor"/>
                                             </label>
-                                            <!--Change Song Button-->
                                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="add-changeBtn">
-                                                <rect key="frame" x="150" y="292" width="100" height="30"/>
+                                                <rect key="frame" x="153.66666666666666" y="291.33333333333331" width="93" height="30"/>
                                                 <state key="normal" title="Change Song"/>
                                                 <connections>
                                                     <action selector="changeSongTapped" destination="add-act-vc" eventType="touchUpInside" id="add-changeAction"/>
                                                 </connections>
                                             </button>
-                                            <!--Rating Label-->
                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" text="Rating" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="add-ratingLabel">
-                                                <rect key="frame" x="100" y="338" width="200" height="18"/>
+                                                <rect key="frame" x="177.33333333333334" y="337.33333333333331" width="45.333333333333343" height="18"/>
                                                 <fontDescription key="fontDescription" type="system" weight="medium" pointSize="15"/>
                                                 <nil key="textColor"/>
                                                 <nil key="highlightedColor"/>
                                             </label>
-                                            <!--Rating Segment-->
                                             <segmentedControl opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="top" segmentControlStyle="plain" selectedSegmentIndex="4" translatesAutoresizingMaskIntoConstraints="NO" id="add-ratingSegment">
-                                                <rect key="frame" x="50" y="372" width="300" height="32"/>
+                                                <rect key="frame" x="120" y="371.33333333333337" width="160" height="32"/>
                                                 <segments>
                                                     <segment title="1"/>
                                                     <segment title="2"/>
@@ -1061,21 +1088,22 @@
                                                     <segment title="5"/>
                                                 </segments>
                                             </segmentedControl>
-                                            <!--Review Label-->
-                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" text="Review (optional)" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="add-reviewLabel">
-                                                <rect key="frame" x="100" y="420" width="200" height="18"/>
-                                                <fontDescription key="fontDescription" type="system" weight="medium" pointSize="15"/>
-                                                <nil key="textColor"/>
-                                                <nil key="highlightedColor"/>
-                                            </label>
-                                            <!--Review Text View-->
-                                            <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="add-reviewText">
-                                                <rect key="frame" x="0.0" y="454" width="400" height="100"/>
+                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="A1o-rF-hVs">
+                                                <rect key="frame" x="155" y="418.33333333333337" width="90" height="30"/>
+                                                <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
+                                                <state key="normal" title="Add Location"/>
+                                                <connections>
+                                                    <action selector="locationPressed:" destination="add-act-vc" eventType="touchUpInside" id="aXq-fR-saQ"/>
+                                                </connections>
+                                            </button>
+                                            <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" text="Write review here (optional)" translatesAutoresizingMaskIntoConstraints="NO" id="add-reviewText">
+                                                <rect key="frame" x="0.0" y="464.33333333333337" width="400" height="100"/>
                                                 <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                                                 <constraints>
                                                     <constraint firstAttribute="height" constant="100" id="add-reviewH"/>
                                                 </constraints>
-                                                <fontDescription key="fontDescription" type="system" pointSize="15"/>
+                                                <color key="textColor" systemColor="placeholderTextColor"/>
+                                                <fontDescription key="fontDescription" name=".AppleSystemUIFont" family=".AppleSystemUIFont" pointSize="15"/>
                                                 <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
                                                 <userDefinedRuntimeAttributes>
                                                     <userDefinedRuntimeAttribute type="number" keyPath="layer.cornerRadius">
@@ -1089,9 +1117,8 @@
                                                     </userDefinedRuntimeAttribute>
                                                 </userDefinedRuntimeAttributes>
                                             </textView>
-                                            <!--Submit Button-->
                                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="add-submitBtn">
-                                                <rect key="frame" x="0.0" y="570" width="400" height="50"/>
+                                                <rect key="frame" x="0.0" y="580.33333333333337" width="400" height="50"/>
                                                 <color key="backgroundColor" name="AudioRed"/>
                                                 <constraints>
                                                     <constraint firstAttribute="height" constant="50" id="add-submitH"/>
@@ -1110,33 +1137,35 @@
                                                 </connections>
                                             </button>
                                         </subviews>
+                                        <constraints>
+                                            <constraint firstItem="add-reviewText" firstAttribute="width" secondItem="add-formStack" secondAttribute="width" id="add-reviewW"/>
+                                            <constraint firstItem="add-submitBtn" firstAttribute="width" secondItem="add-formStack" secondAttribute="width" id="add-submitW"/>
+                                        </constraints>
                                     </stackView>
                                 </subviews>
                                 <constraints>
-                                    <constraint firstItem="add-formStack" firstAttribute="top" secondItem="add-formScroll" secondAttribute="top" constant="20" id="add-stackTop"/>
+                                    <constraint firstAttribute="bottom" secondItem="add-formStack" secondAttribute="bottom" constant="20" id="add-stackBot"/>
                                     <constraint firstItem="add-formStack" firstAttribute="leading" secondItem="add-formScroll" secondAttribute="leading" constant="20" id="add-stackLead"/>
-                                    <constraint secondItem="add-formStack" secondAttribute="trailing" firstItem="add-formScroll" firstAttribute="trailing" constant="20" id="add-stackTrail"/>
-                                    <constraint secondItem="add-formStack" secondAttribute="bottom" firstItem="add-formScroll" firstAttribute="bottom" constant="20" id="add-stackBot"/>
+                                    <constraint firstItem="add-formStack" firstAttribute="top" secondItem="add-formScroll" secondAttribute="top" constant="20" id="add-stackTop"/>
+                                    <constraint firstAttribute="trailing" secondItem="add-formStack" secondAttribute="trailing" constant="20" id="add-stackTrail"/>
                                     <constraint firstItem="add-formStack" firstAttribute="width" secondItem="add-formScroll" secondAttribute="width" constant="-40" id="add-stackWidth"/>
-                                    <constraint firstItem="add-reviewText" firstAttribute="width" secondItem="add-formStack" secondAttribute="width" id="add-reviewW"/>
-                                    <constraint firstItem="add-submitBtn" firstAttribute="width" secondItem="add-formStack" secondAttribute="width" id="add-submitW"/>
                                 </constraints>
                             </scrollView>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="add-safeArea"/>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                         <constraints>
-                            <constraint firstItem="add-searchBar" firstAttribute="top" secondItem="add-safeArea" secondAttribute="top" id="add-sbTop"/>
-                            <constraint firstItem="add-searchBar" firstAttribute="leading" secondItem="add-act-view" secondAttribute="leading" id="add-sbLead"/>
-                            <constraint firstItem="add-searchBar" firstAttribute="trailing" secondItem="add-act-view" secondAttribute="trailing" id="add-sbTrail"/>
-                            <constraint firstItem="add-resultsTable" firstAttribute="top" secondItem="add-searchBar" secondAttribute="bottom" id="add-rtTop"/>
-                            <constraint firstItem="add-resultsTable" firstAttribute="leading" secondItem="add-act-view" secondAttribute="leading" id="add-rtLead"/>
-                            <constraint firstItem="add-resultsTable" firstAttribute="trailing" secondItem="add-act-view" secondAttribute="trailing" id="add-rtTrail"/>
-                            <constraint firstItem="add-resultsTable" firstAttribute="bottom" secondItem="add-act-view" secondAttribute="bottom" id="add-rtBot"/>
-                            <constraint firstItem="add-formScroll" firstAttribute="top" secondItem="add-safeArea" secondAttribute="top" id="add-fsTop"/>
-                            <constraint firstItem="add-formScroll" firstAttribute="leading" secondItem="add-act-view" secondAttribute="leading" id="add-fsLead"/>
-                            <constraint firstItem="add-formScroll" firstAttribute="trailing" secondItem="add-act-view" secondAttribute="trailing" id="add-fsTrail"/>
                             <constraint firstItem="add-formScroll" firstAttribute="bottom" secondItem="add-act-view" secondAttribute="bottom" id="add-fsBot"/>
+                            <constraint firstItem="add-formScroll" firstAttribute="leading" secondItem="add-act-view" secondAttribute="leading" id="add-fsLead"/>
+                            <constraint firstItem="add-formScroll" firstAttribute="top" secondItem="add-safeArea" secondAttribute="top" id="add-fsTop"/>
+                            <constraint firstItem="add-formScroll" firstAttribute="trailing" secondItem="add-act-view" secondAttribute="trailing" id="add-fsTrail"/>
+                            <constraint firstItem="add-resultsTable" firstAttribute="bottom" secondItem="add-act-view" secondAttribute="bottom" id="add-rtBot"/>
+                            <constraint firstItem="add-resultsTable" firstAttribute="leading" secondItem="add-act-view" secondAttribute="leading" id="add-rtLead"/>
+                            <constraint firstItem="add-resultsTable" firstAttribute="top" secondItem="add-searchBar" secondAttribute="bottom" id="add-rtTop"/>
+                            <constraint firstItem="add-resultsTable" firstAttribute="trailing" secondItem="add-act-view" secondAttribute="trailing" id="add-rtTrail"/>
+                            <constraint firstItem="add-searchBar" firstAttribute="leading" secondItem="add-act-view" secondAttribute="leading" id="add-sbLead"/>
+                            <constraint firstItem="add-searchBar" firstAttribute="top" secondItem="add-safeArea" secondAttribute="top" id="add-sbTop"/>
+                            <constraint firstItem="add-searchBar" firstAttribute="trailing" secondItem="add-act-view" secondAttribute="trailing" id="add-sbTrail"/>
                         </constraints>
                     </view>
                     <navigationItem key="navigationItem" title="New Activity" id="add-navItem">
@@ -1147,20 +1176,21 @@
                         </barButtonItem>
                     </navigationItem>
                     <connections>
-                        <outlet property="searchBar" destination="add-searchBar" id="add-out-sb"/>
-                        <outlet property="resultsTableView" destination="add-resultsTable" id="add-out-rt"/>
-                        <outlet property="formScrollView" destination="add-formScroll" id="add-out-fs"/>
                         <outlet property="albumArtImageView" destination="add-albumArt" id="add-out-art"/>
-                        <outlet property="songLabel" destination="add-songLabel" id="add-out-song"/>
                         <outlet property="artistLabel" destination="add-artistLabel" id="add-out-artist"/>
+                        <outlet property="formScrollView" destination="add-formScroll" id="add-out-fs"/>
+                        <outlet property="locationButton" destination="A1o-rF-hVs" id="BaA-ii-hMf"/>
                         <outlet property="ratingSegment" destination="add-ratingSegment" id="add-out-rating"/>
+                        <outlet property="resultsTableView" destination="add-resultsTable" id="add-out-rt"/>
                         <outlet property="reviewTextView" destination="add-reviewText" id="add-out-review"/>
+                        <outlet property="searchBar" destination="add-searchBar" id="add-out-sb"/>
+                        <outlet property="songLabel" destination="add-songLabel" id="add-out-song"/>
                         <outlet property="submitButton" destination="add-submitBtn" id="add-out-submit"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="add-firstResp" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="7000" y="130"/>
+            <point key="canvasLocation" x="7381" y="-48"/>
         </scene>
     </scenes>
     <inferredMetricsTieBreakers>
@@ -1172,19 +1202,23 @@
         <image name="happy_headphones" width="768" height="768"/>
         <image name="house.fill" catalog="system" width="128" height="104"/>
         <image name="load_logo_final" width="1024" height="1024"/>
+        <image name="map.fill" catalog="system" width="128" height="110"/>
         <image name="person.circle.fill" catalog="system" width="128" height="123"/>
         <image name="sun.max.fill" catalog="system" width="128" height="125"/>
         <namedColor name="AudioRed">
             <color red="0.74699997901916504" green="0.2370000034570694" blue="0.36599999666213989" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
         </namedColor>
+        <systemColor name="placeholderTextColor">
+            <color red="0.23529411764705882" green="0.23529411764705882" blue="0.2627450980392157" alpha="0.29803921568627451" colorSpace="custom" customColorSpace="sRGB"/>
+        </systemColor>
+        <systemColor name="secondaryLabelColor">
+            <color red="0.23529411764705882" green="0.23529411764705882" blue="0.2627450980392157" alpha="0.59999999999999998" colorSpace="custom" customColorSpace="sRGB"/>
+        </systemColor>
         <systemColor name="systemBackgroundColor">
             <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
         </systemColor>
         <systemColor name="systemGray2Color">
-            <color red="0.68235294120000001" green="0.68235294120000001" blue="0.69803921570000005" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-        </systemColor>
-        <systemColor name="systemPinkColor">
-            <color red="1" green="0.1764705882" blue="0.33333333329999998" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+            <color red="0.68235294117647061" green="0.68235294117647061" blue="0.69803921568627447" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </systemColor>
         <systemColor name="systemGray4Color">
             <color red="0.81960784313725488" green="0.81960784313725488" blue="0.83921568627450982" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
@@ -1192,8 +1226,11 @@
         <systemColor name="systemGray5Color">
             <color red="0.89803921568627454" green="0.89803921568627454" blue="0.91764705882352937" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </systemColor>
+        <systemColor name="systemPinkColor">
+            <color red="1" green="0.17647058823529413" blue="0.33333333333333331" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </systemColor>
         <systemColor name="systemRedColor">
-            <color red="1" green="0.23137254900000001" blue="0.18823529410000001" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+            <color red="1" green="0.2196078431372549" blue="0.23529411764705882" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </systemColor>
     </resources>
 </document>
