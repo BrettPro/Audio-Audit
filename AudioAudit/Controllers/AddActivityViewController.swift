@@ -7,6 +7,7 @@
 
 import UIKit
 import MusicKit
+import CoreLocation
 
 class AddActivityViewController: UIViewController, UISearchBarDelegate, UITableViewDataSource, UITableViewDelegate {
 
@@ -19,7 +20,8 @@ class AddActivityViewController: UIViewController, UISearchBarDelegate, UITableV
     @IBOutlet weak var ratingSegment: UISegmentedControl!
     @IBOutlet weak var reviewTextView: UITextView!
     @IBOutlet weak var submitButton: UIButton!
-
+    @IBOutlet weak var locationButton: UIButton!
+    
     var searchResults: [Song] = []
     var usingSamples = false
     var filteredSamples: [SampleSong] = []
@@ -27,6 +29,7 @@ class AddActivityViewController: UIViewController, UISearchBarDelegate, UITableV
     var selectedSong: String?
     var selectedArtist: String?
     var selectedArtwork: UIImage?
+    var selectedCoord: CLLocationCoordinate2D?
 
     struct SampleSong {
         let title: String
@@ -169,7 +172,22 @@ class AddActivityViewController: UIViewController, UISearchBarDelegate, UITableV
             }
         }
     }
-
+    
+    @IBAction func locationPressed(_ sender: Any) {
+        let locPicker = ReviewLocationPickerViewController()
+            locPicker.modalPresentationStyle = .fullScreen
+            locPicker.onConfirm = { coord in
+                self.selectedCoord = coord
+                Task {
+                    await MainActor.run {
+                        self.locationButton.setTitle("Location Set", for: .normal)
+                    }
+                }
+                print(self.selectedCoord)
+            }
+            present(locPicker, animated: true)
+    }
+    
     // MARK: - Actions
 
     @IBAction func cancelTapped() {
@@ -189,7 +207,7 @@ class AddActivityViewController: UIViewController, UISearchBarDelegate, UITableV
         let review = (reviewText?.isEmpty == false) ? reviewText : nil
 
         submitButton.isEnabled = false
-
+        // TODO IF LOCATION SET, ADD SELECTED COORD TO ACTIVITY
         Task {
             do {
                 _ = try await ActivityService.shared.logReview(

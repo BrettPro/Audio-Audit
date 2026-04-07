@@ -20,7 +20,7 @@ final class ReviewLocationPickerViewController: UIViewController {
 
     private var pinAnnotation: DraggablePointAnnotation?
 
-    // Optional if you want to start somewhere specific
+    // to start somewhere specific
     var initialCoordinate: CLLocationCoordinate2D?
 
     override func viewDidLoad() {
