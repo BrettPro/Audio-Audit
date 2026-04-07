@@ -10,6 +10,7 @@ import MusicKit
 
 class ActivityCellTableViewCell: UITableViewCell {
     var currentSongTitle: String?
+    var currentAvatarURL: String?
 
     let cardView = UIView()
     let profileImageView = UIImageView()
@@ -166,7 +167,7 @@ class ActivityCellTableViewCell: UITableViewCell {
         ])
     }
 
-    func configure(with activity: Activity, username: String? = nil) {
+    func configure(with activity: Activity, username: String? = nil, avatarURL: String?) {
         let displayName = username ?? "User"
         let action = activity.type == .review ? "reviewed" : "listened to"
         let fullText = "\(displayName) \(action) \(activity.song)"
@@ -201,6 +202,21 @@ class ActivityCellTableViewCell: UITableViewCell {
         } else {
             descriptionLabel.text = nil
             descriptionLabel.isHidden = true
+        }
+        currentAvatarURL = avatarURL
+        if let urlString = avatarURL, let url = URL(string: urlString) {
+            Task {
+                do {
+                    let (data, _) = try await URLSession.shared.data(from: url)
+                    await MainActor.run {
+                        if self.currentAvatarURL == avatarURL {
+                            self.profileImageView.image = UIImage(data: data)
+                        }
+                    }
+                } catch {
+                    print("ERROR, FAILED TO LOAD AVATAR: \(error)")
+                }
+            }
         }
     }
 

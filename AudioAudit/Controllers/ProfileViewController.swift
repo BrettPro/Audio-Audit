@@ -171,7 +171,7 @@ class ProfileViewController: UIViewController, UITableViewDataSource, UITableVie
             for: indexPath
         ) as! ActivityCellTableViewCell
 
-        cell.configure(with: activity, username: UserService.shared.currentUser?.name)
+        cell.configure(with: activity, username: UserService.shared.currentUser?.name, avatarURL: UserService.shared.currentUser?.profilePicURL)
         return cell
     }
 

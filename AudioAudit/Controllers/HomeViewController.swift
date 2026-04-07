@@ -12,6 +12,7 @@ class HomeViewController: UIViewController, UITableViewDataSource, UITableViewDe
     @IBOutlet weak var activityTableView: UITableView!
     var activities: [Activity] = []
     var usernames: [String: String] = [:]
+    var avatarURLs: [String: String] = [:]
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -81,15 +82,18 @@ class HomeViewController: UIViewController, UITableViewDataSource, UITableViewDe
                 // Fetch usernames for each unique userId
                 let uniqueUserIds = Set(fetchedActivities.map { $0.userId })
                 var names: [String: String] = [:]
+                var avatars: [String: String] = [:]
                 for uid in uniqueUserIds {
                     if let user = try? await UserService.shared.fetchUser(uid: uid) {
                         names[uid] = user.name
+                        avatars[uid] = user.profilePicURL
                     }
                 }
 
                 await MainActor.run {
                     self.activities = fetchedActivities
                     self.usernames = names
+                    self.avatarURLs = avatars
                     self.activityTableView.reloadData()
                 }
             } catch {
@@ -116,7 +120,7 @@ class HomeViewController: UIViewController, UITableViewDataSource, UITableViewDe
             for: indexPath
         ) as! ActivityCellTableViewCell
 
-        cell.configure(with: activity, username: usernames[activity.userId])
+        cell.configure(with: activity, username: usernames[activity.userId], avatarURL: avatarURLs[activity.userId])
 
         return cell
     }
