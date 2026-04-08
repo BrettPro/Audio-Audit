@@ -19,12 +19,19 @@ class ProfileViewController: UIViewController, UITableViewDataSource, UITableVie
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        navigationItem.rightBarButtonItem = UIBarButtonItem(
+        let friendsButton = UIBarButtonItem(
             image: UIImage(systemName: "person.2.fill"),
             style: .plain,
             target: self,
             action: #selector(friendsTapped)
         )
+        let settingsButton = UIBarButtonItem(
+            image: UIImage(systemName: "gear"),
+            style: .plain,
+            target: self,
+            action: #selector(settingsTapped)
+        )
+        navigationItem.rightBarButtonItems = [settingsButton, friendsButton]
         testImage = UIImageView(image: UIImage(named: "loadLogoFinal"))
         profileTableView.dataSource = self
         profileTableView.delegate = self
@@ -157,6 +164,12 @@ class ProfileViewController: UIViewController, UITableViewDataSource, UITableVie
 
     @objc func friendsTapped() {
         navigationController?.pushViewController(FriendsViewController(), animated: true)
+    }
+
+    @objc func settingsTapped() {
+        let storyboard = UIStoryboard(name: "Main", bundle: nil)
+        let settingsVC = storyboard.instantiateViewController(withIdentifier: "SettingsVC")
+        navigationController?.pushViewController(settingsVC, animated: true)
     }
 
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {

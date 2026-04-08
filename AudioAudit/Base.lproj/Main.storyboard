@@ -333,7 +333,7 @@
         <!--Settings View Controller-->
         <scene sceneID="B1s-pa-MM2">
             <objects>
-                <viewController id="y6M-bO-B4t" customClass="SettingsViewController" customModule="AudioAudit" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="SettingsVC" id="y6M-bO-B4t" customClass="SettingsViewController" customModule="AudioAudit" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="IfS-nZ-uzM">
                         <rect key="frame" x="0.0" y="0.0" width="440" height="956"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
