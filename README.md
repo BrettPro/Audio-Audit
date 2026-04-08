@@ -1,3 +1,6 @@
+Group Number: 1
+Project: Audio Audit
+
 Contributions:
 We each feel we contributed an equivalent amount this project (25%). This applies both to the Alpha and Beta
 versions of the release.
