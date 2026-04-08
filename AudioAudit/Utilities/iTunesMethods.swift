@@ -36,12 +36,14 @@ func getSongInfoFromITunes(title: String) async throws -> (artist: String, album
     let searchResult = try JSONDecoder().decode(ITunesSearchResult.self, from: data)
     guard let song = searchResult.results.first else { return nil }
     
-    // Load artwork
+    // Load higher-resolution artwork
     var image: UIImage? = nil
-    if let artworkUrl = song.artworkUrl100,
-       let url = URL(string: artworkUrl) {
-        let (imageData, _) = try await URLSession.shared.data(from: url)
-        image = UIImage(data: imageData)
+    if let artworkUrl = song.artworkUrl100 {
+        let highResUrlString = artworkUrl.replacingOccurrences(of: "100x100", with: "600x600")
+        if let url = URL(string: highResUrlString) {
+            let (imageData, _) = try await URLSession.shared.data(from: url)
+            image = UIImage(data: imageData)
+        }
     }
     
     return (song.artistName ?? "", song.collectionName ?? "", image)

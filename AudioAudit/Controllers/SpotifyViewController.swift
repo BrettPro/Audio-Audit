@@ -6,7 +6,7 @@
 //
 
 import UIKit
-import MusicKit
+import UserNotifications
 
 class SpotifyViewController: UIViewController {
 
@@ -14,59 +14,35 @@ class SpotifyViewController: UIViewController {
         super.viewDidLoad()
         self.navigationItem.hidesBackButton = true
         self.navigationController?.interactivePopGestureRecognizer?.isEnabled = false
-        // Do any additional setup after loading the view.
     }
     
     @IBAction func linkButtonPressed(_ sender: Any) {
-        Task { @MainActor in
-            let status = await MusicAuthorization.request()
+        UNUserNotificationCenter.current().requestAuthorization(options: [.alert, .sound, .badge]) { granted, error in
             
-            if status != .authorized {
-                UserDefaults.standard.set(false, forKey: "appleMusicConnected")
-                
-                let alert = UIAlertController(
-                    title: "Access Denied",
-                    message: "Please allow Apple Music access in Settings.",
-                    preferredStyle: .alert
-                )
-                alert.addAction(UIAlertAction(title: "Ok", style: .default))
-                present(alert, animated: true)
-                return
-            }
-            
-            // Authorized — now check subscription
-            let hasSubscription: Bool
-            
-            do {
-                let subscription = try await MusicSubscription.current
-                hasSubscription = subscription.canPlayCatalogContent
-            } catch {
-                hasSubscription = false
-            }
-            
-            if hasSubscription {
-                UserDefaults.standard.set(true, forKey: "appleMusicConnected")
-                
-                let alert = UIAlertController(
-                    title: "Account Successfully Linked!",
-                    message: "Your Apple Music account is linked!",
-                    preferredStyle: .alert
-                )
-                alert.addAction(UIAlertAction(title: "Ok", style: .default))
-                present(alert, animated: true)
-                
-            } else {
-                UserDefaults.standard.set(false, forKey: "appleMusicConnected")
-                
-                let alert = UIAlertController(
-                    title: "Apple Music Not Active",
-                    message: "You need an active Apple Music subscription.",
-                    preferredStyle: .alert
-                )
-                alert.addAction(UIAlertAction(title: "Ok", style: .default))
-                present(alert, animated: true)
+            DispatchQueue.main.async {
+                if granted {
+                    UserDefaults.standard.set(true, forKey: "notificationsEnabled")
+                    
+                    let alert = UIAlertController(
+                        title: "Notifications Enabled",
+                        message: "You will now receive notifications.",
+                        preferredStyle: .alert
+                    )
+                    alert.addAction(UIAlertAction(title: "OK", style: .default))
+                    self.present(alert, animated: true)
+                    
+                } else {
+                    UserDefaults.standard.set(false, forKey: "notificationsEnabled")
+                    
+                    let alert = UIAlertController(
+                        title: "Notifications Disabled",
+                        message: "Please enable notifications in Settings.",
+                        preferredStyle: .alert
+                    )
+                    alert.addAction(UIAlertAction(title: "OK", style: .default))
+                    self.present(alert, animated: true)
+                }
             }
         }
     }
-
 }

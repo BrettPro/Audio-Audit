@@ -146,16 +146,50 @@ class AddActivityViewController: UIViewController, UISearchBarDelegate, UITableV
 
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "SongResult", for: indexPath)
+        
         var config = cell.defaultContentConfiguration()
+        
         if usingSamples {
             let sample = filteredSamples[indexPath.row]
             config.text = sample.title
             config.secondaryText = sample.artist
+            config.image = UIImage(systemName: "music.note")
         } else {
             let song = searchResults[indexPath.row]
             config.text = song.title
             config.secondaryText = song.artistName
+            config.image = UIImage(systemName: "music.note")
+            
+            // Async load album art
+            if let artworkUrl = song.artworkUrl, let url = URL(string: artworkUrl) {
+                Task {
+                    do {
+                        let (data, _) = try await URLSession.shared.data(from: url)
+                        if let image = UIImage(data: data) {
+                            await MainActor.run {
+                                // Ensure the cell is still visible before setting the image
+                                if let visibleCell = tableView.cellForRow(at: indexPath) {
+                                    var updatedConfig = visibleCell.defaultContentConfiguration()
+                                    updatedConfig.text = song.title
+                                    updatedConfig.secondaryText = song.artistName
+                                    updatedConfig.image = image
+                                    updatedConfig.imageProperties.maximumSize = CGSize(width: 50, height: 50)
+                                    updatedConfig.imageProperties.cornerRadius = 4
+                                    visibleCell.contentConfiguration = updatedConfig
+                                }
+                            }
+                        }
+                    } catch {
+                        print("Failed to load artwork: \(error)")
+                    }
+                }
+            }
         }
+        
+        // Set size and corner radius for the image
+        config.imageProperties.maximumSize = CGSize(width: 50, height: 50)
+        config.imageProperties.cornerRadius = 4
+        
         cell.contentConfiguration = config
         return cell
     }

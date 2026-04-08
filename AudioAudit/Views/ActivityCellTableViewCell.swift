@@ -37,6 +37,13 @@ class ActivityCellTableViewCell: UITableViewCell {
     }
 
     private func setupViews() {
+        var fontSize = 0
+        if UserDefaults.standard.object(forKey: "fontSize") != nil {
+            fontSize = UserDefaults.standard.integer(forKey: "fontSize")
+        } else {
+            fontSize = 15
+        }
+        
         selectionStyle = .none
         backgroundColor = .clear
         contentView.backgroundColor = .clear
@@ -75,19 +82,19 @@ class ActivityCellTableViewCell: UITableViewCell {
 
         // Song name
         songNameLabel.translatesAutoresizingMaskIntoConstraints = false
-        songNameLabel.font = UIFont.systemFont(ofSize: 15, weight: .semibold)
+        songNameLabel.font = UIFont.systemFont(ofSize: CGFloat(fontSize), weight: .semibold)
         songNameLabel.textColor = .label
         songNameLabel.numberOfLines = 1
 
         // Artist name
         artistNameLabel.translatesAutoresizingMaskIntoConstraints = false
-        artistNameLabel.font = UIFont.systemFont(ofSize: 13, weight: .regular)
+        artistNameLabel.font = UIFont.systemFont(ofSize: CGFloat(fontSize - 2), weight: .regular)
         artistNameLabel.textColor = .secondaryLabel
         artistNameLabel.numberOfLines = 1
 
         // Review text
         descriptionLabel.translatesAutoresizingMaskIntoConstraints = false
-        descriptionLabel.font = UIFont.systemFont(ofSize: 14)
+        descriptionLabel.font = UIFont.systemFont(ofSize: CGFloat(fontSize - 1))
         descriptionLabel.textColor = .secondaryLabel
         descriptionLabel.numberOfLines = 0
 
