@@ -13,6 +13,7 @@ class HomeViewController: UIViewController, UITableViewDataSource, UITableViewDe
     var activities: [Activity] = []
     var usernames: [String: String] = [:]
     var avatarURLs: [String: String] = [:]
+    private var emptyStateLabel: UILabel?
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -76,8 +77,7 @@ class HomeViewController: UIViewController, UITableViewDataSource, UITableViewDe
 
         Task {
             do {
-                // Temporarily fetch all users' activities instead of just friends
-                let fetchedActivities = try await ActivityService.shared.fetchAllActivities()
+                let fetchedActivities = try await ActivityService.shared.fetchFriendsFeed(friendIds: friendIds)
 
                 // Fetch usernames for each unique userId
                 let uniqueUserIds = Set(fetchedActivities.map { $0.userId })
@@ -95,6 +95,7 @@ class HomeViewController: UIViewController, UITableViewDataSource, UITableViewDe
                     self.usernames = names
                     self.avatarURLs = avatars
                     self.activityTableView.reloadData()
+                    self.updateEmptyState(friendCount: friendIds.count)
                 }
             } catch {
                 print("Error loading friends feed: \(error.localizedDescription)")
@@ -107,6 +108,33 @@ class HomeViewController: UIViewController, UITableViewDataSource, UITableViewDe
         }
     }
     
+    private func updateEmptyState(friendCount: Int) {
+        if activities.isEmpty {
+            if emptyStateLabel == nil {
+                let label = UILabel()
+                label.translatesAutoresizingMaskIntoConstraints = false
+                label.numberOfLines = 0
+                label.textAlignment = .center
+                label.textColor = .secondaryLabel
+                label.font = .systemFont(ofSize: 16)
+                label.text = friendCount <= 1
+                    ? "Add friends to see their activity"
+                    : "No activity yet"
+                view.addSubview(label)
+                NSLayoutConstraint.activate([
+                    label.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+                    label.centerYAnchor.constraint(equalTo: view.centerYAnchor),
+                    label.leadingAnchor.constraint(greaterThanOrEqualTo: view.leadingAnchor, constant: 24),
+                    label.trailingAnchor.constraint(lessThanOrEqualTo: view.trailingAnchor, constant: -24)
+                ])
+                emptyStateLabel = label
+            }
+            emptyStateLabel?.isHidden = false
+        } else {
+            emptyStateLabel?.isHidden = true
+        }
+    }
+
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return activities.count
     }

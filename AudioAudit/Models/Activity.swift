@@ -22,6 +22,8 @@ struct Activity: Codable, Identifiable {
     var rating: Int?
     var review: String?
     var timestamp: Date
+    var latitude: Double?
+    var longitude: Double?
 
     enum CodingKeys: String, CodingKey {
         case id
@@ -32,5 +34,7 @@ struct Activity: Codable, Identifiable {
         case rating
         case review
         case timestamp
+        case latitude
+        case longitude
     }
 }

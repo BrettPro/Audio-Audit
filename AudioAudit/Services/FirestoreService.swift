@@ -13,7 +13,7 @@
 //
 // Service Design:
 // FirestoreService is a singleton (shared) that handles generic CRUD for models
-// Each collection has its own service ActivityService, MapService, QuizService, and UserService)
+// Each collection has its own service (ActivityService, FriendService, QuizService, UserService)
 
 import Foundation
 import FirebaseFirestore

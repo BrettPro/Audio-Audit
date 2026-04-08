@@ -256,7 +256,8 @@ class AddActivityViewController: UIViewController, UISearchBarDelegate, UITableV
         let review = (reviewText?.isEmpty == false) ? reviewText : nil
 
         submitButton.isEnabled = false
-        // TODO IF LOCATION SET, ADD SELECTED COORD TO ACTIVITY
+        let lat = selectedCoord?.latitude
+        let lon = selectedCoord?.longitude
         Task {
             do {
                 _ = try await ActivityService.shared.logReview(
@@ -264,7 +265,9 @@ class AddActivityViewController: UIViewController, UISearchBarDelegate, UITableV
                     song: song,
                     artist: artist,
                     rating: rating,
-                    review: review
+                    review: review,
+                    latitude: lat,
+                    longitude: lon
                 )
 
                 await MainActor.run {

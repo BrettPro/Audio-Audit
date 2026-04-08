@@ -59,7 +59,7 @@
                                     <constraint firstAttribute="width" constant="238" id="v89-Qu-2Tw"/>
                                 </constraints>
                                 <fontDescription key="fontDescription" type="system" pointSize="14"/>
-                                <textInputTraits key="textInputTraits"/>
+                                <textInputTraits key="textInputTraits" secureTextEntry="YES"/>
                             </textField>
                             <textField opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="248" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Email" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="rYB-wd-DCH">
                                 <rect key="frame" x="101" y="348" width="238" height="34"/>
@@ -1163,6 +1163,7 @@
     </scenes>
     <inferredMetricsTieBreakers>
         <segue reference="7xy-gP-Kao"/>
+        <segue reference="BWZ-XX-2Ad"/>
     </inferredMetricsTieBreakers>
     <resources>
         <image name="Notification" width="1058" height="1012"/>

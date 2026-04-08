@@ -34,20 +34,22 @@ class ActivityService {
     private init() {}
 
     // Log a listen activity. Returns the new document ID.
-    func logListen(userId: String, song: String, artist: String) async throws -> String {
+    func logListen(userId: String, song: String, artist: String, latitude: Double? = nil, longitude: Double? = nil) async throws -> String {
         let activity = Activity(
             userId: userId,
             type: .listen,
             song: song,
             artist: artist,
             rating: nil,
-            timestamp: Date()
+            timestamp: Date(),
+            latitude: latitude,
+            longitude: longitude
         )
         return try await store.create(object: activity, collection: collection)
     }
 
     // Log a review activity with a rating. Returns the new document ID.
-    func logReview(userId: String, song: String, artist: String, rating: Int, review: String? = nil) async throws -> String {
+    func logReview(userId: String, song: String, artist: String, rating: Int, review: String? = nil, latitude: Double? = nil, longitude: Double? = nil) async throws -> String {
         let activity = Activity(
             userId: userId,
             type: .review,
@@ -55,7 +57,9 @@ class ActivityService {
             artist: artist,
             rating: rating,
             review: review,
-            timestamp: Date()
+            timestamp: Date(),
+            latitude: latitude,
+            longitude: longitude
         )
         return try await store.create(object: activity, collection: collection)
     }

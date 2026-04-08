@@ -31,28 +31,17 @@ final class ActivityAnnotation: NSObject, MKAnnotation {
 final class ActivityMapViewController: UIViewController {
 
     private let mapView = MKMapView()
-
-    // Temporary sample data until Activity has latitude/longitude
-    private var sampleAnnotations: [ActivityAnnotation] = []
-
-    // Temporary username lookup until real user fetching exists
-    private let userLookup: [String: String] = [
-        "user_1": "Alex",
-        "user_2": "Jordan",
-        "user_3": "Taylor",
-        "user_4": "Casey"
-    ]
+    private var annotations: [ActivityAnnotation] = []
 
     override func viewDidLoad() {
         super.viewDidLoad()
-
-        //title = "Activity Map"
         view.backgroundColor = .systemBackground
-
         setupMapView()
-        loadSamplePins()
-        addSamplePinsToMap()
-        centerMapOnPins()
+    }
+
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        loadFriendActivities()
     }
 
     private func setupMapView() {
@@ -72,81 +61,52 @@ final class ActivityMapViewController: UIViewController {
         ])
     }
 
-    private func loadSamplePins() {
-        let sampleActivities: [(activity: Activity, coordinate: CLLocationCoordinate2D)] = [
-            (
-                activity: Activity(
-                    id: "1",
-                    userId: "user_1",
-                    type: .review,
-                    song: "Bohemian Rhapsody",
-                    artist: "Queen",
-                    rating: 5,
-                    review: "Classic. Never gets old.",
-                    timestamp: Date()
-                ),
-                coordinate: CLLocationCoordinate2D(latitude: 30.2672, longitude: -97.7431)
-            ),
-            (
-                activity: Activity(
-                    id: "2",
-                    userId: "user_2",
-                    type: .review,
-                    song: "Blinding Lights",
-                    artist: "The Weeknd",
-                    rating: 4,
-                    review: "Great late-night song.",
-                    timestamp: Date()
-                ),
-                coordinate: CLLocationCoordinate2D(latitude: 30.2705, longitude: -97.7500)
-            ),
-            (
-                activity: Activity(
-                    id: "3",
-                    userId: "user_3",
-                    type: .listen,
-                    song: "Levitating",
-                    artist: "Dua Lipa",
-                    rating: nil,
-                    review: nil,
-                    timestamp: Date()
-                ),
-                coordinate: CLLocationCoordinate2D(latitude: 30.2625, longitude: -97.7360)
-            ),
-            (
-                activity: Activity(
-                    id: "4",
-                    userId: "user_4",
-                    type: .review,
-                    song: "Bad Guy",
-                    artist: "Billie Eilish",
-                    rating: 3,
-                    review: "Catchy but overplayed.",
-                    timestamp: Date()
-                ),
-                coordinate: CLLocationCoordinate2D(latitude: 30.2740, longitude: -97.7420)
-            )
-        ]
+    private func loadFriendActivities() {
+        guard let currentUser = UserService.shared.currentUser else {
+            print("MAP ERROR: No current user found")
+            return
+        }
 
-        sampleAnnotations = sampleActivities.map { item in
-            let username = userLookup[item.activity.userId] ?? "Unknown"
-            return ActivityAnnotation(
-                activity: item.activity,
-                coordinate: item.coordinate,
-                username: username
-            )
+        var friendIds = currentUser.friends
+        if let myId = UserService.shared.currentUserId {
+            friendIds.append(myId)
+        }
+
+        Task {
+            do {
+                let activities = try await ActivityService.shared.fetchFriendsFeed(friendIds: friendIds)
+                let geoActivities = activities.filter { $0.latitude != nil && $0.longitude != nil }
+
+                let uniqueUserIds = Set(geoActivities.map { $0.userId })
+                let users = try await UserService.shared.fetchUsers(uids: Array(uniqueUserIds))
+
+                let newAnnotations: [ActivityAnnotation] = geoActivities.compactMap { activity in
+                    guard let lat = activity.latitude, let lon = activity.longitude else { return nil }
+                    let username = users[activity.userId]?.name ?? "Unknown"
+                    return ActivityAnnotation(
+                        activity: activity,
+                        coordinate: CLLocationCoordinate2D(latitude: lat, longitude: lon),
+                        username: username
+                    )
+                }
+
+                await MainActor.run {
+                    self.mapView.removeAnnotations(self.annotations)
+                    self.annotations = newAnnotations
+                    self.mapView.addAnnotations(self.annotations)
+                    self.centerMapOnPins()
+                }
+            } catch {
+                print("Error loading map activities: \(error.localizedDescription)")
+            }
         }
     }
 
-    private func addSamplePinsToMap() {
-        mapView.addAnnotations(sampleAnnotations)
-    }
-
     private func centerMapOnPins() {
-        guard !sampleAnnotations.isEmpty else { return }
+        guard !annotations.isEmpty else { return }
 
-        let latitudes = sampleAnnotations.map { $0.coordinate.latitude }
-        let longitudes = sampleAnnotations.map { $0.coordinate.longitude }
+        let latitudes = annotations.map { $0.coordinate.latitude }
+        let longitudes = annotations.map { $0.coordinate.longitude }
 
         guard let minLat = latitudes.min(),
               let maxLat = latitudes.max(),
@@ -177,8 +137,6 @@ final class ActivityMapViewController: UIViewController {
             Type: \(activity.type.rawValue)
             Rating: \(activity.rating.map(String.init) ?? "N/A")
             Review: \(activity.review ?? "No review")
-
-            TODO: fetch full activity by ID: \(activity.id ?? "nil")
             """,
             preferredStyle: .alert
         )
@@ -209,7 +167,7 @@ extension ActivityMapViewController: MKMapViewDelegate {
         view.canShowCallout = true
         view.isDraggable = false
         view.rightCalloutAccessoryView = UIButton(type: .detailDisclosure)
-        
+
         view.titleVisibility = .hidden
         view.subtitleVisibility = .hidden
 

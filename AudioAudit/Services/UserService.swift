@@ -105,4 +105,37 @@ class UserService {
     func deleteUser(uid: String) async throws {
         try await store.delete(collection: collection, documentId: uid)
     }
+
+    // Case-insensitive substring search over all users (test-app scale).
+    func searchUsers(byNamePrefix query: String, limit: Int = 50) async throws -> [AAUser] {
+        guard !query.isEmpty else { return [] }
+        let all = try await store.fetchAll(type: AAUser.self, collection: collection, filter: nil)
+        return all
+            .filter { $0.name.localizedCaseInsensitiveContains(query) }
+            .prefix(limit)
+            .map { $0 }
+    }
+
+    // Fetch all friends of a user.
+    func fetchFriends(of uid: String) async throws -> [AAUser] {
+        let user = try await fetchUser(uid: uid)
+        return try await fetchUsers(uids: user.friends).values.map { $0 }
+    }
+
+    // Fetch a batch of users by UID. Chunked due to Firestore `in` query 30-item limit.
+    func fetchUsers(uids: [String]) async throws -> [String: AAUser] {
+        if uids.isEmpty { return [:] }
+        var result: [String: AAUser] = [:]
+        for chunk in uids.chunked(into: 30) {
+            let users = try await store.fetchAll(type: AAUser.self, collection: collection, filter: { ref in
+                ref.whereField(FieldPath.documentID(), in: chunk)
+            })
+            for user in users {
+                if let id = user.id {
+                    result[id] = user
+                }
+            }
+        }
+        return result
+    }
 }

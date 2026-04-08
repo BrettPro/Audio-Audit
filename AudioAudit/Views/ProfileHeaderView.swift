@@ -153,7 +153,7 @@ class ProfileHeaderView: UIView {
             print("ERROR READING IMAGE URL")
             return
         }
-        
+
         let session = URLSession(configuration: .default)
         let task = session.dataTask(with: imageURL) { (data, response, error) in
             

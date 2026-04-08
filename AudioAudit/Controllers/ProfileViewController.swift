@@ -19,6 +19,12 @@ class ProfileViewController: UIViewController, UITableViewDataSource, UITableVie
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        navigationItem.rightBarButtonItem = UIBarButtonItem(
+            image: UIImage(systemName: "person.2.fill"),
+            style: .plain,
+            target: self,
+            action: #selector(friendsTapped)
+        )
         testImage = UIImageView(image: UIImage(named: "loadLogoFinal"))
         profileTableView.dataSource = self
         profileTableView.delegate = self
@@ -147,6 +153,10 @@ class ProfileViewController: UIViewController, UITableViewDataSource, UITableVie
         super.viewWillAppear(animated)
         //addSampleReview()
         self.tabBarController?.tabBar.isHidden = false
+    }
+
+    @objc func friendsTapped() {
+        navigationController?.pushViewController(FriendsViewController(), animated: true)
     }
 
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
