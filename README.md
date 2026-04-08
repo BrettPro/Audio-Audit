@@ -1,6 +1,9 @@
 Group Number: 1
 Project: Audio Audit
 
+Test profile username: pic@pic.com 
+Test profile password: picpic
+
 Contributions:
 We each feel we contributed an equivalent amount this project (25%). This applies both to the Alpha and Beta
 versions of the release.
