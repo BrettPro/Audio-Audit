@@ -66,7 +66,7 @@ class AddActivityViewController: UIViewController, UISearchBarDelegate, UITableV
         resultsTableView.dataSource = self
         resultsTableView.delegate = self
         requestMusicAuth()
-        loadSamples()
+        //loadSamples()
     }
 
     func requestMusicAuth() {
@@ -112,7 +112,7 @@ class AddActivityViewController: UIViewController, UISearchBarDelegate, UITableV
                 let results = try await searchITunes(query: query)
                 await MainActor.run {
                     if results.isEmpty {
-                        // fallback to your sample songs
+                        // fallback to sample songs
                         self.usingSamples = true
                         self.filteredSamples = self.sampleSongs.filter {
                             $0.title.localizedCaseInsensitiveContains(query) ||
@@ -120,7 +120,6 @@ class AddActivityViewController: UIViewController, UISearchBarDelegate, UITableV
                         }
                     } else {
                         self.usingSamples = false
-                        // Convert ITunesSong to your Song-like struct
                         self.searchResults = results.map { song in
                             Song(title: song.trackName, artistName: song.artistName, artworkUrl: song.artworkUrl100)
                         }

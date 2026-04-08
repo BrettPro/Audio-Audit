@@ -131,6 +131,10 @@ class ProfileHeaderView: UIView {
         setConstraints()
     }
     
+    func getFriends() {
+        friendsLabel.text = "\(UserService.shared.currentUser!.friends.count)"
+    }
+    
     func getUserInfo(with user: AAUser) async {
         nameLabel.text = user.name
         do {
@@ -140,7 +144,7 @@ class ProfileHeaderView: UIView {
             print("ERROR READING POST COUNT")
             return
         }
-        friendsLabel.text = "\(user.friends.count)"
+        getFriends()
         // loads user pic from utcs directory
         await getUserPic()
     }
