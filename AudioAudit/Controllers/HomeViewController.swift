@@ -152,5 +152,15 @@ class HomeViewController: UIViewController, UITableViewDataSource, UITableViewDe
 
         return cell
     }
-
+    
+    // sends selected activity to expandVC
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        if segue.identifier == "ExpandSegue" {
+            if let indexPath = activityTableView.indexPathForSelectedRow {
+                let selectedItem = activities[indexPath.row]
+                let destinationVC = segue.destination as! ExpandReviewVC
+                destinationVC.activity = selectedItem
+            }
+        }
+    }
 }

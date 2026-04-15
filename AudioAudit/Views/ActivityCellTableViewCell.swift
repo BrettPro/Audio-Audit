@@ -9,6 +9,8 @@ import UIKit
 import MusicKit
 
 class ActivityCellTableViewCell: UITableViewCell {
+    
+    
     var currentSongTitle: String?
     var currentAvatarURL: String?
 
@@ -23,6 +25,8 @@ class ActivityCellTableViewCell: UITableViewCell {
 
     let descriptionLabel = UILabel()
     let commentButton = UIButton(type: .system)
+    
+    var onCommentTapped: (() -> Void)?
 
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
@@ -36,7 +40,7 @@ class ActivityCellTableViewCell: UITableViewCell {
         setupConstraints()
     }
 
-    private func setupViews() {
+    func setupViews() {
         var fontSize = 0
         if UserDefaults.standard.object(forKey: "fontSize") != nil {
             fontSize = UserDefaults.standard.integer(forKey: "fontSize")
@@ -103,6 +107,14 @@ class ActivityCellTableViewCell: UITableViewCell {
         commentButton.setImage(UIImage(systemName: "bubble.left"), for: .normal)
         commentButton.tintColor = .secondaryLabel
         commentButton.contentHorizontalAlignment = .leading
+        let action = UIAction() {_ in 
+            self.onCommentTapped!()
+        }
+        commentButton.addAction(action, for: .touchUpInside)
+        // TODO open up text field in expandreview VC
+        onCommentTapped = {
+            print("COMMENT TAPPED")
+        }
 
         contentView.addSubview(cardView)
 
@@ -117,7 +129,7 @@ class ActivityCellTableViewCell: UITableViewCell {
         mediaBoxView.addSubview(artistNameLabel)
     }
 
-    private func setupConstraints() {
+    func setupConstraints() {
         NSLayoutConstraint.activate([
 
             // Main card
