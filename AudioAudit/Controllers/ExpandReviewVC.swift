@@ -35,6 +35,23 @@ class ExpandReviewVC: UIViewController {
         view.backgroundColor = .systemBackground
     }
     
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        activityView.onCommentTapped = {
+            print("COMMENT TAPPED INSIDE EXPAND REVIEW")
+            
+        }
+    }
+
+    
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        activityView.onCommentTapped = {
+            print("COMMENT TAPPED")
+        }
+    }
+
+    
     private func setupActivity() {
         guard let activity = activity else {
             return

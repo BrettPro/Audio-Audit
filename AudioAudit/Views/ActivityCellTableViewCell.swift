@@ -114,6 +114,7 @@ class ActivityCellTableViewCell: UITableViewCell {
         // TODO open up text field in expandreview VC
         onCommentTapped = {
             print("COMMENT TAPPED")
+            // open comment text field
         }
 
         contentView.addSubview(cardView)

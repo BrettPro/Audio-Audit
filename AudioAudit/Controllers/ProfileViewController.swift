@@ -85,6 +85,18 @@ class ProfileViewController: UIViewController, UITableViewDataSource, UITableVie
         loadJournal()
     }
     
+    // sends selected activity to expandVC
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        print("ENTERED PROFILE PREPARE")
+        if segue.identifier == "ExpandProfile" {
+            if let indexPath = profileTableView.indexPathForSelectedRow {
+                let selectedItem = activities[indexPath.row]
+                let destinationVC = segue.destination as! ExpandReviewVC
+                destinationVC.activity = selectedItem
+            }
+        }
+    }
+    
     func loadJournal() {
         Task {
             do {
