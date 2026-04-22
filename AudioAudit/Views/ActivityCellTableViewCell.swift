@@ -25,6 +25,7 @@ class ActivityCellTableViewCell: UITableViewCell {
 
     let descriptionLabel = UILabel()
     let commentButton = UIButton(type: .system)
+    let commentNum = UILabel()
     
     var onCommentTapped: (() -> Void)?
 
@@ -68,13 +69,14 @@ class ActivityCellTableViewCell: UITableViewCell {
         titleLabel.translatesAutoresizingMaskIntoConstraints = false
         titleLabel.font = UIFont.systemFont(ofSize: 16, weight: .semibold)
         titleLabel.textColor = .label
-        titleLabel.numberOfLines = 1
+        titleLabel.numberOfLines = 0
 
         // Media box
         mediaBoxView.translatesAutoresizingMaskIntoConstraints = false
         mediaBoxView.backgroundColor = .systemBackground
         mediaBoxView.layer.cornerRadius = 12
         mediaBoxView.layer.borderWidth = 1
+        //mediaBoxView.clipsToBounds = false
         mediaBoxView.layer.borderColor = UIColor.systemGray5.cgColor
 
         // Album cover
@@ -101,6 +103,12 @@ class ActivityCellTableViewCell: UITableViewCell {
         descriptionLabel.font = UIFont.systemFont(ofSize: CGFloat(fontSize - 1))
         descriptionLabel.textColor = .secondaryLabel
         descriptionLabel.numberOfLines = 0
+        descriptionLabel.lineBreakMode = .byWordWrapping
+        
+        // comment num
+        commentNum.translatesAutoresizingMaskIntoConstraints = false
+        commentNum.font = UIFont.systemFont(ofSize: CGFloat(fontSize - 1))
+        commentNum.textColor = .secondaryLabel
 
         // Comment button
         commentButton.translatesAutoresizingMaskIntoConstraints = false
@@ -111,10 +119,8 @@ class ActivityCellTableViewCell: UITableViewCell {
             self.onCommentTapped!()
         }
         commentButton.addAction(action, for: .touchUpInside)
-        // TODO open up text field in expandreview VC
         onCommentTapped = {
             print("COMMENT TAPPED")
-            // open comment text field
         }
 
         contentView.addSubview(cardView)
@@ -123,6 +129,7 @@ class ActivityCellTableViewCell: UITableViewCell {
         cardView.addSubview(titleLabel)
         cardView.addSubview(mediaBoxView)
         cardView.addSubview(descriptionLabel)
+        //cardView.addSubview(commentNum)
         cardView.addSubview(commentButton)
 
         mediaBoxView.addSubview(albumCoverImageView)
@@ -154,6 +161,7 @@ class ActivityCellTableViewCell: UITableViewCell {
             mediaBoxView.topAnchor.constraint(equalTo: titleLabel.bottomAnchor, constant: 10),
             mediaBoxView.leadingAnchor.constraint(equalTo: titleLabel.leadingAnchor),
             mediaBoxView.trailingAnchor.constraint(equalTo: cardView.trailingAnchor, constant: -16),
+            mediaBoxView.heightAnchor.constraint(equalToConstant: 76),
 
             // Album cover inside media box
             albumCoverImageView.leadingAnchor.constraint(equalTo: mediaBoxView.leadingAnchor, constant: 12),
@@ -168,15 +176,19 @@ class ActivityCellTableViewCell: UITableViewCell {
             songNameLabel.trailingAnchor.constraint(equalTo: mediaBoxView.trailingAnchor, constant: -12),
 
             // Artist name
-            artistNameLabel.topAnchor.constraint(equalTo: songNameLabel.bottomAnchor, constant: 4),
+            artistNameLabel.topAnchor.constraint(equalTo: songNameLabel.bottomAnchor, constant: 6),
             artistNameLabel.leadingAnchor.constraint(equalTo: songNameLabel.leadingAnchor),
             artistNameLabel.trailingAnchor.constraint(equalTo: songNameLabel.trailingAnchor),
-            artistNameLabel.bottomAnchor.constraint(lessThanOrEqualTo: mediaBoxView.bottomAnchor, constant: -12),
+            artistNameLabel.bottomAnchor.constraint(equalTo: mediaBoxView.bottomAnchor, constant: -12),
 
             // Review
             descriptionLabel.topAnchor.constraint(equalTo: mediaBoxView.bottomAnchor, constant: 12),
             descriptionLabel.leadingAnchor.constraint(equalTo: titleLabel.leadingAnchor),
             descriptionLabel.trailingAnchor.constraint(equalTo: titleLabel.trailingAnchor),
+            
+            
+            // comment num
+            
 
             // Comment button
             commentButton.topAnchor.constraint(equalTo: descriptionLabel.bottomAnchor, constant: 12),

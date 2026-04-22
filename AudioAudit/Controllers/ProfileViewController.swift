@@ -35,7 +35,7 @@ class ProfileViewController: UIViewController, UITableViewDataSource, UITableVie
         testImage = UIImageView(image: UIImage(named: "loadLogoFinal"))
         profileTableView.dataSource = self
         profileTableView.delegate = self
-        profileTableView.register(ActivityCellTableViewCell.self, forCellReuseIdentifier: "ActivityCell")
+        //profileTableView.register(ActivityCellTableViewCell.self, forCellReuseIdentifier: "ActivityCell")
         guard let currentUser = UserService.shared.currentUser else {
             print("PROFILE ERROR: No current user found")
             activities = []
@@ -82,7 +82,12 @@ class ProfileViewController: UIViewController, UITableViewDataSource, UITableVie
             //print(destVC.imageView.image)
             self.navigationController?.pushViewController(destVC, animated: true)
         }
+        let refreshControl = UIRefreshControl()
+        refreshControl.addTarget(self, action: #selector(handleRefresh), for: .valueChanged)
+        refreshControl.addTarget(self, action: #selector(handleRefresh), for: .valueChanged)
+        profileTableView.refreshControl = refreshControl
         loadJournal()
+        loadFriends()
     }
     
     // sends selected activity to expandVC
@@ -97,6 +102,11 @@ class ProfileViewController: UIViewController, UITableViewDataSource, UITableVie
         }
     }
     
+    @objc func handleRefresh() {
+        loadJournal()
+        loadFriends()
+    }
+    
     func loadJournal() {
         Task {
             do {
@@ -104,6 +114,7 @@ class ProfileViewController: UIViewController, UITableViewDataSource, UITableVie
                 await MainActor.run {
                     self.activities = fetchedActivities
                     self.profileTableView.reloadData()
+                    self.profileTableView.refreshControl?.endRefreshing()
                 }
             } catch {
                 print("Error loading user journal: \(error.localizedDescription)")
@@ -128,8 +139,8 @@ class ProfileViewController: UIViewController, UITableViewDataSource, UITableVie
         super.viewWillAppear(animated)
         //addSampleReview()
         self.tabBarController?.tabBar.isHidden = false
-        loadJournal()
-        loadFriends()
+        //loadJournal()
+        //loadFriends()
     }
 
     @objc func friendsTapped() {

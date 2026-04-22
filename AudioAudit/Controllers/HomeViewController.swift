@@ -23,15 +23,25 @@ class HomeViewController: UIViewController, UITableViewDataSource, UITableViewDe
         activityTableView.delegate = self
 
         activityTableView.rowHeight = UITableView.automaticDimension
-        activityTableView.estimatedRowHeight = 110
+        activityTableView.estimatedRowHeight = 200
         activityTableView.separatorStyle = .none
         activityTableView.backgroundColor = .systemBackground
         activityTableView.isScrollEnabled = true
         activityTableView.alwaysBounceVertical = true
 
         setupAddButton()
+        
+        let refreshControl = UIRefreshControl()
+        refreshControl.addTarget(self, action: #selector(handleRefresh), for: .valueChanged)
+        activityTableView.refreshControl = refreshControl
+        
+        loadFriendsFeed()
     }
 
+    @objc func handleRefresh() {
+        loadFriendsFeed()
+    }
+    
     func setupAddButton() {
         let addButton = UIButton(type: .system)
         addButton.translatesAutoresizingMaskIntoConstraints = false
@@ -59,7 +69,7 @@ class HomeViewController: UIViewController, UITableViewDataSource, UITableViewDe
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        loadFriendsFeed()
+        
     }
     
     func loadFriendsFeed() {
@@ -95,6 +105,9 @@ class HomeViewController: UIViewController, UITableViewDataSource, UITableViewDe
                     self.usernames = names
                     self.avatarURLs = avatars
                     self.activityTableView.reloadData()
+                    
+                    self.activityTableView.refreshControl?.endRefreshing()
+                    
                     self.updateEmptyState(friendCount: friendIds.count)
                 }
             } catch {
