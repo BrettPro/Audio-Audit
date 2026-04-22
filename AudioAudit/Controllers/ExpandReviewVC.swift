@@ -7,7 +7,7 @@
 
 import UIKit
 
-class ExpandReviewVC: UIViewController{
+class ExpandReviewVC: UIViewController, UITextFieldDelegate {
 
     var activity: Activity?
     var username: String?
@@ -16,7 +16,6 @@ class ExpandReviewVC: UIViewController{
     let activityView = ActivityCellTableViewCell(style: .default, reuseIdentifier: nil)
     
     var commentCard: NewCommentView?
-    
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -27,6 +26,7 @@ class ExpandReviewVC: UIViewController{
                     username = reviewUser.name
                     avatarURL = reviewUser.profilePicURL
                     commentCard = NewCommentView(user: reviewUser)
+                    commentCard?.commentField.delegate = self
                     setupActivity()
                     setupCommentField()
                     // TODO load comments from firebase backend
@@ -48,7 +48,7 @@ class ExpandReviewVC: UIViewController{
             // TODO open text field
         }
         
-        activityView.onCommentTapped = {
+        activityView.onLikeTapped = {
             print("LIKE TAPPED INSIDE EXPAND REVIEW")
         }
     }
@@ -64,13 +64,25 @@ class ExpandReviewVC: UIViewController{
         }
     }
     
+    // Called when 'return' key pressed
+    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+        commentCard?.commentField.resignFirstResponder()
+        return true
+    }
+
+    // Called when the user clicks on the view outside of the UITextField
+    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
+        self.view.endEditing(true)
+    }
+    
     func setupCommentField() {
         guard let activity = activity else {
             return
         }
-        let card = activityView.cardView
+        view.addSubview(commentCard!)
+        commentCard?.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
-            commentCard!.topAnchor.constraint(equalTo: card.bottomAnchor, constant: 8),
+            commentCard!.topAnchor.constraint(equalTo: activityView.cardView.bottomAnchor, constant: 8),
             commentCard!.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 16),
             commentCard!.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -16),
             commentCard!.heightAnchor.constraint(greaterThanOrEqualToConstant: 30)

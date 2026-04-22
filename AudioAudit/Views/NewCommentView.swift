@@ -7,18 +7,17 @@
 
 import UIKit
 
-class NewCommentView: UIView, UITextFieldDelegate  {
+class NewCommentView: UIView {
     
     var user: AAUser
     let avatar = UIImageView()
-    let commentField = UITextField()
+    let commentField = UITextView()
     
     var card: ActivityCellTableViewCell?
 
     init(user: AAUser) {
         self.user = user
         super.init(frame: .zero)
-        commentField.delegate = self
         setupLayout()
 //        Task {
 //            await getUserPic()
@@ -30,27 +29,25 @@ class NewCommentView: UIView, UITextFieldDelegate  {
     }
     
     func setupLayout() {
-        commentField.placeholder = "Write comment here"
-        commentField.translatesAutoresizingMaskIntoConstraints = false
+        self.backgroundColor = .secondarySystemBackground
+        self.layer.cornerRadius = 14
         
-        commentField.backgroundColor = .secondarySystemBackground
-        commentField.layer.cornerRadius = 14
+        commentField.text = "Write comment here"
+        commentField.translatesAutoresizingMaskIntoConstraints = false
         commentField.textColor = .secondaryLabel
         
         let paddingView = UIView(frame: CGRect(x: 0, y: 0, width: 15, height: commentField.frame.height))
         commentField.leftView = paddingView
         commentField.leftViewMode = .always
+        addSubview(commentField)
     
+        NSLayoutConstraint.activate([
+            commentField.topAnchor.constraint(equalTo: self.topAnchor, constant: 8),
+            commentField.leadingAnchor.constraint(equalTo: self.leadingAnchor, constant: 16),
+            commentField.trailingAnchor.constraint(equalTo: self.trailingAnchor, constant: -16),
+        ])
+        //TODO add avatar and send button
     }
     
-//    // Called when 'return' key pressed
-//    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
-//        textField.resignFirstResponder()
-//        return true
-//    }
-//    
-//    // Called when the user clicks on the view outside of the UITextField
-//    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
-//        self.view.endEditing(true)
-//    }
+
 }
