@@ -22,25 +22,40 @@ struct ITunesSong: Codable {
 }
 
 // MARK: - Fetch song info from iTunes
-func getSongInfoFromITunes(title: String) async throws -> (artist: String, album: String, artwork: UIImage?)? {
-    // Prepare URL
-    guard let encodedTitle = title.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed),
-          let url = URL(string: "https://itunes.apple.com/search?term=\(encodedTitle)&media=music&limit=1") else {
+func getSongInfoFromITunes(title: String, artist: String) async throws -> (artist: String, album: String, artwork: UIImage?)? {
+    
+    // Stronger query (title + artist)
+    let query = "\(title) \(artist)"
+    
+    guard let encoded = query.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed),
+          let url = URL(string: "https://itunes.apple.com/search?term=\(encoded)&media=music&entity=song&limit=10") else {
         return nil
     }
     
-    // Fetch data
     let (data, _) = try await URLSession.shared.data(from: url)
-    
-    // Decode JSON
     let searchResult = try JSONDecoder().decode(ITunesSearchResult.self, from: data)
-    guard let song = searchResult.results.first else { return nil }
     
-    // Load higher-resolution artwork
+    guard !searchResult.results.isEmpty else { return nil }
+    
+    let normalizedArtist = artist.lowercased()
+    let normalizedTitle = title.lowercased()
+    
+    // Better match: prioritize both artist AND title match
+    let song = searchResult.results.first(where: {
+        let resultArtist = $0.artistName?.lowercased() ?? ""
+        let resultTitle = $0.trackName?.lowercased() ?? ""
+        
+        return resultArtist.contains(normalizedArtist) &&
+               resultTitle.contains(normalizedTitle)
+    }) ?? searchResult.results.first
+    
+    guard let song else { return nil }
+    
+    // High-res artwork
     var image: UIImage? = nil
     if let artworkUrl = song.artworkUrl100 {
-        let highResUrlString = artworkUrl.replacingOccurrences(of: "100x100", with: "600x600")
-        if let url = URL(string: highResUrlString) {
+        let highRes = artworkUrl.replacingOccurrences(of: "100x100", with: "600x600")
+        if let url = URL(string: highRes) {
             let (imageData, _) = try await URLSession.shared.data(from: url)
             image = UIImage(data: imageData)
         }

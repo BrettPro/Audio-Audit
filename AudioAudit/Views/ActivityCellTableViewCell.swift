@@ -24,10 +24,19 @@ class ActivityCellTableViewCell: UITableViewCell {
     let artistNameLabel = UILabel()
 
     let descriptionLabel = UILabel()
+    
     let commentButton = UIButton(type: .system)
     let commentNum = UILabel()
-    
     var onCommentTapped: (() -> Void)?
+    
+    let likeButton = UIButton(type: .system)
+    let likeNum = UILabel()
+    var onLikeTapped: (() -> Void)?
+    // TODO get info from firebase to know if user liked this activity.
+    // use to update likebutton icon and color
+    var userLiked: Bool?
+    
+    let ratingStackView = UIStackView()
 
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
@@ -105,10 +114,9 @@ class ActivityCellTableViewCell: UITableViewCell {
         descriptionLabel.numberOfLines = 0
         descriptionLabel.lineBreakMode = .byWordWrapping
         
-        // comment num
-        commentNum.translatesAutoresizingMaskIntoConstraints = false
-        commentNum.font = UIFont.systemFont(ofSize: CGFloat(fontSize - 1))
-        commentNum.textColor = .secondaryLabel
+        // rating stack
+        ratingStackView.axis = .horizontal
+        ratingStackView.spacing = 4
 
         // Comment button
         commentButton.translatesAutoresizingMaskIntoConstraints = false
@@ -121,7 +129,32 @@ class ActivityCellTableViewCell: UITableViewCell {
         commentButton.addAction(action, for: .touchUpInside)
         onCommentTapped = {
             print("COMMENT TAPPED")
+            // can add functionality to open expandreviewvc and write comment if we want
         }
+        
+        // comment num
+        commentNum.translatesAutoresizingMaskIntoConstraints = false
+        commentNum.font = UIFont.systemFont(ofSize: CGFloat(18))
+        commentNum.textColor = .secondaryLabel
+        
+        //like button
+        likeButton.translatesAutoresizingMaskIntoConstraints = false
+        likeButton.setImage(UIImage(systemName: "heart"), for: .normal)
+        likeButton.tintColor = .secondaryLabel
+        likeButton.contentHorizontalAlignment = .leading
+        let likeAction = UIAction() {_ in
+            self.onLikeTapped!()
+        }
+        likeButton.addAction(likeAction, for: .touchUpInside)
+        onLikeTapped = {
+            print("LIKE TAPPED")
+            // TODO change icon to either filled or outline
+            // increment num likes in firebase
+            // reload likenum
+        }
+        
+        // likenum
+        //TODO
 
         contentView.addSubview(cardView)
 
@@ -129,12 +162,18 @@ class ActivityCellTableViewCell: UITableViewCell {
         cardView.addSubview(titleLabel)
         cardView.addSubview(mediaBoxView)
         cardView.addSubview(descriptionLabel)
-        //cardView.addSubview(commentNum)
         cardView.addSubview(commentButton)
+        cardView.addSubview(commentNum)
+        cardView.addSubview(likeButton)
+        //cardView.addSubview(likeNum)
 
         mediaBoxView.addSubview(albumCoverImageView)
         mediaBoxView.addSubview(songNameLabel)
         mediaBoxView.addSubview(artistNameLabel)
+        
+        // stars
+        cardView.addSubview(ratingStackView)
+        ratingStackView.translatesAutoresizingMaskIntoConstraints = false
     }
 
     func setupConstraints() {
@@ -174,6 +213,11 @@ class ActivityCellTableViewCell: UITableViewCell {
             songNameLabel.topAnchor.constraint(equalTo: mediaBoxView.topAnchor, constant: 14),
             songNameLabel.leadingAnchor.constraint(equalTo: albumCoverImageView.trailingAnchor, constant: 12),
             songNameLabel.trailingAnchor.constraint(equalTo: mediaBoxView.trailingAnchor, constant: -12),
+            
+            // stars
+            ratingStackView.topAnchor.constraint(equalTo: descriptionLabel.bottomAnchor, constant: 8),
+            ratingStackView.leadingAnchor.constraint(equalTo: titleLabel.leadingAnchor),
+            ratingStackView.heightAnchor.constraint(equalToConstant: 16),
 
             // Artist name
             artistNameLabel.topAnchor.constraint(equalTo: songNameLabel.bottomAnchor, constant: 6),
@@ -185,17 +229,23 @@ class ActivityCellTableViewCell: UITableViewCell {
             descriptionLabel.topAnchor.constraint(equalTo: mediaBoxView.bottomAnchor, constant: 12),
             descriptionLabel.leadingAnchor.constraint(equalTo: titleLabel.leadingAnchor),
             descriptionLabel.trailingAnchor.constraint(equalTo: titleLabel.trailingAnchor),
-            
-            
-            // comment num
-            
 
             // Comment button
-            commentButton.topAnchor.constraint(equalTo: descriptionLabel.bottomAnchor, constant: 12),
+            commentButton.topAnchor.constraint(equalTo: ratingStackView.bottomAnchor, constant: 12),
             commentButton.leadingAnchor.constraint(equalTo: titleLabel.leadingAnchor),
             commentButton.widthAnchor.constraint(equalToConstant: 44),
             commentButton.heightAnchor.constraint(equalToConstant: 30),
-            commentButton.bottomAnchor.constraint(equalTo: cardView.bottomAnchor, constant: -12)
+            commentButton.bottomAnchor.constraint(equalTo: cardView.bottomAnchor, constant: -12),
+            
+            // comment num
+            commentNum.leadingAnchor.constraint(equalTo: commentButton.trailingAnchor, constant: -8),
+            commentNum.centerYAnchor.constraint(equalTo: commentButton.centerYAnchor, constant: -1),
+            
+            likeButton.topAnchor.constraint(equalTo: ratingStackView.bottomAnchor, constant: 12),
+            likeButton.leadingAnchor.constraint(equalTo: commentNum.trailingAnchor, constant: 12),
+            likeButton.widthAnchor.constraint(equalToConstant: 44),
+            likeButton.heightAnchor.constraint(equalToConstant: 30),
+            likeButton.bottomAnchor.constraint(equalTo: cardView.bottomAnchor, constant: -12),
         ])
     }
 
@@ -223,6 +273,7 @@ class ActivityCellTableViewCell: UITableViewCell {
         titleLabel.attributedText = attributedText
         songNameLabel.text = activity.song
         artistNameLabel.text = activity.artist
+        setRating(activity.rating)
         
         currentSongTitle = activity.song
         loadSongInfo(title: activity.song, artist: activity.artist)
@@ -231,9 +282,12 @@ class ActivityCellTableViewCell: UITableViewCell {
            !review.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty {
             descriptionLabel.text = review
             descriptionLabel.isHidden = false
+            //TODO connect to comment backend
+            commentNum.text = "0"
         } else {
             descriptionLabel.text = nil
             descriptionLabel.isHidden = true
+            commentNum.text = "0"
         }
         currentAvatarURL = avatarURL
         if let urlString = avatarURL, let url = URL(string: urlString) {
@@ -269,7 +323,7 @@ class ActivityCellTableViewCell: UITableViewCell {
 
         Task {
             do {
-                guard let info = try await getSongInfoFromITunes(title: title) else { return }
+                guard let info = try await getSongInfoFromITunes(title: title, artist: artist) else { return }
 
                 await MainActor.run {
                     // Prevent wrong data due to reuse
@@ -283,5 +337,37 @@ class ActivityCellTableViewCell: UITableViewCell {
                 print("Failed to load song info from iTunes: \(error)")
             }
         }
+    }
+    
+    func setRating(_ rating: Int?) {
+
+        let maxStars = 5
+        let rating = rating ?? 0
+
+        let stack = UIStackView()
+        stack.axis = .horizontal
+        stack.spacing = 2
+
+        for i in 1...maxStars {
+
+            let imageView = UIImageView()
+
+            let isFilled = i <= rating
+
+            imageView.image = UIImage(
+                systemName: isFilled ? "star.fill" : "star"
+            )
+
+            imageView.tintColor = isFilled ? .systemYellow : .systemGray3
+            imageView.contentMode = .scaleAspectFit
+
+            imageView.widthAnchor.constraint(equalToConstant: 14).isActive = true
+            imageView.heightAnchor.constraint(equalToConstant: 14).isActive = true
+
+            stack.addArrangedSubview(imageView)
+        }
+
+        ratingStackView.arrangedSubviews.forEach { $0.removeFromSuperview() }
+        ratingStackView.addArrangedSubview(stack)
     }
 }

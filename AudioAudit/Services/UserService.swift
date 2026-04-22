@@ -138,4 +138,21 @@ class UserService {
         }
         return result
     }
+    
+    func updateProfileSong(
+        uid: String,
+        title: String,
+        artist: String,
+        previewURL: String?
+    ) async throws {
+        try await store.update(
+            collection: collection,
+            documentId: uid,
+            fields: [
+                "profile_song_title": title,
+                "profile_song_artist": artist,
+                "profile_song_preview_url": previewURL ?? ""
+            ]
+        )
+    }
 }
