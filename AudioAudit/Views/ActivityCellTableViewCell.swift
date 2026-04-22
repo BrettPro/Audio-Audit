@@ -23,6 +23,8 @@ class ActivityCellTableViewCell: UITableViewCell {
 
     let descriptionLabel = UILabel()
     let commentButton = UIButton(type: .system)
+    
+    let ratingStackView = UIStackView()
 
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
@@ -97,6 +99,9 @@ class ActivityCellTableViewCell: UITableViewCell {
         descriptionLabel.font = UIFont.systemFont(ofSize: CGFloat(fontSize - 1))
         descriptionLabel.textColor = .secondaryLabel
         descriptionLabel.numberOfLines = 0
+        
+        ratingStackView.axis = .horizontal
+        ratingStackView.spacing = 4
 
         // Comment button
         commentButton.translatesAutoresizingMaskIntoConstraints = false
@@ -115,6 +120,10 @@ class ActivityCellTableViewCell: UITableViewCell {
         mediaBoxView.addSubview(albumCoverImageView)
         mediaBoxView.addSubview(songNameLabel)
         mediaBoxView.addSubview(artistNameLabel)
+        
+        // stars
+        cardView.addSubview(ratingStackView)
+        ratingStackView.translatesAutoresizingMaskIntoConstraints = false
     }
 
     private func setupConstraints() {
@@ -153,6 +162,11 @@ class ActivityCellTableViewCell: UITableViewCell {
             songNameLabel.topAnchor.constraint(equalTo: mediaBoxView.topAnchor, constant: 14),
             songNameLabel.leadingAnchor.constraint(equalTo: albumCoverImageView.trailingAnchor, constant: 12),
             songNameLabel.trailingAnchor.constraint(equalTo: mediaBoxView.trailingAnchor, constant: -12),
+            
+            // stars
+            ratingStackView.topAnchor.constraint(equalTo: descriptionLabel.bottomAnchor, constant: 8),
+            ratingStackView.leadingAnchor.constraint(equalTo: titleLabel.leadingAnchor),
+            ratingStackView.heightAnchor.constraint(equalToConstant: 16),
 
             // Artist name
             artistNameLabel.topAnchor.constraint(equalTo: songNameLabel.bottomAnchor, constant: 4),
@@ -166,7 +180,7 @@ class ActivityCellTableViewCell: UITableViewCell {
             descriptionLabel.trailingAnchor.constraint(equalTo: titleLabel.trailingAnchor),
 
             // Comment button
-            commentButton.topAnchor.constraint(equalTo: descriptionLabel.bottomAnchor, constant: 12),
+            commentButton.topAnchor.constraint(equalTo: ratingStackView.bottomAnchor, constant: 12),
             commentButton.leadingAnchor.constraint(equalTo: titleLabel.leadingAnchor),
             commentButton.widthAnchor.constraint(equalToConstant: 44),
             commentButton.heightAnchor.constraint(equalToConstant: 30),
@@ -198,6 +212,7 @@ class ActivityCellTableViewCell: UITableViewCell {
         titleLabel.attributedText = attributedText
         songNameLabel.text = activity.song
         artistNameLabel.text = activity.artist
+        setRating(activity.rating)
         
         currentSongTitle = activity.song
         loadSongInfo(title: activity.song, artist: activity.artist)
@@ -244,7 +259,7 @@ class ActivityCellTableViewCell: UITableViewCell {
 
         Task {
             do {
-                guard let info = try await getSongInfoFromITunes(title: title) else { return }
+                guard let info = try await getSongInfoFromITunes(title: title, artist: artist) else { return }
 
                 await MainActor.run {
                     // Prevent wrong data due to reuse
@@ -258,5 +273,37 @@ class ActivityCellTableViewCell: UITableViewCell {
                 print("Failed to load song info from iTunes: \(error)")
             }
         }
+    }
+    
+    func setRating(_ rating: Int?) {
+
+        let maxStars = 5
+        let rating = rating ?? 0
+
+        let stack = UIStackView()
+        stack.axis = .horizontal
+        stack.spacing = 2
+
+        for i in 1...maxStars {
+
+            let imageView = UIImageView()
+
+            let isFilled = i <= rating
+
+            imageView.image = UIImage(
+                systemName: isFilled ? "star.fill" : "star"
+            )
+
+            imageView.tintColor = isFilled ? .systemYellow : .systemGray3
+            imageView.contentMode = .scaleAspectFit
+
+            imageView.widthAnchor.constraint(equalToConstant: 14).isActive = true
+            imageView.heightAnchor.constraint(equalToConstant: 14).isActive = true
+
+            stack.addArrangedSubview(imageView)
+        }
+
+        ratingStackView.arrangedSubviews.forEach { $0.removeFromSuperview() }
+        ratingStackView.addArrangedSubview(stack)
     }
 }

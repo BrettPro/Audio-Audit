@@ -35,7 +35,7 @@ class SettingsViewController: UIViewController, UITableViewDelegate, UITableView
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         switch SettingsSection(rawValue: section)! {
         case .appearance: return 1
-        case .preferences: return 2
+        case .preferences: return 3
         case .integrations: return 1
         case .account: return 1
         }
@@ -69,9 +69,14 @@ class SettingsViewController: UIViewController, UITableViewDelegate, UITableView
                 toggle.isOn = UserDefaults.standard.bool(forKey: "showMap")
                 toggle.addTarget(self, action: #selector(mapChanged(_:)), for: .valueChanged)
                 cell.accessoryView = toggle
-            } else {
+            }
+            else if indexPath.row == 1 {
                 cell.textLabel?.text = "Font Size"
                 cell.imageView?.image = UIImage(systemName: "textformat.size")
+                cell.accessoryType = .disclosureIndicator
+            } else {
+                cell.textLabel?.text = "Profile Song"
+                cell.imageView?.image = UIImage(systemName: "music.note")
                 cell.accessoryType = .disclosureIndicator
             }
 
@@ -111,6 +116,10 @@ class SettingsViewController: UIViewController, UITableViewDelegate, UITableView
         case .preferences:
             if indexPath.row == 1 {
                 performSegue(withIdentifier: "goToFontSize", sender: nil)
+            }
+            else if indexPath.row == 2 {
+                let vc = ProfileSongPickerViewController()
+                navigationController?.pushViewController(vc, animated: true)
             }
         
         case .integrations:

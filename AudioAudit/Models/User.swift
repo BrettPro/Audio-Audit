@@ -29,6 +29,9 @@ struct AAUser: Codable, Identifiable {
     var createdAt: Date
     var lastLogin: Date
     var spotifyCredential: SpotifyCredential?
+    var profileSongTitle: String?
+    var profileSongArtist: String?
+    var profileSongPreviewURL: String?
 
     enum CodingKeys: String, CodingKey {
         case id
@@ -39,5 +42,8 @@ struct AAUser: Codable, Identifiable {
         case createdAt = "created_at"
         case lastLogin = "last_login"
         case spotifyCredential = "spotify_credential"
+        case profileSongTitle = "profile_song_title"
+        case profileSongArtist = "profile_song_artist"
+        case profileSongPreviewURL = "profile_song_preview_url"
     }
 }

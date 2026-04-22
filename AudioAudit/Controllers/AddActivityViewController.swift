@@ -40,6 +40,7 @@ class AddActivityViewController: UIViewController, UISearchBarDelegate, UITableV
         let title: String
         let artistName: String
         let artworkUrl: String?  // optional URL string for album art
+        let previewUrl: String?
     }
     
     struct ITunesSong: Codable {
@@ -121,7 +122,7 @@ class AddActivityViewController: UIViewController, UISearchBarDelegate, UITableV
                     } else {
                         self.usingSamples = false
                         self.searchResults = results.map { song in
-                            Song(title: song.trackName, artistName: song.artistName, artworkUrl: song.artworkUrl100)
+                            Song(title: song.trackName, artistName: song.artistName, artworkUrl: song.artworkUrl100, previewUrl: nil)
                         }
                     }
                     self.resultsTableView.reloadData()

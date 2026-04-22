@@ -16,6 +16,7 @@ class ProfileViewController: UIViewController, UITableViewDataSource, UITableVie
     var testImage: UIImageView!
     var activities: [Activity] = []
     var tabBar = TabBarView()
+    
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -170,5 +171,4 @@ class ProfileViewController: UIViewController, UITableViewDataSource, UITableVie
             }
         }
     }
-
 }

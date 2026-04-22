@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import AVFoundation
 
 let DEFAULT_PFP = "https://firebasestorage.googleapis.com/v0/b/audioaudit-3a29c.firebasestorage.app/o/logo_transparent.jpg?alt=media&token=c5ec3413-6c78-4947-aa6e-57d8bb819224"
 
@@ -19,8 +20,11 @@ class ProfileHeaderView: UIView {
     
     var onBackTapped: (() -> Void)?
     var statsStack = UIStackView()
+    var player: AVPlayer?
+    var user: AAUser
     
     init(user: AAUser) {
+        self.user = user
         super.init(frame: .zero)
         setupLayout()
         Task {
@@ -88,8 +92,30 @@ class ProfileHeaderView: UIView {
     }
     
     func playSong() {
-        //TODO play user song, probably store in firebase somehow
-        // maybe simulate notif to show what song is playing
+
+        guard let urlString = UserService.shared.currentUser?.profileSongPreviewURL,
+              let url = URL(string: urlString) else {
+            print("No song")
+            return
+        }
+
+        // If same URL already playing → toggle
+        if let player = player,
+           let currentURL = (player.currentItem?.asset as? AVURLAsset)?.url,
+           currentURL == url {
+
+            if player.timeControlStatus == .playing {
+                player.pause()
+            } else {
+                player.play()
+            }
+            return
+        }
+
+        // Otherwise replace song completely
+        player?.pause()
+        player = AVPlayer(url: url)
+        player?.play()
     }
     
     func openEditPage() {
