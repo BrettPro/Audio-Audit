@@ -34,7 +34,7 @@ class ActivityCellTableViewCell: UITableViewCell {
     var onLikeTapped: (() -> Void)?
     // TODO get info from firebase to know if user liked this activity.
     // use to update likebutton icon and color
-    var userLiked: Bool?
+    var userLiked = false
     
     let ratingStackView = UIStackView()
 
@@ -137,7 +137,7 @@ class ActivityCellTableViewCell: UITableViewCell {
         commentNum.font = UIFont.systemFont(ofSize: CGFloat(18))
         commentNum.textColor = .secondaryLabel
         
-        //like button
+        // like button
         likeButton.translatesAutoresizingMaskIntoConstraints = false
         likeButton.setImage(UIImage(systemName: "heart"), for: .normal)
         likeButton.tintColor = .secondaryLabel
@@ -148,13 +148,25 @@ class ActivityCellTableViewCell: UITableViewCell {
         likeButton.addAction(likeAction, for: .touchUpInside)
         onLikeTapped = {
             print("LIKE TAPPED")
+            self.userLiked = !self.userLiked
+//            Task {
+//                do {
+//                    await MainActor.run {
+//                        
+//                    }
+//                } catch {
+//                    
+//                }
+//            }
             // TODO change icon to either filled or outline
             // increment num likes in firebase
             // reload likenum
         }
         
-        // likenum
-        //TODO
+        // like num
+        likeNum.translatesAutoresizingMaskIntoConstraints = false
+        likeNum.font = UIFont.systemFont(ofSize: CGFloat(18))
+        likeNum.textColor = .secondaryLabel
 
         contentView.addSubview(cardView)
 
@@ -165,7 +177,7 @@ class ActivityCellTableViewCell: UITableViewCell {
         cardView.addSubview(commentButton)
         cardView.addSubview(commentNum)
         cardView.addSubview(likeButton)
-        //cardView.addSubview(likeNum)
+        cardView.addSubview(likeNum)
 
         mediaBoxView.addSubview(albumCoverImageView)
         mediaBoxView.addSubview(songNameLabel)
@@ -241,11 +253,16 @@ class ActivityCellTableViewCell: UITableViewCell {
             commentNum.leadingAnchor.constraint(equalTo: commentButton.trailingAnchor, constant: -8),
             commentNum.centerYAnchor.constraint(equalTo: commentButton.centerYAnchor, constant: -1),
             
+            // Like button
             likeButton.topAnchor.constraint(equalTo: ratingStackView.bottomAnchor, constant: 12),
             likeButton.leadingAnchor.constraint(equalTo: commentNum.trailingAnchor, constant: 12),
             likeButton.widthAnchor.constraint(equalToConstant: 44),
             likeButton.heightAnchor.constraint(equalToConstant: 30),
             likeButton.bottomAnchor.constraint(equalTo: cardView.bottomAnchor, constant: -12),
+            
+            // like num
+            likeNum.leadingAnchor.constraint(equalTo: likeButton.trailingAnchor, constant: -8),
+            likeNum.centerYAnchor.constraint(equalTo: likeButton.centerYAnchor, constant: -1)
         ])
     }
 
@@ -282,12 +299,14 @@ class ActivityCellTableViewCell: UITableViewCell {
            !review.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty {
             descriptionLabel.text = review
             descriptionLabel.isHidden = false
-            //TODO connect to comment backend
+            //TODO connect to comment and like backend
             commentNum.text = "0"
+            likeNum.text = "0"
         } else {
             descriptionLabel.text = nil
             descriptionLabel.isHidden = true
             commentNum.text = "0"
+            likeNum.text = "0"
         }
         currentAvatarURL = avatarURL
         if let urlString = avatarURL, let url = URL(string: urlString) {
@@ -358,7 +377,7 @@ class ActivityCellTableViewCell: UITableViewCell {
                 systemName: isFilled ? "star.fill" : "star"
             )
 
-            imageView.tintColor = isFilled ? .systemYellow : .systemGray3
+            imageView.tintColor = isFilled ? .audioRed : .systemGray3
             imageView.contentMode = .scaleAspectFit
 
             imageView.widthAnchor.constraint(equalToConstant: 14).isActive = true
