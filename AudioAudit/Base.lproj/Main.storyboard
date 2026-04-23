@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="24506" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="WeP-WL-mO4">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="24506" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="gKg-2p-28g">
     <device id="retina6_9" orientation="portrait" appearance="light"/>
     <dependencies>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="24504"/>
@@ -24,7 +24,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="141" y="131"/>
+            <point key="canvasLocation" x="-312" y="68"/>
         </scene>
         <!--Login View Controller-->
         <scene sceneID="Xf8-VJ-SpE">
@@ -401,13 +401,14 @@
                     <connections>
                         <outlet property="tabBarView" destination="Caj-hd-GKF" id="ENn-hO-qFk"/>
                         <segue destination="iUC-ni-bNN" kind="relationship" relationship="viewControllers" id="EvN-kX-xY3"/>
-                        <segue destination="Ffa-rF-jSK" kind="relationship" relationship="viewControllers" id="2B2-T0-cL6"/>
+                        <segue destination="WeP-WL-mO4" kind="relationship" relationship="viewControllers" id="Dmx-oG-gUp"/>
                         <segue destination="7bm-GV-ysc" kind="relationship" relationship="viewControllers" id="gF4-O4-CeS"/>
+                        <segue destination="Ffa-rF-jSK" kind="relationship" relationship="viewControllers" id="2B2-T0-cL6"/>
                     </connections>
                 </tabBarController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="IAc-4n-gHl" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="3031" y="-266"/>
+            <point key="canvasLocation" x="2925" y="-244"/>
         </scene>
         <!--Profile-->
         <scene sceneID="0O5-wh-5Dj">
@@ -645,7 +646,7 @@
             </objects>
             <point key="canvasLocation" x="4022" y="1447"/>
         </scene>
-        <!--Quiz Hub View Controller-->
+        <!--Quiz-->
         <scene sceneID="El4-0r-IfR">
             <objects>
                 <viewController id="WeP-WL-mO4" customClass="QuizHubViewController" customModule="AudioAudit" customModuleProvider="target" sceneMemberID="viewController">
@@ -655,6 +656,9 @@
                         <viewLayoutGuide key="safeArea" id="ufg-6G-npT"/>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                     </view>
+                    <tabBarItem key="tabBarItem" title="Quiz" image="list.bullet.clipboard.fill" catalog="system" selectedImage="list.bullet.clipboard.fill" id="DfD-Zj-V5l">
+                        <color key="badgeColor" name="AudioRed"/>
+                    </tabBarItem>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="vmg-Ja-neW" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
@@ -1192,13 +1196,14 @@
         </scene>
     </scenes>
     <inferredMetricsTieBreakers>
-        <segue reference="BWZ-XX-2Ad"/>
+        <segue reference="2YT-Lf-els"/>
     </inferredMetricsTieBreakers>
     <resources>
         <image name="Notification" width="1058" height="1012"/>
         <image name="gear" catalog="system" width="128" height="122"/>
         <image name="happy_headphones" width="768" height="768"/>
         <image name="house.fill" catalog="system" width="128" height="104"/>
+        <image name="list.bullet.clipboard.fill" catalog="system" width="98" height="128"/>
         <image name="load_logo_final" width="1024" height="1024"/>
         <image name="map.fill" catalog="system" width="128" height="110"/>
         <image name="person.circle.fill" catalog="system" width="128" height="123"/>

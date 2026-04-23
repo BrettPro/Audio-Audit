@@ -92,7 +92,7 @@ final class QuizHubViewController: UIViewController {
         var config = UIButton.Configuration.filled()
         config.title = "Start Quiz"
         config.cornerStyle = .large
-        config.baseBackgroundColor = .systemBlue
+        config.baseBackgroundColor = .audioRed
         config.baseForegroundColor = .white
         button.configuration = config
         button.titleLabel?.font = UIFont.systemFont(ofSize: 20, weight: .semibold)

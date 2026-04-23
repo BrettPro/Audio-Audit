@@ -113,7 +113,7 @@ final class QuizViewController: UIViewController {
         let button = UIButton(type: .system)
         var config = UIButton.Configuration.filled()
         config.cornerStyle = .large
-        config.baseBackgroundColor = .systemBlue
+        config.baseBackgroundColor = .audioRed
         config.baseForegroundColor = .white
         config.titleAlignment = .center
         button.configuration = config
@@ -448,7 +448,7 @@ final class QuizViewController: UIViewController {
             button.isHidden = index >= question.options.count
 
             if index < question.options.count {
-                updateButton(button, title: question.options[index], color: .systemBlue)
+                updateButton(button, title: question.options[index], color: .audioRed)
             }
         }
 
