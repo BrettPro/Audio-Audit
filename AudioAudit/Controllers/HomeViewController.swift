@@ -50,6 +50,13 @@ class HomeViewController: UIViewController, UITableViewDataSource, UITableViewDe
         addButton.backgroundColor = .audioRed
         addButton.layer.cornerRadius = 28
         addButton.addTarget(self, action: #selector(addActivityTapped), for: .touchUpInside)
+        
+        // button shadow
+        addButton.layer.shadowColor = UIColor.black.cgColor
+        addButton.layer.shadowOpacity = 0.3
+        addButton.layer.shadowOffset = CGSize(width: 0, height: 4)
+        addButton.layer.shadowRadius = 8
+        
         view.addSubview(addButton)
 
         NSLayoutConstraint.activate([

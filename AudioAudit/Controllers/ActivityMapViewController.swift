@@ -126,24 +126,36 @@ final class ActivityMapViewController: UIViewController {
         let region = MKCoordinateRegion(center: center, span: span)
         mapView.setRegion(region, animated: false)
     }
-
+    
     private func showActivityDetails(for annotation: ActivityAnnotation) {
-        let activity = annotation.activity
-
-        let alert = UIAlertController(
-            title: "\(activity.song) — \(activity.artist)",
-            message: """
-            User: \(annotation.username)
-            Type: \(activity.type.rawValue)
-            Rating: \(activity.rating.map(String.init) ?? "N/A")
-            Review: \(activity.review ?? "No review")
-            """,
-            preferredStyle: .alert
-        )
-
-        alert.addAction(UIAlertAction(title: "OK", style: .default))
-        present(alert, animated: true)
+        performSegue(withIdentifier: "MapToExpand", sender: annotation)
     }
+
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        if segue.identifier == "MapToExpand" {
+            let annotation = sender as! ActivityAnnotation
+            let destinationVC = segue.destination as! ExpandReviewVC
+            destinationVC.activity = annotation.activity
+        }
+    }
+//
+//    private func showActivityDetails(for annotation: ActivityAnnotation) {
+//        let activity = annotation.activity
+//
+//        let alert = UIAlertController(
+//            title: "\(activity.song) — \(activity.artist)",
+//            message: """
+//            User: \(annotation.username)
+//            Type: \(activity.type.rawValue)
+//            Rating: \(activity.rating.map(String.init) ?? "N/A")
+//            Review: \(activity.review ?? "No review")
+//            """,
+//            preferredStyle: .alert
+//        )
+//
+//        alert.addAction(UIAlertAction(title: "OK", style: .default))
+//        present(alert, animated: true)
+//    }
 }
 
 // MARK: - MKMapViewDelegate

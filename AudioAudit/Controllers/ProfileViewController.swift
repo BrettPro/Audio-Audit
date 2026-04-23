@@ -15,6 +15,8 @@ class ProfileViewController: UIViewController, UITableViewDataSource, UITableVie
     var selectedTab = 0
     var testImage: UIImageView!
     var activities: [Activity] = []
+    // TODO: when liked tab selected, display liked activities
+    var likedActivities: [Activity] = []
     var tabBar = TabBarView()
     
 
@@ -36,7 +38,6 @@ class ProfileViewController: UIViewController, UITableViewDataSource, UITableVie
         testImage = UIImageView(image: UIImage(named: "loadLogoFinal"))
         profileTableView.dataSource = self
         profileTableView.delegate = self
-        //profileTableView.register(ActivityCellTableViewCell.self, forCellReuseIdentifier: "ActivityCell")
         guard let currentUser = UserService.shared.currentUser else {
             print("PROFILE ERROR: No current user found")
             activities = []
@@ -138,10 +139,7 @@ class ProfileViewController: UIViewController, UITableViewDataSource, UITableVie
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        //addSampleReview()
         self.tabBarController?.tabBar.isHidden = false
-        //loadJournal()
-        //loadFriends()
     }
 
     @objc func friendsTapped() {
@@ -178,20 +176,4 @@ class ProfileViewController: UIViewController, UITableViewDataSource, UITableVie
         return cell
     }
 
-    func addSampleReview() {
-        guard let uid = UserService.shared.currentUserId else { return }
-        Task {
-            do {
-                _ = try await ActivityService.shared.logReview(
-                    userId: uid,
-                    song: "Sample Song",
-                    artist: "Sample Artist",
-                    rating: 5
-                )
-                print("Sample review added")
-            } catch {
-                print("Failed to add sample review: \(error)")
-            }
-        }
-    }
 }

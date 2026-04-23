@@ -261,7 +261,7 @@ class ActivityCellTableViewCell: UITableViewCell {
             likeButton.bottomAnchor.constraint(equalTo: cardView.bottomAnchor, constant: -12),
             
             // like num
-            likeNum.leadingAnchor.constraint(equalTo: likeButton.trailingAnchor, constant: -8),
+            likeNum.leadingAnchor.constraint(equalTo: likeButton.trailingAnchor, constant: -12),
             likeNum.centerYAnchor.constraint(equalTo: likeButton.centerYAnchor, constant: -1)
         ])
     }

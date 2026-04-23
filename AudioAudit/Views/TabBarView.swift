@@ -22,7 +22,7 @@ class TabBarView: UIView {
         super.init(frame: frame)
         underline.backgroundColor = UIColor.secondaryLabel
         setButton(button: journalButton, icon: "book.fill", tag: 0)
-        setButton(button: mentionsButton, icon: "person.crop.square", tag: 1)
+        setButton(button: mentionsButton, icon: "heart.square.fill", tag: 1)
         setStack()
         print(stackView.arrangedSubviews)
         addSubview(stackView)

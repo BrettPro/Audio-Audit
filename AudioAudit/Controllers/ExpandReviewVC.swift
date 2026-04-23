@@ -7,18 +7,43 @@
 
 import UIKit
 
-class ExpandReviewVC: UIViewController, UITextFieldDelegate {
+class ExpandReviewVC: UIViewController, UITextViewDelegate {
 
     var activity: Activity?
     var username: String?
     var avatarURL: String?
     
     let activityView = ActivityCellTableViewCell(style: .default, reuseIdentifier: nil)
+    let scrollView = UIScrollView()
+    let contentView = UIView()
     
     var commentCard: NewCommentView?
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        scrollView.translatesAutoresizingMaskIntoConstraints = false
+        contentView.translatesAutoresizingMaskIntoConstraints = false
+
+        view.addSubview(scrollView)
+        scrollView.addSubview(contentView)
+
+        NSLayoutConstraint.activate([
+            scrollView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
+            scrollView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            scrollView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+            scrollView.bottomAnchor.constraint(equalTo: view.keyboardLayoutGuide.topAnchor, constant: -100),
+            
+            contentView.topAnchor.constraint(equalTo: scrollView.topAnchor),
+            contentView.leadingAnchor.constraint(equalTo: scrollView.leadingAnchor),
+            contentView.trailingAnchor.constraint(equalTo: scrollView.trailingAnchor),
+            contentView.bottomAnchor.constraint(equalTo: scrollView.bottomAnchor),
+            contentView.widthAnchor.constraint(equalTo: scrollView.widthAnchor)
+        ])
+        
+        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(dismissKeyboard))
+        tapGesture.cancelsTouchesInView = false
+        scrollView.addGestureRecognizer(tapGesture)
+        
         Task {
             do {
                 let reviewUser = try await UserService.shared.fetchUser(uid: activity!.userId)
@@ -41,6 +66,28 @@ class ExpandReviewVC: UIViewController, UITextFieldDelegate {
         view.backgroundColor = .systemBackground
     }
     
+    func textViewDidBeginEditing(_ textView: UITextView) {
+        if (commentCard!.commentField.text == "Write comment here") {
+            commentCard!.commentField.text = nil
+        }
+//        DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
+//            if let commentCard = self.commentCard {
+//                self.scrollView.scrollRectToVisible(commentCard.frame, animated: true)
+//            }
+//        }
+    }
+    
+    func textViewDidEndEditing(_ textView: UITextView) {
+        if (commentCard!.commentField.text.isEmpty) {
+            textView.text = "Write comment here"
+            textView.textColor = .secondaryLabel
+        }
+    }
+    
+    @objc func dismissKeyboard() {
+        view.endEditing(true)
+    }
+    
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         activityView.onCommentTapped = {
@@ -50,6 +97,7 @@ class ExpandReviewVC: UIViewController, UITextFieldDelegate {
         
         activityView.onLikeTapped = {
             print("LIKE TAPPED INSIDE EXPAND REVIEW")
+            // TODO add like to firebase? or do this inside ActivityCell
         }
     }
 
@@ -70,23 +118,29 @@ class ExpandReviewVC: UIViewController, UITextFieldDelegate {
         return true
     }
 
-    // Called when the user clicks on the view outside of the UITextField
-    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
-        self.view.endEditing(true)
-    }
+//    // Called when the user clicks on the view outside of the UITextField
+//    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
+//        self.view.endEditing(true)
+//    }
     
     func setupCommentField() {
-        guard let activity = activity else {
+        guard activity != nil else {
             return
         }
+
         view.addSubview(commentCard!)
         commentCard?.translatesAutoresizingMaskIntoConstraints = false
+
         NSLayoutConstraint.activate([
-            commentCard!.topAnchor.constraint(equalTo: activityView.cardView.bottomAnchor, constant: 8),
             commentCard!.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 16),
             commentCard!.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -16),
-            commentCard!.heightAnchor.constraint(greaterThanOrEqualToConstant: 30)
+            commentCard!.bottomAnchor.constraint(equalTo: view.keyboardLayoutGuide.topAnchor, constant: -8),
+            commentCard!.heightAnchor.constraint(greaterThanOrEqualToConstant: 85),
         ])
+
+        commentCard?.postTapped = {
+            print("POST BUTTON TAPPED")
+        }
     }
     
     private func setupActivity() {
@@ -98,12 +152,12 @@ class ExpandReviewVC: UIViewController, UITextFieldDelegate {
         
         let card = activityView.cardView
         card.translatesAutoresizingMaskIntoConstraints = false
-        view.addSubview(card)
+        contentView.addSubview(card)
         
         NSLayoutConstraint.activate([
-            card.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 8),
-            card.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 16),
-            card.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -16),
+            card.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 8),
+            card.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 16),
+            card.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -16),
         ])
     }
 }
