@@ -19,6 +19,9 @@ class ProfileViewController: UIViewController, UITableViewDataSource, UITableVie
     var likedActivities: [Activity] = []
     var tabBar = TabBarView()
     
+    // TODO: ensure that segue into profileVC sets these if coming from an activitycell tap
+    var isCurrentUser = true
+    var displayUser: AAUser?
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -35,6 +38,15 @@ class ProfileViewController: UIViewController, UITableViewDataSource, UITableVie
             action: #selector(settingsTapped)
         )
         navigationItem.rightBarButtonItems = [settingsButton, friendsButton]
+        
+        // hides settings and friends buttons if on non-current user profile
+        if !isCurrentUser {
+            friendsButton.isHidden = true
+            settingsButton.isHidden = true
+        } else {
+            friendsButton.isHidden = false
+            settingsButton.isHidden = false
+        }
         testImage = UIImageView(image: UIImage(named: "loadLogoFinal"))
         profileTableView.dataSource = self
         profileTableView.delegate = self
@@ -44,45 +56,52 @@ class ProfileViewController: UIViewController, UITableViewDataSource, UITableVie
             profileTableView.reloadData()
             return
         }
-        header = ProfileHeaderView(user: currentUser)
+        if isCurrentUser {
+            displayUser = currentUser
+        }
+        header = ProfileHeaderView(user: displayUser!)
         header?.frame = CGRect(x: 0, y: 0, width: profileTableView.bounds.width, height: 150)
         profileTableView.tableHeaderView = header
         tabBar.onTabSelected = { tab in
             self.selectedTab = tab
             self.profileTableView.reloadData()
         }
-        header?.onBackTapped = {
-            print("SHOULD GO TO EDIT PAGE")
-            let storyboard = UIStoryboard(name: "EditProfilePic", bundle: nil)
-            let destVC = storyboard.instantiateViewController(withIdentifier: "EditPic") as! EditPicViewController
-            destVC.imageView.image = self.header?.avatarButton.imageView?.image
-            destVC.saveChanges = { image in
-                self.header?.avatarButton.setImage(image, for: .normal)
-                print("PFP SHOULD BE SAVED: \(self.header?.avatarButton.imageView?.image, default: "SOMETHING WENT WRONG")")
-                let resized = image.preparingThumbnail(of: CGSize(width: 500, height: 500))
-                guard let imageData = resized?.jpegData(compressionQuality: 1) else {
-                    print("COULD NOT COMPRESS NEW IMAGE")
-                    return
-                }
-
-                let userName = UserService.shared.currentUser?.name.dropLast(4).replacingOccurrences(of: "@", with: "") ?? "unknown"
-                let ref = Storage.storage().reference().child("profile_pics/\(userName).jpeg")
-
-                Task {
-                    do {
-                        _ = try await ref.putDataAsync(imageData)
-                        let downloadURL = try await ref.downloadURL()
-                        try await UserService.shared.updateProfilePic(uid: UserService.shared.currentUserId!, url: downloadURL.absoluteString)
-                        print("Upload succeeded: \(downloadURL.absoluteString)")
-                    } catch {
-                        print("Upload failed: \(error.localizedDescription)")
-                        try? await UserService.shared.updateProfilePic(uid: UserService.shared.currentUserId!, url: DEFAULT_PFP)
+        if isCurrentUser {
+            header?.onBackTapped = {
+                print("SHOULD GO TO EDIT PAGE")
+                let storyboard = UIStoryboard(name: "EditProfilePic", bundle: nil)
+                let destVC = storyboard.instantiateViewController(withIdentifier: "EditPic") as! EditPicViewController
+                destVC.imageView.image = self.header?.avatarButton.imageView?.image
+                destVC.saveChanges = { image in
+                    self.header?.avatarButton.setImage(image, for: .normal)
+                    print("PFP SHOULD BE SAVED: \(self.header?.avatarButton.imageView?.image, default: "SOMETHING WENT WRONG")")
+                    let resized = image.preparingThumbnail(of: CGSize(width: 500, height: 500))
+                    guard let imageData = resized?.jpegData(compressionQuality: 1) else {
+                        print("COULD NOT COMPRESS NEW IMAGE")
+                        return
+                    }
+                    
+                    let userName = UserService.shared.currentUser?.name.dropLast(4).replacingOccurrences(of: "@", with: "") ?? "unknown"
+                    let ref = Storage.storage().reference().child("profile_pics/\(userName).jpeg")
+                    
+                    Task {
+                        do {
+                            _ = try await ref.putDataAsync(imageData)
+                            let downloadURL = try await ref.downloadURL()
+                            try await UserService.shared.updateProfilePic(uid: UserService.shared.currentUserId!, url: downloadURL.absoluteString)
+                            print("Upload succeeded: \(downloadURL.absoluteString)")
+                        } catch {
+                            print("Upload failed: \(error.localizedDescription)")
+                            try? await UserService.shared.updateProfilePic(uid: UserService.shared.currentUserId!, url: DEFAULT_PFP)
+                        }
                     }
                 }
+                //destVC.imageView.image = self.header?.avatarButton.imageView?.image
+                //print(destVC.imageView.image)
+                self.navigationController?.pushViewController(destVC, animated: true)
             }
-            //destVC.imageView.image = self.header?.avatarButton.imageView?.image
-            //print(destVC.imageView.image)
-            self.navigationController?.pushViewController(destVC, animated: true)
+        } else {
+            print("PROFILE PIC TAPPED ON NON-CURRENT USER PROFILE")
         }
         let refreshControl = UIRefreshControl()
         refreshControl.addTarget(self, action: #selector(handleRefresh), for: .valueChanged)
@@ -112,7 +131,7 @@ class ProfileViewController: UIViewController, UITableViewDataSource, UITableVie
     func loadJournal() {
         Task {
             do {
-                let fetchedActivities = try await ActivityService.shared.fetchActivities(for: UserService.shared.currentUserId!)
+                let fetchedActivities = try await ActivityService.shared.fetchActivities(for: displayUser!.id!)
                 await MainActor.run {
                     self.activities = fetchedActivities
                     self.profileTableView.reloadData()
@@ -140,6 +159,14 @@ class ProfileViewController: UIViewController, UITableViewDataSource, UITableVie
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         self.tabBarController?.tabBar.isHidden = false
+    }
+    
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        
+        if !isCurrentUser {
+            isCurrentUser = true
+        }
     }
 
     @objc func friendsTapped() {
@@ -172,7 +199,7 @@ class ProfileViewController: UIViewController, UITableViewDataSource, UITableVie
             for: indexPath
         ) as! ActivityCellTableViewCell
 
-        cell.configure(with: activity, username: UserService.shared.currentUser?.name, avatarURL: UserService.shared.currentUser?.profilePicURL)
+        cell.configure(with: activity, username: displayUser!.name, avatarURL: displayUser!.profilePicURL)
         return cell
     }
 

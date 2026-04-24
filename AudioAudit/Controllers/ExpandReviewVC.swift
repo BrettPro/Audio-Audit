@@ -54,7 +54,7 @@ class ExpandReviewVC: UIViewController, UITextViewDelegate {
                     commentCard?.commentField.delegate = self
                     setupActivity()
                     setupCommentField()
-                    // TODO load comments from firebase backend
+                    // TODO: load comments from firebase backend
                 }
             } catch {
                 print("Failed to fetch user: \(error)")
@@ -92,12 +92,19 @@ class ExpandReviewVC: UIViewController, UITextViewDelegate {
         super.viewWillAppear(animated)
         activityView.onCommentTapped = {
             print("COMMENT TAPPED INSIDE EXPAND REVIEW")
-            // TODO open text field
+            // TODO: open text field
         }
         
         activityView.onLikeTapped = {
             print("LIKE TAPPED INSIDE EXPAND REVIEW")
-            // TODO add like to firebase? or do this inside ActivityCell
+            // TODO: add like to firebase? or do this inside ActivityCell
+        }
+        
+        activityView.onAvatarTapped = {
+            print("AVATAR TAPPED INSIDE EXPAND REVIEW")
+            let profileVC = ProfileViewController()
+            profileVC.isCurrentUser = false
+            self.navigationController?.pushViewController(profileVC, animated: true)
         }
     }
 
@@ -143,21 +150,46 @@ class ExpandReviewVC: UIViewController, UITextViewDelegate {
         }
     }
     
+//    private func setupActivity() {
+//        guard let activity = activity else {
+//            return
+//        }
+//        
+//        activityView.configure(with: activity, username: username, avatarURL: avatarURL)
+//        
+//        let card = activityView.cardView
+//        card.translatesAutoresizingMaskIntoConstraints = false
+//        contentView.addSubview(card)
+//        contentView.addSubview(activityView)
+//        
+//        NSLayoutConstraint.activate([
+//            card.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 8),
+//            card.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 16),
+//            card.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -16),
+//        ])
+//    }
+    
     private func setupActivity() {
-        guard let activity = activity else {
-            return
-        }
+        guard let activity = activity else { return }
         
         activityView.configure(with: activity, username: username, avatarURL: avatarURL)
+        activityView.translatesAutoresizingMaskIntoConstraints = false
+        contentView.addSubview(activityView)
         
-        let card = activityView.cardView
-        card.translatesAutoresizingMaskIntoConstraints = false
-        contentView.addSubview(card)
+        activityView.contentView.translatesAutoresizingMaskIntoConstraints = false
+
+        NSLayoutConstraint.activate([
+            activityView.contentView.topAnchor.constraint(equalTo: activityView.topAnchor),
+            activityView.contentView.leadingAnchor.constraint(equalTo: activityView.leadingAnchor),
+            activityView.contentView.trailingAnchor.constraint(equalTo: activityView.trailingAnchor),
+            activityView.contentView.bottomAnchor.constraint(equalTo: activityView.bottomAnchor)
+        ])
         
         NSLayoutConstraint.activate([
-            card.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 8),
-            card.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 16),
-            card.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -16),
+            activityView.topAnchor.constraint(equalTo: contentView.topAnchor),
+            activityView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
+            activityView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
+            activityView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor)
         ])
     }
 }

@@ -16,6 +16,7 @@ class ActivityCellTableViewCell: UITableViewCell {
 
     let cardView = UIView()
     let profileImageView = UIImageView()
+    var onAvatarTapped: (() -> Void)?
     let titleLabel = UILabel()
 
     let mediaBoxView = UIView()
@@ -32,7 +33,7 @@ class ActivityCellTableViewCell: UITableViewCell {
     let likeButton = UIButton(type: .system)
     let likeNum = UILabel()
     var onLikeTapped: (() -> Void)?
-    // TODO get info from firebase to know if user liked this activity.
+    // TODO: get info from firebase to know if user liked this activity.
     // use to update likebutton icon and color
     var userLiked = false
     
@@ -73,6 +74,10 @@ class ActivityCellTableViewCell: UITableViewCell {
         profileImageView.clipsToBounds = true
         profileImageView.layer.cornerRadius = 24
         profileImageView.backgroundColor = .systemGray5
+        profileImageView.isUserInteractionEnabled = true
+        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(imageTapped))
+        profileImageView.addGestureRecognizer(tapGesture)
+        
 
         // Title
         titleLabel.translatesAutoresizingMaskIntoConstraints = false
@@ -149,16 +154,7 @@ class ActivityCellTableViewCell: UITableViewCell {
         onLikeTapped = {
             print("LIKE TAPPED")
             self.userLiked = !self.userLiked
-//            Task {
-//                do {
-//                    await MainActor.run {
-//                        
-//                    }
-//                } catch {
-//                    
-//                }
-//            }
-            // TODO change icon to either filled or outline
+            // TODO: change icon to either filled or outline
             // increment num likes in firebase
             // reload likenum
         }
@@ -186,6 +182,11 @@ class ActivityCellTableViewCell: UITableViewCell {
         // stars
         cardView.addSubview(ratingStackView)
         ratingStackView.translatesAutoresizingMaskIntoConstraints = false
+    }
+    
+    @objc func imageTapped() {
+        print("IMAGE TAPPED FROM ACTIVITYCELL")
+        //onAvatarTapped!()
     }
 
     func setupConstraints() {
@@ -380,8 +381,8 @@ class ActivityCellTableViewCell: UITableViewCell {
             imageView.tintColor = isFilled ? .audioRed : .systemGray3
             imageView.contentMode = .scaleAspectFit
 
-            imageView.widthAnchor.constraint(equalToConstant: 14).isActive = true
-            imageView.heightAnchor.constraint(equalToConstant: 14).isActive = true
+            //imageView.widthAnchor.constraint(equalToConstant: 14).isActive = true
+            //imageView.heightAnchor.constraint(equalToConstant: 14).isActive = true
 
             stack.addArrangedSubview(imageView)
         }
