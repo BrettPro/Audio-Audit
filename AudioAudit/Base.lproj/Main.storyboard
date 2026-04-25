@@ -294,7 +294,7 @@
             <objects>
                 <viewController id="gPI-NV-cFm" customClass="ProfileViewController" customModule="AudioAudit" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="xDh-ey-9xb">
-                        <rect key="frame" x="0.0" y="0.0" width="440" height="956"/>
+                        <rect key="frame" x="0.0" y="0.0" width="440" height="884"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <tableView clipsSubviews="YES" contentMode="scaleToFill" fixedFrame="YES" alwaysBounceVertical="YES" dataMode="prototypes" style="grouped" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="18" estimatedSectionHeaderHeight="-1" sectionFooterHeight="18" estimatedSectionFooterHeight="-1" translatesAutoresizingMaskIntoConstraints="NO" id="VoG-lV-044">
@@ -339,11 +339,11 @@
             <objects>
                 <viewController storyboardIdentifier="SettingsVC" id="y6M-bO-B4t" customClass="SettingsViewController" customModule="AudioAudit" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="IfS-nZ-uzM">
-                        <rect key="frame" x="0.0" y="0.0" width="440" height="956"/>
+                        <rect key="frame" x="0.0" y="0.0" width="440" height="884"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="-1" estimatedSectionHeaderHeight="-1" sectionFooterHeight="-1" estimatedSectionFooterHeight="-1" translatesAutoresizingMaskIntoConstraints="NO" id="dJ5-vH-H7V">
-                                <rect key="frame" x="0.0" y="116" width="440" height="757"/>
+                                <rect key="frame" x="0.0" y="62" width="440" height="822"/>
                                 <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                             </tableView>
                         </subviews>
@@ -419,12 +419,15 @@
             <objects>
                 <viewController id="5Zt-yI-Tky" customClass="ExpandReviewVC" customModule="AudioAudit" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="jOU-7B-7lR">
-                        <rect key="frame" x="0.0" y="0.0" width="440" height="956"/>
+                        <rect key="frame" x="0.0" y="0.0" width="440" height="884"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <viewLayoutGuide key="safeArea" id="Ni6-4U-7eV"/>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                     </view>
                     <navigationItem key="navigationItem" id="XGL-gs-7Fk"/>
+                    <connections>
+                        <segue destination="gPI-NV-cFm" kind="show" identifier="ShowProfile" id="RQj-X4-w2l"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="KsP-cI-70S" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
@@ -1126,17 +1129,17 @@
             <objects>
                 <viewController id="gw1-eZ-aVQ" customClass="Font_2_ViewController" customModule="AudioAudit" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" alpha="0.89999997615814209" contentMode="scaleToFill" id="IWl-f9-gF7">
-                        <rect key="frame" x="0.0" y="0.0" width="440" height="956"/>
+                        <rect key="frame" x="0.0" y="0.0" width="440" height="884"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Choose a comfortable font size" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="6" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="vDc-VT-4Fu">
-                                <rect key="frame" x="20" y="155" width="400" height="197"/>
+                                <rect key="frame" x="20" y="101" width="400" height="197"/>
                                 <fontDescription key="fontDescription" type="boldSystem" pointSize="55"/>
                                 <nil key="textColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="4w3-cd-s64">
-                                <rect key="frame" x="70" y="778" width="300" height="75"/>
+                                <rect key="frame" x="70" y="789" width="300" height="75"/>
                                 <constraints>
                                     <constraint firstAttribute="width" constant="300" id="Ibn-rF-Z0m"/>
                                     <constraint firstAttribute="height" constant="75" id="rKk-Zp-A10"/>
@@ -1153,19 +1156,19 @@
                                 </connections>
                             </button>
                             <slider opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" value="2" minValue="0.0" maxValue="4" translatesAutoresizingMaskIntoConstraints="NO" id="rwx-tf-jQk">
-                                <rect key="frame" x="25" y="602" width="390" height="34"/>
+                                <rect key="frame" x="25" y="548" width="390" height="34"/>
                                 <connections>
                                     <action selector="sliderMoved:" destination="gw1-eZ-aVQ" eventType="valueChanged" id="9vW-vs-Afv"/>
                                 </connections>
                             </slider>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="See the changes instantly!" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="URy-lE-TBu">
-                                <rect key="frame" x="20" y="477" width="400" height="21"/>
+                                <rect key="frame" x="20" y="423" width="400" height="21"/>
                                 <fontDescription key="fontDescription" type="boldSystem" pointSize="17"/>
                                 <nil key="textColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Smaller" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="dXK-MN-NGh">
-                                <rect key="frame" x="25" y="661" width="75" height="21"/>
+                                <rect key="frame" x="25" y="607" width="75" height="21"/>
                                 <constraints>
                                     <constraint firstAttribute="width" constant="75" id="Dk7-yW-b5F"/>
                                 </constraints>
@@ -1174,7 +1177,7 @@
                                 <nil key="highlightedColor"/>
                             </label>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Larger" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="t3Q-fA-EKw">
-                                <rect key="frame" x="340" y="661" width="75" height="21"/>
+                                <rect key="frame" x="340" y="607" width="75" height="21"/>
                                 <constraints>
                                     <constraint firstAttribute="width" constant="75" id="sVF-b4-x60"/>
                                 </constraints>
@@ -1240,8 +1243,9 @@
         </scene>
     </scenes>
     <inferredMetricsTieBreakers>
-        <segue reference="J0p-sr-ga8"/>
+        <segue reference="5SU-ga-VvE"/>
         <segue reference="2YT-Lf-els"/>
+        <segue reference="RQj-X4-w2l"/>
     </inferredMetricsTieBreakers>
     <resources>
         <image name="Notification" width="1058" height="1012"/>

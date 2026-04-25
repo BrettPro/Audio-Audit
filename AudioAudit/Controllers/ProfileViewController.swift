@@ -101,7 +101,9 @@ class ProfileViewController: UIViewController, UITableViewDataSource, UITableVie
                 self.navigationController?.pushViewController(destVC, animated: true)
             }
         } else {
-            print("PROFILE PIC TAPPED ON NON-CURRENT USER PROFILE")
+            header?.onBackTapped = {
+                print("PROFILE PIC TAPPED ON NON-CURRENT USER PROFILE")
+            }
         }
         let refreshControl = UIRefreshControl()
         refreshControl.addTarget(self, action: #selector(handleRefresh), for: .valueChanged)
@@ -167,6 +169,7 @@ class ProfileViewController: UIViewController, UITableViewDataSource, UITableVie
         if !isCurrentUser {
             isCurrentUser = true
         }
+        header?.stopSong()
     }
 
     @objc func friendsTapped() {

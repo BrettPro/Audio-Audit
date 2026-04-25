@@ -129,7 +129,7 @@ class ActivityCellTableViewCell: UITableViewCell {
         commentButton.tintColor = .secondaryLabel
         commentButton.contentHorizontalAlignment = .leading
         let action = UIAction() {_ in 
-            self.onCommentTapped!()
+            self.onCommentTapped?()
         }
         commentButton.addAction(action, for: .touchUpInside)
         onCommentTapped = {
@@ -148,7 +148,7 @@ class ActivityCellTableViewCell: UITableViewCell {
         likeButton.tintColor = .secondaryLabel
         likeButton.contentHorizontalAlignment = .leading
         let likeAction = UIAction() {_ in
-            self.onLikeTapped!()
+            self.onLikeTapped?()
         }
         likeButton.addAction(likeAction, for: .touchUpInside)
         onLikeTapped = {
@@ -185,8 +185,8 @@ class ActivityCellTableViewCell: UITableViewCell {
     }
     
     @objc func imageTapped() {
-        print("IMAGE TAPPED FROM ACTIVITYCELL")
-        //onAvatarTapped!()
+        //print("IMAGE TAPPED FROM ACTIVITYCELL")
+        onAvatarTapped?()
     }
 
     func setupConstraints() {

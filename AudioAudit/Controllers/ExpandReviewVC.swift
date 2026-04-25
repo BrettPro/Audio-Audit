@@ -9,9 +9,11 @@ import UIKit
 
 class ExpandReviewVC: UIViewController, UITextViewDelegate {
 
+    var user: AAUser?
     var activity: Activity?
     var username: String?
     var avatarURL: String?
+    var isCurrentUser = true
     
     let activityView = ActivityCellTableViewCell(style: .default, reuseIdentifier: nil)
     let scrollView = UIScrollView()
@@ -48,6 +50,8 @@ class ExpandReviewVC: UIViewController, UITextViewDelegate {
             do {
                 let reviewUser = try await UserService.shared.fetchUser(uid: activity!.userId)
                 await MainActor.run {
+                    isCurrentUser = reviewUser.id == UserService.shared.currentUserId
+                    user = reviewUser
                     username = reviewUser.name
                     avatarURL = reviewUser.profilePicURL
                     commentCard = NewCommentView(user: reviewUser)
@@ -101,13 +105,22 @@ class ExpandReviewVC: UIViewController, UITextViewDelegate {
         }
         
         activityView.onAvatarTapped = {
+            guard let user = self.user else {
+                print("USER NOT LOADED, IGNORE TAP")
+                return
+            }
             print("AVATAR TAPPED INSIDE EXPAND REVIEW")
-            let profileVC = ProfileViewController()
-            profileVC.isCurrentUser = false
-            self.navigationController?.pushViewController(profileVC, animated: true)
+            self.performSegue(withIdentifier: "ShowProfile", sender: user)
         }
     }
-
+    
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        if segue.identifier == "ShowProfile" {
+            let profileVC = segue.destination as! ProfileViewController
+            profileVC.isCurrentUser = false
+            profileVC.displayUser = sender as? AAUser
+        }
+    }
     
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
@@ -124,11 +137,6 @@ class ExpandReviewVC: UIViewController, UITextViewDelegate {
         commentCard?.commentField.resignFirstResponder()
         return true
     }
-
-//    // Called when the user clicks on the view outside of the UITextField
-//    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
-//        self.view.endEditing(true)
-//    }
     
     func setupCommentField() {
         guard activity != nil else {
@@ -150,25 +158,6 @@ class ExpandReviewVC: UIViewController, UITextViewDelegate {
         }
     }
     
-//    private func setupActivity() {
-//        guard let activity = activity else {
-//            return
-//        }
-//        
-//        activityView.configure(with: activity, username: username, avatarURL: avatarURL)
-//        
-//        let card = activityView.cardView
-//        card.translatesAutoresizingMaskIntoConstraints = false
-//        contentView.addSubview(card)
-//        contentView.addSubview(activityView)
-//        
-//        NSLayoutConstraint.activate([
-//            card.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 8),
-//            card.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 16),
-//            card.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -16),
-//        ])
-//    }
-    
     private func setupActivity() {
         guard let activity = activity else { return }
         
@@ -184,12 +173,38 @@ class ExpandReviewVC: UIViewController, UITextViewDelegate {
             activityView.contentView.trailingAnchor.constraint(equalTo: activityView.trailingAnchor),
             activityView.contentView.bottomAnchor.constraint(equalTo: activityView.bottomAnchor)
         ])
-        
-        NSLayoutConstraint.activate([
-            activityView.topAnchor.constraint(equalTo: contentView.topAnchor),
-            activityView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
-            activityView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
-            activityView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor)
-        ])
+        if isCurrentUser {
+            let deleteButton = UIButton()
+            deleteButton.translatesAutoresizingMaskIntoConstraints = false
+            deleteButton.setTitle("Delete", for: .normal)
+            deleteButton.setTitleColor(.audioRed, for: .normal)
+            let action = UIAction() { _ in
+                print("DELETE PRESSED")
+                self.deletePost()
+            }
+            deleteButton.addAction(action, for: .touchUpInside)
+            contentView.addSubview(deleteButton)
+            
+            NSLayoutConstraint.activate([
+                activityView.topAnchor.constraint(equalTo: contentView.topAnchor),
+                activityView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
+                activityView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
+                
+                deleteButton.topAnchor.constraint(equalTo: activityView.bottomAnchor, constant: -8),
+                deleteButton.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -24),
+                deleteButton.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -8)
+            ])
+        } else {
+            NSLayoutConstraint.activate([
+                activityView.topAnchor.constraint(equalTo: contentView.topAnchor),
+                activityView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
+                activityView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
+                activityView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor)
+            ])
+        }
+    }
+    
+    func deletePost() {
+        // TODO: implement delete logic
     }
 }

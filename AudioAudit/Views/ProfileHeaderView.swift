@@ -93,7 +93,7 @@ class ProfileHeaderView: UIView {
     
     func playSong() {
 
-        guard let urlString = UserService.shared.currentUser?.profileSongPreviewURL,
+        guard let urlString = user.profileSongPreviewURL,
               let url = URL(string: urlString) else {
             print("No song")
             return
@@ -119,6 +119,12 @@ class ProfileHeaderView: UIView {
         player = AVPlayer(url: url)
         player?.play()
         switchIcon(play: false)
+    }
+    
+    func stopSong() {
+        if let player = player {
+            player.pause()
+        }
     }
     
     func switchIcon(play: Bool) {
@@ -172,13 +178,13 @@ class ProfileHeaderView: UIView {
     }
     
     func getFriends() {
-        friendsLabel.text = "\(UserService.shared.currentUser!.friends.count)"
+        friendsLabel.text = "\(user.friends.count)"
     }
     
     func getUserInfo(with user: AAUser) async {
         nameLabel.text = user.name
         do {
-            let postCount = try await ActivityService.shared.fetchActivities(for: UserService.shared.currentUserId!).count
+            let postCount = try await ActivityService.shared.fetchActivities(for: user.id!).count
             postCountLabel.text = "\(postCount)"
         } catch {
             print("ERROR READING POST COUNT")
@@ -190,13 +196,7 @@ class ProfileHeaderView: UIView {
     }
     
     func getUserPic() async {
-        var imageURL:URL
-        do {
-            imageURL = URL(string: "\(try await UserService.shared.fetchCurrentUser().profilePicURL ?? DEFAULT_PFP)")!
-        } catch {
-            print("ERROR READING IMAGE URL")
-            return
-        }
+        let imageURL = URL(string: "\(user.profilePicURL ?? DEFAULT_PFP)")!
 
         let session = URLSession(configuration: .default)
         let task = session.dataTask(with: imageURL) { (data, response, error) in
