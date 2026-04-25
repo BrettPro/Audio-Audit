@@ -20,6 +20,8 @@ class ExpandReviewVC: UIViewController, UITextViewDelegate {
     let contentView = UIView()
     
     var commentCard: NewCommentView?
+    //TODO: display comments in table underneath activity
+    var comments: [Activity]?
     
     override func viewDidLoad() {
         super.viewDidLoad()
