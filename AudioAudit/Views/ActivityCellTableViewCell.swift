@@ -33,9 +33,11 @@ class ActivityCellTableViewCell: UITableViewCell {
     let likeButton = UIButton(type: .system)
     let likeNum = UILabel()
     var onLikeTapped: (() -> Void)?
-    // TODO: get info from firebase to know if user liked this activity.
-    // use to update likebutton icon and color
     var userLiked = false
+
+    // Tracks the activity this cell currently represents, so async fetch results
+    // don't apply to a reused cell that's since been configured for a different activity.
+    var currentActivityId: String?
     
     let ratingStackView = UIStackView()
 
@@ -152,11 +154,23 @@ class ActivityCellTableViewCell: UITableViewCell {
         }
         likeButton.addAction(likeAction, for: .touchUpInside)
         onLikeTapped = {
-            print("LIKE TAPPED")
-            self.userLiked = !self.userLiked
-            // TODO: change icon to either filled or outline
-            // increment num likes in firebase
-            // reload likenum
+            guard let activityId = self.currentActivityId,
+                  let userId = UserService.shared.currentUserId else { return }
+            let willLike = !self.userLiked
+            self.userLiked = willLike
+            self.updateLikeAppearance()
+            Task {
+                do {
+                    if willLike {
+                        try await InteractionService.shared.setReaction(type: .like, userId: userId, activityId: activityId)
+                    } else {
+                        try await InteractionService.shared.removeReaction(userId: userId, activityId: activityId)
+                    }
+                    await self.refreshInteractionCounts()
+                } catch {
+                    print("Failed to update reaction: \(error)")
+                }
+            }
         }
         
         // like num
@@ -300,14 +314,17 @@ class ActivityCellTableViewCell: UITableViewCell {
            !review.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty {
             descriptionLabel.text = review
             descriptionLabel.isHidden = false
-            //TODO connect to comment and like backend
-            commentNum.text = "0"
-            likeNum.text = "0"
         } else {
             descriptionLabel.text = nil
             descriptionLabel.isHidden = true
-            commentNum.text = "0"
-            likeNum.text = "0"
+        }
+        commentNum.text = "0"
+        likeNum.text = "0"
+        userLiked = false
+        updateLikeAppearance()
+        currentActivityId = activity.id
+        Task {
+            await refreshInteractionCounts()
         }
         currentAvatarURL = avatarURL
         if let urlString = avatarURL, let url = URL(string: urlString) {
@@ -335,6 +352,40 @@ class ActivityCellTableViewCell: UITableViewCell {
         artistNameLabel.text = nil
         descriptionLabel.text = nil
         descriptionLabel.isHidden = false
+        currentActivityId = nil
+        userLiked = false
+        updateLikeAppearance()
+        likeNum.text = "0"
+        commentNum.text = "0"
+    }
+
+    private func updateLikeAppearance() {
+        likeButton.setImage(UIImage(systemName: userLiked ? "heart.fill" : "heart"), for: .normal)
+        likeButton.tintColor = userLiked ? .audioRed : .secondaryLabel
+    }
+
+    // Re-fetch like/comment counts and the current user's reaction for the active activity.
+    func refreshInteractionCounts() async {
+        guard let activityId = currentActivityId else { return }
+        do {
+            let interactions = try await InteractionService.shared.fetchInteractions(for: activityId)
+            let likeCount = interactions.filter { $0.type == .like }.count
+            let commentCount = interactions.filter { $0.type == .comment }.count
+            var liked = false
+            if let userId = UserService.shared.currentUserId {
+                liked = interactions.contains { $0.userId == userId && $0.type == .like }
+            }
+            await MainActor.run {
+                if self.currentActivityId == activityId {
+                    self.likeNum.text = "\(likeCount)"
+                    self.commentNum.text = "\(commentCount)"
+                    self.userLiked = liked
+                    self.updateLikeAppearance()
+                }
+            }
+        } catch {
+            print("Failed to fetch interactions: \(error)")
+        }
     }
     
     func loadSongInfo(title: String, artist: String) {

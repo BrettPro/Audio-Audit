@@ -19,7 +19,6 @@ class ProfileViewController: UIViewController, UITableViewDataSource, UITableVie
     var likedActivities: [Activity] = []
     var tabBar = TabBarView()
     
-    // TODO: ensure that segue into profileVC sets these if coming from an activitycell tap
     var isCurrentUser = true
     var displayUser: AAUser?
 
