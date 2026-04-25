@@ -96,7 +96,6 @@ class ExpandReviewVC: UIViewController, UITextViewDelegate {
         super.viewWillAppear(animated)
         activityView.onCommentTapped = {
             print("COMMENT TAPPED INSIDE EXPAND REVIEW")
-            // TODO: open text field
         }
         
         activityView.onLikeTapped = {
