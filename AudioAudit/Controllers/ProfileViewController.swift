@@ -132,6 +132,13 @@ class ProfileViewController: UIViewController, UITableViewDataSource, UITableVie
     func loadJournal() {
         Task {
             do {
+                // refresh displayUser first
+                if let uid = displayUser?.id {
+                    let freshUser = try await UserService.shared.fetchUser(uid: uid)
+                    await MainActor.run {
+                        self.displayUser = freshUser
+                    }
+                }
                 let fetchedActivities = try await ActivityService.shared.fetchActivities(for: displayUser!.id!)
                 await MainActor.run {
                     self.activities = fetchedActivities
@@ -205,9 +212,10 @@ class ProfileViewController: UIViewController, UITableViewDataSource, UITableVie
             withIdentifier: "ActivityCell",
             for: indexPath
         ) as! ActivityCellTableViewCell
-
+        
         cell.configure(with: activity, username: displayUser!.name, avatarURL: displayUser!.profilePicURL)
+        print("Configuring cell with avatarURL: \(displayUser!.profilePicURL ?? "NIL")")
         return cell
     }
-
+    
 }

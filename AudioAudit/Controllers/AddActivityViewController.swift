@@ -9,7 +9,7 @@ import UIKit
 import MusicKit
 import CoreLocation
 
-class AddActivityViewController: UIViewController, UISearchBarDelegate, UITableViewDataSource, UITableViewDelegate {
+class AddActivityViewController: UIViewController, UISearchBarDelegate, UITableViewDataSource, UITableViewDelegate, UITextViewDelegate  {
 
     @IBOutlet weak var searchBar: UISearchBar!
     @IBOutlet weak var resultsTableView: UITableView!
@@ -21,6 +21,7 @@ class AddActivityViewController: UIViewController, UISearchBarDelegate, UITableV
     @IBOutlet weak var reviewTextView: UITextView!
     @IBOutlet weak var submitButton: UIButton!
     @IBOutlet weak var locationButton: UIButton!
+    @IBOutlet weak var scrollBottomConstraint: NSLayoutConstraint!
     
     var searchResults: [Song] = []
     var usingSamples = false
@@ -66,8 +67,22 @@ class AddActivityViewController: UIViewController, UISearchBarDelegate, UITableV
         searchBar.delegate = self
         resultsTableView.dataSource = self
         resultsTableView.delegate = self
+        reviewTextView.delegate = self
+        reviewTextView.text = "Write review here"
+        reviewTextView.textColor = .placeholderText
+        let tap = UITapGestureRecognizer(target: self, action: #selector(dismissKeyboard))
+        tap.cancelsTouchesInView = false
+        view.addGestureRecognizer(tap)
+        scrollBottomConstraint.isActive = false
+        let bottomConstraint = formScrollView.bottomAnchor.constraint(equalTo: view.keyboardLayoutGuide.topAnchor)
+        bottomConstraint.priority = .defaultHigh
+        bottomConstraint.isActive = true
         requestMusicAuth()
         //loadSamples()
+    }
+    
+    @objc func dismissKeyboard() {
+        view.endEditing(true)
     }
 
     func requestMusicAuth() {
@@ -135,6 +150,20 @@ class AddActivityViewController: UIViewController, UISearchBarDelegate, UITableV
                     self.resultsTableView.reloadData()
                 }
             }
+        }
+    }
+    
+    func textViewDidBeginEditing(_ textView: UITextView) {
+        if textView.textColor == .placeholderText {
+            textView.text = nil
+            textView.textColor = .secondaryLabel
+        }
+    }
+
+    func textViewDidEndEditing(_ textView: UITextView) {
+        if textView.text.isEmpty {
+            textView.text = "Write review here"
+            textView.textColor = .placeholderText
         }
     }
 
@@ -250,8 +279,9 @@ class AddActivityViewController: UIViewController, UISearchBarDelegate, UITableV
     @IBAction func submitTapped() {
         guard let song = selectedSong, let artist = selectedArtist,
               let uid = UserService.shared.currentUserId else { return }
-
-        let reviewText = reviewTextView.text?.trimmingCharacters(in: .whitespacesAndNewlines)
+        
+        let reviewText = reviewTextView.textColor == .placeholderText ? nil : reviewTextView.text?.trimmingCharacters(in: .whitespacesAndNewlines)
+        //let reviewText = reviewTextView.text?.trimmingCharacters(in: .whitespacesAndNewlines)
         let rating = ratingSegment.selectedSegmentIndex + 1
         let review = (reviewText?.isEmpty == false) ? reviewText : nil
 
