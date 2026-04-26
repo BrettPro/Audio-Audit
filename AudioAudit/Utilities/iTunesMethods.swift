@@ -19,10 +19,11 @@ struct ITunesSong: Codable {
     let artistName: String?
     let collectionName: String?
     let artworkUrl100: String? // 100x100 image
+    let previewUrl: String?
 }
 
 // MARK: - Fetch song info from iTunes
-func getSongInfoFromITunes(title: String, artist: String) async throws -> (artist: String, album: String, artwork: UIImage?)? {
+func getSongInfoFromITunes(title: String, artist: String) async throws -> (artist: String, album: String, artwork: UIImage?, previewURL: URL?)? {
     
     // Stronger query (title + artist)
     let query = "\(title) \(artist)"
@@ -61,5 +62,7 @@ func getSongInfoFromITunes(title: String, artist: String) async throws -> (artis
         }
     }
     
-    return (song.artistName ?? "", song.collectionName ?? "", image)
+    let previewURL = song.previewUrl.flatMap { URL(string: $0) }
+    
+    return (song.artistName ?? "", song.collectionName ?? "", image, previewURL)
 }

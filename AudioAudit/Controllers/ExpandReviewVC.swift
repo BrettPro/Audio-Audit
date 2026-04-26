@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import AVFoundation
 
 class ExpandReviewVC: UIViewController, UITextViewDelegate {
 
@@ -18,6 +19,7 @@ class ExpandReviewVC: UIViewController, UITextViewDelegate {
     let activityView = ActivityCellTableViewCell(style: .default, reuseIdentifier: nil)
     let scrollView = UIScrollView()
     let contentView = UIView()
+    var audioPlayer: AVPlayer?
     
     var commentCard: NewCommentView?
     //TODO: display comments in table underneath activity
@@ -60,6 +62,11 @@ class ExpandReviewVC: UIViewController, UITextViewDelegate {
                     commentCard?.commentField.delegate = self
                     setupActivity()
                     setupCommentField()
+                    if let activity = self.activity {
+                        Task {
+                            await self.playSong(for: activity)
+                        }
+                    }
                     // TODO: load comments from firebase backend
                 }
             } catch {
@@ -125,6 +132,7 @@ class ExpandReviewVC: UIViewController, UITextViewDelegate {
     
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
+        audioPlayer?.pause()
         activityView.onCommentTapped = {
             print("COMMENT TAPPED")
         }
@@ -207,5 +215,25 @@ class ExpandReviewVC: UIViewController, UITextViewDelegate {
     
     func deletePost() {
         // TODO: implement delete logic
+    }
+    
+    private func playSong(for activity: Activity) async {
+        do {
+            guard let result = try await getSongInfoFromITunes(
+                title: activity.song,
+                artist: activity.artist
+            ),
+            let previewURL = result.previewURL else {
+                print("No preview available")
+                return
+            }
+
+            let playerItem = AVPlayerItem(url: previewURL)
+            audioPlayer = AVPlayer(playerItem: playerItem)
+            audioPlayer?.play()
+
+        } catch {
+            print("Failed to play song: \(error)")
+        }
     }
 }

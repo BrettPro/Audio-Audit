@@ -271,6 +271,7 @@ class AddActivityViewController: UIViewController, UISearchBarDelegate, UITableV
                 )
 
                 await MainActor.run {
+                    self.scheduleReviewReminder(song: song, artist: artist)
                     self.dismiss(animated: true)
                 }
             } catch {
@@ -292,5 +293,27 @@ class AddActivityViewController: UIViewController, UISearchBarDelegate, UITableV
         let (data, _) = try await URLSession.shared.data(from: url)
         let response = try JSONDecoder().decode(ITunesSearchResponse.self, from: data)
         return response.results
+    }
+    
+    func scheduleReviewReminder(song: String, artist: String) {
+        let content = UNMutableNotificationContent()
+        content.title = "Check your review 🎧"
+        content.body = "See new likes & comments on your review of \(song) by \(artist)."
+        content.sound = .default
+
+        // sets the delay Three hours in the future
+        let trigger = UNTimeIntervalNotificationTrigger(timeInterval: 3 * 60 * 60, repeats: false)
+
+        let request = UNNotificationRequest(
+            identifier: UUID().uuidString,
+            content: content,
+            trigger: trigger
+        )
+
+        UNUserNotificationCenter.current().add(request) { error in
+            if let error = error {
+                print("Notification scheduling error:", error)
+            }
+        }
     }
 }

@@ -160,6 +160,11 @@ class ProfileViewController: UIViewController, UITableViewDataSource, UITableVie
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         self.tabBarController?.tabBar.isHidden = false
+        Task {
+                guard let uid = displayUser?.id else { return }
+                let freshUser = try await UserService.shared.fetchUser(uid: uid)
+            header!.updateUser(freshUser)
+            }
     }
     
     override func viewWillDisappear(_ animated: Bool) {
