@@ -67,14 +67,27 @@ final class ActivityMapViewController: UIViewController {
             return
         }
 
-        var friendIds = currentUser.friends
-        if let myId = UserService.shared.currentUserId {
-            friendIds.append(myId)
+        var friendIds = Set(currentUser.friends)
+        
+        var includeMeOnMap: Bool {
+            UserDefaults.standard.bool(forKey: "showMap")
         }
+
+        if includeMeOnMap {
+            if let myId = UserService.shared.currentUserId {
+                friendIds.insert(myId)
+            }
+        } else {
+            if let myId = UserService.shared.currentUserId {
+                friendIds.remove(myId)
+            }
+        }
+
+        let finalFriendIds = Array(friendIds)
 
         Task {
             do {
-                let activities = try await ActivityService.shared.fetchFriendsFeed(friendIds: friendIds)
+                let activities = try await ActivityService.shared.fetchFriendsFeed(friendIds: finalFriendIds)
                 let geoActivities = activities.filter { $0.latitude != nil && $0.longitude != nil }
 
                 let uniqueUserIds = Set(geoActivities.map { $0.userId })

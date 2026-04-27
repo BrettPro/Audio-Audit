@@ -123,4 +123,9 @@ class ActivityService {
     func deleteActivity(activityId: String) async throws {
         try await store.delete(collection: collection, documentId: activityId)
     }
+    
+    // Fetch an activity by its document ID.
+    func fetchActivity(by id: String) async throws -> Activity {
+        try await store.fetch(type: Activity.self, collection: collection, documentId: id)
+    }
 }

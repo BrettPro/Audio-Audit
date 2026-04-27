@@ -18,6 +18,10 @@ class ProfileHeaderView: UIView {
     let songButton = UIButton()
     let avatarButton = UIButton()
     
+    let songTitleLabel = UILabel()
+    let songArtistLabel = UILabel()
+    let songInfoStack = UIStackView()
+    
     var onBackTapped: (() -> Void)?
     var statsStack = UIStackView()
     var player: AVPlayer?
@@ -79,6 +83,9 @@ class ProfileHeaderView: UIView {
             nameLabel.topAnchor.constraint(equalTo: avatarButton.bottomAnchor, constant: 8),
             nameLabel.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 24),
             nameLabel.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -16),
+            
+            songInfoStack.bottomAnchor.constraint(equalTo: songButton.topAnchor, constant: -4),
+            songInfoStack.centerXAnchor.constraint(equalTo: songButton.centerXAnchor),
         ])
         
         avatarButton.layer.cornerRadius = imageWidth / 2
@@ -92,33 +99,49 @@ class ProfileHeaderView: UIView {
     }
     
     func playSong() {
-
-        guard let urlString = user.profileSongPreviewURL,
-              let url = URL(string: urlString) else {
-            print("No song")
-            return
+        Task {
+            await playSongAsync()
         }
+    }
+    
+    func playSongAsync() async {
+        do {
+            guard let userId = user.id else { return }
 
-        // If same URL already playing then toggle
-        if let player = player,
-           let currentURL = (player.currentItem?.asset as? AVURLAsset)?.url,
-           currentURL == url {
+            let freshUser = try await UserService.shared.fetchUser(uid: userId)
 
-            if player.timeControlStatus == .playing {
-                player.pause()
-                switchIcon(play: true)
-            } else {
-                player.play()
-                switchIcon(play: false)
+            DispatchQueue.main.async {
+                self.user = freshUser
             }
-            return
-        }
 
-        // Otherwise replace song completely
-        player?.pause()
-        player = AVPlayer(url: url)
-        player?.play()
-        switchIcon(play: false)
+            guard let urlString = freshUser.profileSongPreviewURL,
+                  let url = URL(string: urlString) else {
+                print("No song")
+                return
+            }
+
+            if let player = player,
+               let currentURL = (player.currentItem?.asset as? AVURLAsset)?.url,
+               currentURL == url {
+
+                if player.timeControlStatus == .playing {
+                    player.pause()
+                    switchIcon(play: true)
+                } else {
+                    player.play()
+                    switchIcon(play: false)
+                }
+                return
+            }
+
+            player?.pause()
+            player = AVPlayer(url: url)
+            player?.play()
+            switchIcon(play: false)
+
+        } catch {
+            print("Failed to refresh user/song: \(error)")
+        }
     }
     
     func stopSong() {
@@ -174,6 +197,8 @@ class ProfileHeaderView: UIView {
         addSubview(avatarButton)
         addSubview(nameLabel)
         addSubview(statsStack)
+        setupSongInfoUI()
+        addSubview(songInfoStack)
         setConstraints()
     }
     
@@ -192,6 +217,8 @@ class ProfileHeaderView: UIView {
         }
         getFriends()
         // loads user pic from firestorage
+        songTitleLabel.text = user.profileSongTitle ?? "No song"
+        songArtistLabel.text = user.profileSongArtist ?? ""
         await getUserPic()
     }
     
@@ -239,5 +266,32 @@ class ProfileHeaderView: UIView {
         }
         
         task.resume( )
+    }
+    
+    func setupSongInfoUI() {
+        songTitleLabel.font = .boldSystemFont(ofSize: 14)
+        songTitleLabel.textAlignment = .center
+        
+        songArtistLabel.font = .systemFont(ofSize: 12)
+        songArtistLabel.textColor = .systemGray
+        songArtistLabel.textAlignment = .center
+        
+        songInfoStack.axis = .vertical
+        songInfoStack.alignment = .center
+        songInfoStack.spacing = 2
+        
+        songInfoStack.addArrangedSubview(songTitleLabel)
+        songInfoStack.addArrangedSubview(songArtistLabel)
+        
+        songInfoStack.translatesAutoresizingMaskIntoConstraints = false
+    }
+    
+    func updateUser(_ newUser: AAUser) {
+        self.user = newUser
+        
+        DispatchQueue.main.async {
+            self.songTitleLabel.text = newUser.profileSongTitle ?? "No song"
+            self.songArtistLabel.text = newUser.profileSongArtist ?? ""
+        }
     }
 }

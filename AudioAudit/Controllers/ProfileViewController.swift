@@ -21,6 +21,7 @@ class ProfileViewController: UIViewController, UITableViewDataSource, UITableVie
     
     var isCurrentUser = true
     var displayUser: AAUser?
+    var userCache: [String: AAUser] = [:]
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -63,6 +64,9 @@ class ProfileViewController: UIViewController, UITableViewDataSource, UITableVie
         profileTableView.tableHeaderView = header
         tabBar.onTabSelected = { tab in
             self.selectedTab = tab
+            if tab == 1 {
+               self.loadLikedActivities()
+            }
             self.profileTableView.reloadData()
         }
         if isCurrentUser {
@@ -117,7 +121,7 @@ class ProfileViewController: UIViewController, UITableViewDataSource, UITableVie
         print("ENTERED PROFILE PREPARE")
         if segue.identifier == "ExpandProfile" {
             if let indexPath = profileTableView.indexPathForSelectedRow {
-                let selectedItem = activities[indexPath.row]
+                let selectedItem = selectedTab == 0 ? activities[indexPath.row] : likedActivities[indexPath.row]
                 let destinationVC = segue.destination as! ExpandReviewVC
                 destinationVC.activity = selectedItem
             }
@@ -132,6 +136,13 @@ class ProfileViewController: UIViewController, UITableViewDataSource, UITableVie
     func loadJournal() {
         Task {
             do {
+                // refresh displayUser first
+                if let uid = displayUser?.id {
+                    let freshUser = try await UserService.shared.fetchUser(uid: uid)
+                    await MainActor.run {
+                        self.displayUser = freshUser
+                    }
+                }
                 let fetchedActivities = try await ActivityService.shared.fetchActivities(for: displayUser!.id!)
                 await MainActor.run {
                     self.activities = fetchedActivities
@@ -149,6 +160,30 @@ class ProfileViewController: UIViewController, UITableViewDataSource, UITableVie
         }
     }
     
+    func loadLikedActivities() {
+        Task {
+            do {
+                guard let uid = displayUser?.id else { return }
+                let activityIds = try await InteractionService.shared.fetchLikedActivityIds(for: uid)
+                var results: [Activity] = []
+                for id in activityIds {
+                    if let activity = try? await ActivityService.shared.fetchActivity(by: id) {
+                        results.append(activity)
+                    }
+                }
+                let sorted = results.sorted { $0.timestamp > $1.timestamp }
+                await MainActor.run {
+                    self.likedActivities = sorted
+                    if self.selectedTab == 1 {
+                        self.profileTableView.reloadData()
+                    }
+                }
+            } catch {
+                print("Error loading liked activities: \(error)")
+            }
+        }
+    }
+    
     func loadFriends() {
         Task {
             await MainActor.run {
@@ -160,6 +195,11 @@ class ProfileViewController: UIViewController, UITableViewDataSource, UITableVie
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         self.tabBarController?.tabBar.isHidden = false
+        Task {
+                guard let uid = displayUser?.id else { return }
+                let freshUser = try await UserService.shared.fetchUser(uid: uid)
+            header!.updateUser(freshUser)
+            }
     }
     
     override func viewWillDisappear(_ animated: Bool) {
@@ -190,19 +230,34 @@ class ProfileViewController: UIViewController, UITableViewDataSource, UITableVie
     }
 
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return activities.count
+        return selectedTab == 0 ? activities.count : likedActivities.count
     }
 
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let activity = activities[indexPath.row]
+        let activity = selectedTab == 0 ? activities[indexPath.row] : likedActivities[indexPath.row]
 
         let cell = tableView.dequeueReusableCell(
             withIdentifier: "ActivityCell",
             for: indexPath
         ) as! ActivityCellTableViewCell
-
-        cell.configure(with: activity, username: displayUser!.name, avatarURL: displayUser!.profilePicURL)
+        
+        if selectedTab == 0 {
+            cell.configure(with: activity, username: displayUser!.name, avatarURL: displayUser!.profilePicURL)
+        } else if let cachedUser = userCache[activity.userId] {
+            // use cached user if available, otherwise fetch
+            cell.configure(with: activity, username: cachedUser.name, avatarURL: cachedUser.profilePicURL)
+        } else {
+            cell.configure(with: activity, username: nil, avatarURL: nil)
+            Task {
+                if let fetchedUser = try? await UserService.shared.fetchUser(uid: activity.userId) {
+                    await MainActor.run {
+                        self.userCache[activity.userId] = fetchedUser
+                        self.profileTableView.reloadData()
+                    }
+                }
+            }
+        }
         return cell
     }
-
+    
 }

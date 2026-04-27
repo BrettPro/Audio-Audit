@@ -83,4 +83,13 @@ class InteractionService {
             .filter { $0.type == .comment }
             .sorted { $0.timestamp < $1.timestamp }
     }
+    
+    // Fetch all of a user's liked activities, oldest first.
+    func fetchLikedActivityIds(for userId: String) async throws -> [String] {
+        let interactions = try await store.fetchAll(type: Interaction.self, collection: collection, filter: { ref in
+            ref.whereField("user_id", isEqualTo: userId)
+                .whereField("type", isEqualTo: InteractionType.like.rawValue)
+        })
+        return interactions.map { $0.activityId }
+    }
 }

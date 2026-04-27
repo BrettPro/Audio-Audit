@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import AVFoundation
 
 class ExpandReviewVC: UIViewController, UITextViewDelegate {
 
@@ -18,6 +19,7 @@ class ExpandReviewVC: UIViewController, UITextViewDelegate {
     let activityView = ActivityCellTableViewCell(style: .default, reuseIdentifier: nil)
     let scrollView = UIScrollView()
     let contentView = UIView()
+    var audioPlayer: AVPlayer?
     
     var commentCard: NewCommentView?
 
@@ -62,6 +64,12 @@ class ExpandReviewVC: UIViewController, UITextViewDelegate {
                     commentCard?.commentField.delegate = self
                     setupActivity()
                     setupCommentField()
+                    if let activity = self.activity {
+                        Task {
+                            await self.playSong(for: activity)
+                        }
+                    }
+                    // TODO: load comments from firebase backend
                 }
                 await loadComments()
             } catch {
@@ -78,11 +86,6 @@ class ExpandReviewVC: UIViewController, UITextViewDelegate {
         if (commentCard!.commentField.text == "Write comment here") {
             commentCard!.commentField.text = nil
         }
-//        DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
-//            if let commentCard = self.commentCard {
-//                self.scrollView.scrollRectToVisible(commentCard.frame, animated: true)
-//            }
-//        }
     }
     
     func textViewDidEndEditing(_ textView: UITextView) {
@@ -117,6 +120,17 @@ class ExpandReviewVC: UIViewController, UITextViewDelegate {
             let profileVC = segue.destination as! ProfileViewController
             profileVC.isCurrentUser = false
             profileVC.displayUser = sender as? AAUser
+        }
+    }
+    
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        audioPlayer?.pause()
+        activityView.onCommentTapped = {
+            print("COMMENT TAPPED")
+        }
+        activityView.onLikeTapped = {
+            print("LIKE TAPPED")
         }
     }
     
@@ -196,8 +210,20 @@ class ExpandReviewVC: UIViewController, UITextViewDelegate {
             deleteButton.setTitle("Delete", for: .normal)
             deleteButton.setTitleColor(.audioRed, for: .normal)
             let action = UIAction() { _ in
-                print("DELETE PRESSED")
-                self.deletePost()
+                let alert = UIAlertController(
+                    title: "Are you sure you want to delete this post?",
+                    message: "You cannot undo this action.",
+                    preferredStyle: .alert
+                )
+
+                alert.addAction(UIAlertAction(title: "Delete", style: .destructive) { _ in
+                    print("DELETE PRESSED")
+                    Task {
+                        await self.deletePost()
+                    }
+                })
+                alert.addAction(UIAlertAction(title: "Cancel", style: .cancel))
+                self.present(alert, animated: true)
             }
             deleteButton.addAction(action, for: .touchUpInside)
             contentView.addSubview(deleteButton)
@@ -256,7 +282,37 @@ class ExpandReviewVC: UIViewController, UITextViewDelegate {
         }
     }
     
-    func deletePost() {
+    func deletePost() async {
         // TODO: implement delete logic
+        do {
+            print("TRYING TO DELETE")
+            try await ActivityService.shared.deleteActivity(activityId: activity!.id!)
+            print("SHOULD BE DELETED")
+            await MainActor.run {
+                navigationController?.popViewController(animated: true)
+            }
+        } catch {
+            print("ERROR DELETING POST: \(error)")
+        }
+    }
+    
+    private func playSong(for activity: Activity) async {
+        do {
+            guard let result = try await getSongInfoFromITunes(
+                title: activity.song,
+                artist: activity.artist
+            ),
+            let previewURL = result.previewURL else {
+                print("No preview available")
+                return
+            }
+
+            let playerItem = AVPlayerItem(url: previewURL)
+            audioPlayer = AVPlayer(playerItem: playerItem)
+            audioPlayer?.play()
+
+        } catch {
+            print("Failed to play song: \(error)")
+        }
     }
 }
