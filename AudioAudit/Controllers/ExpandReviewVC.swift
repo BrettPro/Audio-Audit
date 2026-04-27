@@ -196,8 +196,20 @@ class ExpandReviewVC: UIViewController, UITextViewDelegate {
             deleteButton.setTitle("Delete", for: .normal)
             deleteButton.setTitleColor(.audioRed, for: .normal)
             let action = UIAction() { _ in
-                print("DELETE PRESSED")
-                self.deletePost()
+                let alert = UIAlertController(
+                    title: "Are you sure you want to delete this post?",
+                    message: "You cannot undo this action.",
+                    preferredStyle: .alert
+                )
+
+                alert.addAction(UIAlertAction(title: "Delete", style: .destructive) { _ in
+                    print("DELETE PRESSED")
+                    Task {
+                        await self.deletePost()
+                    }
+                })
+                alert.addAction(UIAlertAction(title: "Cancel", style: .cancel))
+                self.present(alert, animated: true)
             }
             deleteButton.addAction(action, for: .touchUpInside)
             contentView.addSubview(deleteButton)
@@ -256,7 +268,14 @@ class ExpandReviewVC: UIViewController, UITextViewDelegate {
         }
     }
     
-    func deletePost() {
+    func deletePost() async {
         // TODO: implement delete logic
+        do {
+            print("TRYING TO DELETE")
+            try await ActivityService.shared.deleteActivity(activityId: activity!.id!)
+            print("SHOULD BE DELETED?")
+        } catch {
+            print("ERROR DELETING POST: \(error)")
+        }
     }
 }
