@@ -14,6 +14,8 @@ struct Quiz: Codable, Identifiable {
     var userId: String
     var correctAnswers: [String]
     var score: Int
+    var total: Int
+    var timestamp: Date
 
     enum CodingKeys: String, CodingKey {
         case id
@@ -21,5 +23,7 @@ struct Quiz: Codable, Identifiable {
         case userId = "user_id"
         case correctAnswers = "correct_answers"
         case score
+        case total
+        case timestamp
     }
 }

@@ -559,8 +559,27 @@ final class QuizViewController: UIViewController {
 
     private func finishQuiz() {
         stopTimer()
-        onQuizFinished?(score, questions.count)
-        dismissOrPop()
+        let finalScore = score
+        let totalQuestions = questions.count
+        Task { [weak self] in
+            if let userId = UserService.shared.currentUserId {
+                do {
+                    _ = try await QuizService.shared.saveAttempt(
+                        quizId: "friend_quiz",
+                        userId: userId,
+                        correctAnswers: [],
+                        score: finalScore,
+                        total: totalQuestions
+                    )
+                } catch {
+                    print("Failed to save quiz attempt: \(error)")
+                }
+            }
+            await MainActor.run {
+                self?.onQuizFinished?(finalScore, totalQuestions)
+                self?.dismissOrPop()
+            }
+        }
     }
 
     // UI States

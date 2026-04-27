@@ -12,8 +12,8 @@ final class QuizHubViewController: UIViewController {
 
     // MARK: - Data
 
-    /// Stores raw quiz scores as (score, totalQuestions)
-    private var quizHistory: [(score: Int, total: Int)] = []
+    // Quiz attempts loaded from Firestore, sorted newest first.
+    private var attempts: [Quiz] = []
 
     // MARK: - UI
 
@@ -111,6 +111,7 @@ final class QuizHubViewController: UIViewController {
         buildUI()
         wireActions()
         refreshStatsUI()
+        Task { await loadStats() }
     }
 
     // MARK: - Setup
@@ -172,11 +173,9 @@ final class QuizHubViewController: UIViewController {
     @objc private func startQuizTapped() {
         let quizVC = QuizViewController()
 
-        quizVC.onQuizFinished = { [weak self] score, totalQuestions in
+        quizVC.onQuizFinished = { [weak self] _, _ in
             guard let self else { return }
-
-            self.quizHistory.append((score: score, total: totalQuestions))
-            self.refreshStatsUI()
+            Task { await self.loadStats() }
         }
 
         //navigationController?.pushViewController(quizVC, animated: true)
@@ -186,22 +185,35 @@ final class QuizHubViewController: UIViewController {
 
     // MARK: - Stats
 
+    private func loadStats() async {
+        guard let userId = UserService.shared.currentUserId else { return }
+        do {
+            let fetched = try await QuizService.shared.fetchAttempts(for: userId)
+            let sorted = fetched.sorted { $0.timestamp > $1.timestamp }
+            await MainActor.run {
+                self.attempts = sorted
+                self.refreshStatsUI()
+            }
+        } catch {
+            print("Failed to load quiz stats: \(error)")
+        }
+    }
+
     private func refreshStatsUI() {
-        quizzesTakenValueLabel.text = "\(quizHistory.count)"
+        quizzesTakenValueLabel.text = "\(attempts.count)"
         averageScoreValueLabel.text = formattedAverageOfLast10()
     }
 
     private func formattedAverageOfLast10() -> String {
-        guard !quizHistory.isEmpty else { return "--" }
+        guard !attempts.isEmpty else { return "--" }
 
-        let lastTen = Array(quizHistory.suffix(10))
+        // attempts is already sorted newest-first, so the 10 most recent are at the front.
+        let lastTen = Array(attempts.prefix(10))
 
-        let percentages: [Double] = lastTen.map { result in
-            guard result.total > 0 else { return 0 }
-            return (Double(result.score) / Double(result.total)) * 100.0
+        let percentages: [Double] = lastTen.map { quiz in
+            guard quiz.total > 0 else { return 0 }
+            return (Double(quiz.score) / Double(quiz.total)) * 100.0
         }
-
-        guard !percentages.isEmpty else { return "--" }
 
         let average = percentages.reduce(0, +) / Double(percentages.count)
         return String(format: "%.1f%%", average)

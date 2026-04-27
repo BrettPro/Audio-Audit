@@ -17,12 +17,14 @@ class QuizService {
     private init() {}
 
     // Save a quiz attempt. Returns the new document ID.
-    func saveAttempt(quizId: String, userId: String, correctAnswers: [String], score: Int) async throws -> String {
+    func saveAttempt(quizId: String, userId: String, correctAnswers: [String], score: Int, total: Int) async throws -> String {
         let quiz = Quiz(
             quizId: quizId,
             userId: userId,
             correctAnswers: correctAnswers,
-            score: score
+            score: score,
+            total: total,
+            timestamp: Date()
         )
         return try await store.create(object: quiz, collection: collection)
     }
