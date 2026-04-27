@@ -273,7 +273,10 @@ class ExpandReviewVC: UIViewController, UITextViewDelegate {
         do {
             print("TRYING TO DELETE")
             try await ActivityService.shared.deleteActivity(activityId: activity!.id!)
-            print("SHOULD BE DELETED?")
+            print("SHOULD BE DELETED")
+            await MainActor.run {
+                navigationController?.popViewController(animated: true)
+            }
         } catch {
             print("ERROR DELETING POST: \(error)")
         }
