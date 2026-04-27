@@ -24,7 +24,7 @@ class ExpandReviewVC: UIViewController, UITextViewDelegate {
     let commentsStackView = UIStackView()
     private var commenterUsernames: [String: String] = [:]
     private var commenterAvatars: [String: String] = [:]
-    
+
     override func viewDidLoad() {
         super.viewDidLoad()
         scrollView.translatesAutoresizingMaskIntoConstraints = false
