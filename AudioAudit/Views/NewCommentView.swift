@@ -21,9 +21,6 @@ class NewCommentView: UIView {
         self.user = user
         super.init(frame: .zero)
         setupLayout()
-//        Task {
-//            await getUserPic()
-//        }
     }
     
     required init?(coder: NSCoder) {
@@ -57,8 +54,7 @@ class NewCommentView: UIView {
             commentField.heightAnchor.constraint(greaterThanOrEqualToConstant: CGFloat(fontSize)),
             commentField.bottomAnchor.constraint(equalTo: self.bottomAnchor, constant: -16)
         ])
-        
-        //postButton.setTitle("Post", for: .normal)
+    
         postButton.setImage(UIImage(systemName: "paperplane.fill"), for: .normal)
         postButton.tintColor = .white
         postButton.translatesAutoresizingMaskIntoConstraints = false
@@ -77,7 +73,6 @@ class NewCommentView: UIView {
             postButton.widthAnchor.constraint(greaterThanOrEqualToConstant: 50),
             postButton.heightAnchor.constraint(greaterThanOrEqualToConstant: CGFloat(36)),
         ])
-        //TODO add avatar
     }
 
 }

@@ -151,24 +151,6 @@ final class ActivityMapViewController: UIViewController {
             destinationVC.activity = annotation.activity
         }
     }
-//
-//    private func showActivityDetails(for annotation: ActivityAnnotation) {
-//        let activity = annotation.activity
-//
-//        let alert = UIAlertController(
-//            title: "\(activity.song) — \(activity.artist)",
-//            message: """
-//            User: \(annotation.username)
-//            Type: \(activity.type.rawValue)
-//            Rating: \(activity.rating.map(String.init) ?? "N/A")
-//            Review: \(activity.review ?? "No review")
-//            """,
-//            preferredStyle: .alert
-//        )
-//
-//        alert.addAction(UIAlertAction(title: "OK", style: .default))
-//        present(alert, animated: true)
-//    }
 }
 
 // MARK: - MKMapViewDelegate

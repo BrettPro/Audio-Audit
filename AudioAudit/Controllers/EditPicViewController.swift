@@ -11,12 +11,11 @@ import PhotosUI
 class EditPicViewController: UIViewController, PHPickerViewControllerDelegate, UIImagePickerControllerDelegate & UINavigationControllerDelegate {
     
     var currentImage: UIImage?
-    var saveChanges: ((UIImage) -> Void)? // TODO add text field too
+    var saveChanges: ((UIImage) -> Void)?
     
     let imageView = UIImageView()
     let photoButton = UIButton()
     let uploadButton = UIButton()
-    //let nameField = UIButton() TODO allow users to change name later
     let saveButton = UIButton()
 
     override func viewDidLoad() {
@@ -59,12 +58,6 @@ class EditPicViewController: UIViewController, PHPickerViewControllerDelegate, U
         view.addSubview(saveButton)
         setConstraints()
     }
-    
-//    override func viewWillAppear(_ animated: Bool) {
-//        super.viewWillAppear(animated)
-//        imageView.image = currentImage
-//    }
-    
     
     func makeButton(_ b: UIButton, _ title: String) {
         b.translatesAutoresizingMaskIntoConstraints = false

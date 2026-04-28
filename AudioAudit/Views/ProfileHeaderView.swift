@@ -43,7 +43,6 @@ class ProfileHeaderView: UIView {
     func makeStatColumn(label: UILabel, title: String) -> UIStackView {
         let titleLabel = UILabel()
         titleLabel.text = title
-        // TODO adjust font via brett's code
         titleLabel.font = .systemFont(ofSize: 14)
         titleLabel.textColor = UIColor.systemGray2
         titleLabel.textAlignment = .center
@@ -192,7 +191,6 @@ class ProfileHeaderView: UIView {
         setLabel(friendsLabel)
         nameLabel.font = .boldSystemFont(ofSize: 16)
         nameLabel.translatesAutoresizingMaskIntoConstraints = false
-        //setImage()
         setStack()
         addSubview(avatarButton)
         addSubview(nameLabel)
