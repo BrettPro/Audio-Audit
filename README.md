@@ -1,50 +1,62 @@
-Group Number: 1
-Project: Audio Audit
+# Audio Audit
 
-Test profile username: pic@pic.com 
-Test profile password: picpic
+Audio Audit is an iOS social media application that allows users to
+create and share music reviews, interact with friends, and visualize
+review activity on an interactive map.
 
-Contributions:
-We each feel we contributed an equivalent amount this project (25%). This applies both to the Alpha and Beta
-versions of the release.
+## Features
 
-Leo -
-    Alpha:
-    Designed the majority of the home page UI that displays the activities.
-    Helped to work on the backend as well to pull from firestore database and display activities in home page.
-    Beta:
-    Implemented the main map feature, which required creating two new view controllers.
-    One is for adding your location on the map for an activity and the other lets you view your friends' reviews
-    on the map.
-    The map allows users to drag a pin around and selecting a pin will display more information.
-Diego -
-    Alpha:
-    Designed the login, register, and splash screens and set up firebase auth.
-    Programed user profile functionality, set up Apple photo library framework to update user pfps
-    Beta:
-    Implemented the camera framework for profile pictures. Also implemented FirebaseStorage to store the images.
-    Connected the home page with FirebaseStorage to display the images there. 
-    Defined activity location confirmation process to connect activities to user-specified locations.
-Bersam -
-    Alpha:
-    Set up firestore services to store activities, users, etc.
-    Added ability for user to add their own song/album reviews, and also cleaned up code for better style.
-    Beta:
-    Created the friend request/accept/deny feature. Modified the activity feed to show only your friends.
-    Modified the backend so that reviews also store locations on map.
-    Helped out with merge conflicts.
-Brett -
-    Alpha:
-    Designed the series of welcome pages and settings panel for a new registering user.
-    Integrated Apple Music (instead of spotify) to the app
-    Beta:
-    Redesigned settings page to look more akin to the native iOS settings page. Tapping the notifications
-    button takes you straight to the native settings app.
-    Added iTunes integration for album art, song info, and showing songs while searching. Art now
-    also displays when searching for songs.
-    Edited some welcome pages.
+- User registration and authentication
+- Music and album search
+- Music reviews and activity feeds
+- Friend requests and friend-based activity feeds
+- Interactive map for review locations
+- 30-second song previews and album artwork
+- Customizable user profiles with camera and photo library support
+- Firebase-backed user and activity data
 
-Deviations:
+## Technologies
 
-We once again switched from Apple Music to iTunes to get around the $99 developer's license. Other than that,
-we reached all of the goals set out in the proposal for Beta.
+- Swift
+- UIKit and Storyboards
+- Firebase Authentication
+- Firebase Firestore
+- Firebase Storage
+- iTunes Search API
+- MapKit
+- Xcode
+
+## My Contributions
+
+As part of the Audio Audit development team, I contributed to the
+following features:
+
+- Designed the welcome screens and settings interface for new users.
+- Integrated Apple Music during the initial development phase.
+- Redesigned the settings page to better match the native iOS Settings
+  experience.
+- Added navigation from the in-app notifications setting to the native
+  iOS Settings application.
+- Integrated the iTunes Search API to retrieve album artwork, song
+  information, and search results.
+- Added song and album information to the music search experience.
+- Updated welcome screens and contributed to the overall user interface.
+
+## Team Project
+
+Audio Audit was developed as a collaborative university project by a
+four-person team. Each team member contributed approximately 25% of
+the project.
+
+This repository is a portfolio version of the original project.
+The original project repository was maintained privately for team
+development.
+
+## Development Notes
+
+The project initially used Apple Music integration but later switched
+to the iTunes Search API to avoid requiring the Apple Developer
+Program's paid membership during development.
+
+The Alpha and Beta releases achieved the goals established in the
+original project proposal.
